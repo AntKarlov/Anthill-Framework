@@ -189,6 +189,19 @@ package ru.antkarlov.anthill
 		/**
 		 * @private
 		 */
+		public function equal(aPoint:AntPoint, aDiff:Number =  0.000001):Boolean
+		{
+			if (AntMath.equal(x, aPoint.x, aDiff) && AntMath.equal(y, aPoint.y, aDiff))
+			{
+				return true;
+			}
+			
+			return false;
+		}
+		
+		/**
+		 * @private
+		 */
 		public function toString():String
 		{
 			return "[AntPoint x:" + x.toString() + " y:" + y.toString() + "]";
