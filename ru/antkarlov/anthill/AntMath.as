@@ -196,7 +196,6 @@ package ru.antkarlov.anthill
 		 * @param	bLineY2	 Вторая координата Y второго отрезка.
 		 * @return		Возвращает true если отрезки пересекаются.
 		 */
-		
 		public static function linesCross(aLineX1:Number, aLineY1:Number, aLineX2:Number, aLineY2:Number,
 			bLineX1:Number, bLineY1:Number, bLineX2:Number, bLineY2:Number):Boolean
 		{
@@ -215,6 +214,52 @@ package ru.antkarlov.anthill
 			var t2:Number = d2 / d;
 			
 			return (t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) ? true : false;
+		}
+		
+		/**
+		 * Проверят пересечение двух отрезков и рассчитывает точку пересечения.
+		 * 
+		 * @param	aLine1a	 Первая точка первого отрезка.
+		 * @param	aLine1b	 Вторая точка первого отрезка.
+		 * @param	aLine2a	 Первая точка второго отрезка.
+		 * @param	aLine2b	 ВТорая точка второго отрезка.
+		 * @param	aResultPoint	 Указатель на точку в которую будут записаны координаты персечения отрезков.
+		 * @return		Возвращает true если отрезки пересекаются.
+		 */
+		public static function linesCrossPoint(aLine1a:AntPoint, aLine1b:AntPoint, aLine2a:AntPoint, aLine2b:AntPoint,
+			aResultPoint:AntPoint = null):Boolean
+		{
+			var isCollided:Boolean = false;
+			
+			var d:Number = (aLine2b.y - aLine2a.y) * (aLine1b.x - aLine1a.x) - 
+				(aLine2b.x - aLine2a.x) * (aLine1b.y - aLine1a.y);
+				
+			var na:Number = (aLine2b.x - aLine2a.x) * (aLine1a.y - aLine2a.y) -
+				(aLine2b.y - aLine2a.y) * (aLine1a.x - aLine2a.x);
+				
+			var nb:Number = (aLine1b.x - aLine1a.x) * (aLine1a.y - aLine2a.y) -
+				(aLine1b.y - aLine1a.y) * (aLine1a.x - aLine2a.x);
+				
+			if (d == 0)
+			{
+				return isCollided;
+			}
+			
+			var ua:Number = na / d;
+			var ub:Number = nb / d;
+			
+			if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1)
+			{
+				if (aResultPoint != null)
+				{
+					aResultPoint.x = aLine1a.x + (ua * (aLine1b.x - aLine1a.x));
+					aResultPoint.y = aLine1a.y + (ua * (aLine1b.y - aLine1a.y));
+				}
+				
+				isCollided = true;
+			}
+			
+			return isCollided;
 		}
 		
 		/**
