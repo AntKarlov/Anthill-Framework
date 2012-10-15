@@ -93,14 +93,7 @@ package ru.antkarlov.anthill
 			_isCreated = false;
 			_isStarted = false;
 			
-			if (stage != null)
-			{
-				create();
-			}
-			else
-			{
-				addEventListener(Event.ADDED_TO_STAGE, create);
-			}
+			(stage == null) ? addEventListener(Event.ADDED_TO_STAGE, create) : create();
 		}
 		
 		/**
@@ -108,13 +101,16 @@ package ru.antkarlov.anthill
 		 */
 		public function create(event:Event = null):void
 		{
+			if (event != null)
+			{
+				removeEventListener(Event.ADDED_TO_STAGE, create);
+			}
+			
 			AntG.init(this);
 			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.frameRate = _framerate;
-						
-			removeEventListener(Event.ADDED_TO_STAGE, create);
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, AntG.debugger.console.keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, AntG.keys.keyDownHandler);
