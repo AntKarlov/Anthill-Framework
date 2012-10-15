@@ -1,6 +1,8 @@
 package ru.antkarlov.anthill
 {
 	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.debug.AntDrawer;
+	
 	import flash.geom.Rectangle;
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
@@ -604,7 +606,7 @@ package ru.antkarlov.anthill
 				return null;
 			}
 			
-			var point:AntPoint = getCoordinates(aIndex, point);			
+			var point:AntPoint = getCoordinates(aIndex);			
 			var tile:AntActor = tiles[aIndex] as AntActor;
 			if (tile == null)
 			{
@@ -637,6 +639,63 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
+		 * @private
+		 */
+		public function queryRectIndexes(aFirstIndex:int, aLastIndex:int, aResult:Array = null):Array
+		{
+			if (aResult == null)
+			{
+				aResult = [];
+			}
+			
+			if (aFirstIndex == aLastIndex)
+			{
+				aResult[aResult.length] = aFirstIndex;
+				return aResult;
+			}
+			
+			var tmp:Number = 0;
+			var lowerPos:AntPoint = getCoordinates(aFirstIndex);
+			var upperPos:AntPoint = getCoordinates(aLastIndex);
+			
+			if (upperPos.x < lowerPos.x)
+			{
+				tmp = upperPos.x;
+				upperPos.x = lowerPos.x;
+				lowerPos.x = tmp;
+			}
+			
+			if (upperPos.y < lowerPos.y)
+			{
+				tmp = upperPos.y;
+				upperPos.y = lowerPos.y;
+				lowerPos.y = tmp;
+			}
+			
+			var i:int;
+			var j:int;
+			if (lowerPos.y == upperPos.y)
+			{
+				for (i = lowerPos.x; i <= upperPos.x; i++)
+				{
+					aResult[aResult.length] = getIndex(i, lowerPos.y);
+				}
+			}
+			else
+			{
+				for (i = lowerPos.y; i <= upperPos.y; i++)
+				{
+					for (j = lowerPos.x; j <= upperPos.x; j++)
+					{
+						aResult[aResult.length] = getIndex(j, i);
+					}
+				}
+			}
+			
+			return aResult;
+		}
+		
+		/**
 		 * @inheritDoc
 		 */
 		override public function draw():void
@@ -648,6 +707,51 @@ package ru.antkarlov.anthill
 			else
 			{
 				super.draw();
+			}
+			
+			if (AntG.debugDrawer != null && allowDebugDraw)
+			{
+				var cam:AntCamera;
+				var n:int = AntG.cameras.length;
+				for (var i:int = 0; i < n; i++)
+				{
+					cam = AntG.cameras[i] as AntCamera;
+					if (cam != null)
+					{
+						debugDraw(cam);
+					}
+				}
+			}
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function debugDraw(aCamera:AntCamera):void
+		{
+			var p1:AntPoint = new AntPoint();
+			var p2:AntPoint = new AntPoint();
+			var drawer:AntDrawer = AntG.debugDrawer;
+			drawer.setCamera(aCamera);
+			
+			if (drawer.showBorders)
+			{
+				var i:int = 0;
+				for (i = 0; i < _numRows + 1; i++)
+				{
+					p1.x = aCamera.scroll.x * scrollFactor.x;
+					p2.x = (_tileWidth * _numCols + aCamera.scroll.x) * scrollFactor.x;
+					p1.y = p2.y = (_tileHeight * i + aCamera.scroll.y) * scrollFactor.y;
+					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, 0x5E5E5E);
+				}
+				
+				for (i = 0; i < _numCols + 1; i++)
+				{
+					p1.x = p2.x = (_tileWidth * i + aCamera.scroll.x) * scrollFactor.x;
+					p1.y = aCamera.scroll.y * scrollFactor.y;
+					p2.y = (_tileHeight * _numRows + aCamera.scroll.y) * scrollFactor.y;
+					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, 0x5E5E5E);
+				}
 			}
 		}
 		
@@ -920,6 +1024,22 @@ package ru.antkarlov.anthill
 		public function get numTiles():int
 		{
 			return _numTiles;
+		}
+		
+		/**
+		 * Ширина тайлов.
+		 */
+		public function get tileWidth():int
+		{
+			return _tileWidth;
+		}
+		
+		/**
+		 * Высота тайлов.
+		 */
+		public function get tileHeight():int
+		{
+			return _tileHeight;
 		}
 	
 	}
