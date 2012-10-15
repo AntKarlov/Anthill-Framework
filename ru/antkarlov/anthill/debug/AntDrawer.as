@@ -208,26 +208,13 @@ package ru.antkarlov.anthill.debug
 		 */
 		public function drawCircle(aX:int, aY:int, aRadius:int, aColor:uint = 0xffff00ff):void
 		{
-			function plotCircle(aX:int, aY:int, cX:int, cY:int):void
-			{
-				_buffer.setPixel(cX + aX, cY + aY, aColor);
-				_buffer.setPixel(cX + aX, cY - aY, aColor);
-				_buffer.setPixel(cX - aX, cY + aY, aColor);
-				_buffer.setPixel(cX - aX, cY - aY, aColor);
-			}
-			
-			if (_buffer == null)
-			{
-				return;
-			}
-			
 			var dx:int = 0;
 			var dy:int = aRadius;
 			var delta:int = 2 - 2 * aRadius;
 			while (dx < dy)
 			{
-				plotCircle(dx, dy, aX, aY);
-				plotCircle(dy, dx, aX, aY);
+				plotCircle(dx, dy, aX, aY, aColor);
+				plotCircle(dy, dx, aX, aY, aColor);
 				if (delta < 0)
 				{
 					delta += 4 * dx + 6;
@@ -241,9 +228,25 @@ package ru.antkarlov.anthill.debug
 
 				if (dx == dy)
 				{
-					plotCircle(dx, dy, aX, aY);
+					plotCircle(dx, dy, aX, aY, aColor);
 				}
 			}
+		}
+		
+		/**
+		 * @private
+		 */
+		private function plotCircle(aX:int, aY:int, cX:int, cY:int, aColor:uint):void
+		{
+			if (_buffer == null)
+			{
+				return;
+			}
+			
+			_buffer.setPixel(cX + aX, cY + aY, aColor);
+			_buffer.setPixel(cX + aX, cY - aY, aColor);
+			_buffer.setPixel(cX - aX, cY + aY, aColor);
+			_buffer.setPixel(cX - aX, cY - aY, aColor);
 		}
 		
 		/**
