@@ -590,6 +590,40 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
+		 * @private
+		 */
+		public function getMyTile(aIndex:int, aClass:Class = null):AntEntity
+		{
+			if (aIndex < 0 || aIndex >= tiles.length)
+			{
+				return null;
+			}
+			
+			var point:AntPoint = getCoordinates(aIndex);			
+			var tile:AntEntity = tiles[aIndex];
+			if (tile == null)
+			{
+				if (aClass != null)
+				{
+					tile = recycle(aClass) as AntActor;
+					if (!tile.exists)
+					{
+						tile.revive();
+					}
+
+					tile.x = point.x * _tileWidth;
+					tile.y = point.y * _tileHeight;
+					tiles[aIndex] = tile;
+					return tile;
+				}
+				
+				return null;
+			}
+			
+			return tile;
+		}
+		
+		/**
 		 * Безопасное извлечение тайла из карты по индексу.
 		 * 
 		 * <p>Примечание: Вернет <code>null</code> если указанный индекс тайла выходит за пределы карты или если тайл не существует.
@@ -739,17 +773,17 @@ package ru.antkarlov.anthill
 				var i:int = 0;
 				for (i = 0; i < _numRows + 1; i++)
 				{
-					p1.x = aCamera.scroll.x * scrollFactor.x;
-					p2.x = (_tileWidth * _numCols + aCamera.scroll.x) * scrollFactor.x;
-					p1.y = p2.y = (_tileHeight * i + aCamera.scroll.y) * scrollFactor.y;
+					p1.x = x + aCamera.scroll.x * scrollFactor.x;
+					p2.x = x + _tileWidth * _numCols + aCamera.scroll.x * scrollFactor.x;
+					p1.y = p2.y = y + _tileHeight * i + aCamera.scroll.y * scrollFactor.y;
 					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, 0x5E5E5E);
 				}
 				
 				for (i = 0; i < _numCols + 1; i++)
 				{
-					p1.x = p2.x = (_tileWidth * i + aCamera.scroll.x) * scrollFactor.x;
-					p1.y = aCamera.scroll.y * scrollFactor.y;
-					p2.y = (_tileHeight * _numRows + aCamera.scroll.y) * scrollFactor.y;
+					p1.x = p2.x = x + _tileWidth * i + aCamera.scroll.x * scrollFactor.x;
+					p1.y = y + aCamera.scroll.y * scrollFactor.y;
+					p2.y = y + _tileHeight * _numRows + aCamera.scroll.y * scrollFactor.y;
 					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, 0x5E5E5E);
 				}
 			}
