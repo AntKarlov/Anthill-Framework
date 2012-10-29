@@ -369,7 +369,7 @@ package ru.antkarlov.anthill
 					}
 				}
 			}
-					
+
 			super.draw();
 		}
 		
@@ -466,8 +466,9 @@ package ru.antkarlov.anthill
 			{
 				_curAnim = _animations.get(aName);
 				_curAnimName = aName;
-				goto(status);
+				_prevFrame = -1;
 				resetHelpers();
+				goto(status);
 			}
 			else
 			{
@@ -774,8 +775,14 @@ package ru.antkarlov.anthill
 				return;
 			}
 			
+			var sendEvent:Boolean = !_toggle;
 			if (_toggle)
-			{
+			{	
+				if (cameras == null)
+				{
+					cameras = AntG.cameras;
+				}
+				
 				var cam:AntCamera;
 				var n:int = cameras.length;
 				for (var i:int = 0; i < n; i++)
@@ -787,13 +794,14 @@ package ru.antkarlov.anthill
 						if (intersectsPoint(_point))
 						{
 							_selected = !_selected;
+							sendEvent = true;
 							break;
 						}
 					}
 				}
 			}
 			
-			status = (_selected) ? DOWN : (_over) ? OVER : NORMAL;
+			status = (_selected) ? DOWN : ((_over) ? OVER : NORMAL);
 			
 			if (status != DOWN)
 			{
@@ -810,7 +818,10 @@ package ru.antkarlov.anthill
 			}
 			
 			goto(status);
-			eventUp.send([ this ]);
+			if (sendEvent)
+			{
+				eventUp.send([ this ]);
+			}
 		}
 		
 		//---------------------------------------
@@ -954,7 +965,7 @@ package ru.antkarlov.anthill
 					}
 				}
 				
-				calcFrame();
+				calcFrame(status - 1);
 			}
 		}
 		
@@ -996,7 +1007,7 @@ package ru.antkarlov.anthill
 					}
 				}
 				
-				calcFrame();
+				calcFrame(status - 1);
 			}
 		}
 
