@@ -34,7 +34,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Версия обслуживания.
 		 */
-		public static const LIB_MAINTENANCE:int = 1;
+		public static const LIB_MAINTENANCE:int = 2;
 		
 		/**
 		 * Размер окна по ширине. 
