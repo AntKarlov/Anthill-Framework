@@ -55,29 +55,12 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Клонирует себя.
-		 * 
-		 * @param	aPoint	 Куда склонировать значения.
-		 * @return		Возвращает новый экземпляр класс с идентичными значениями.
-		 */
-		public function clone(aPoint:AntPoint = null):AntPoint
-		{
-			if (aPoint == null)
-			{
-				aPoint = new AntPoint();
-			}
-			
-			aPoint.set(x, y);
-			return aPoint;
-		}
-		
-		/**
 		 * Копирует свои значения в указанную точку.
 		 * 
 		 * @param	aPoint	 Точка куда необходимо скопировать свои значения.
 		 * @return		Возвращает указатель на точку со скопированными значениями.
 		 */
-		public function copyTo(aPoint:AntPoint = null):AntPoint
+		public function copy(aPoint:AntPoint = null):AntPoint
 		{
 			if (aPoint == null)
 			{
