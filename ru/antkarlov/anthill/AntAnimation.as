@@ -163,6 +163,52 @@ package ru.antkarlov.anthill
 			offsetY.length = 0;
 		}
 		
+		/**
+		 * Создает дубликат текущей анимации только с указанными кадрами.
+		 * 
+		 * @param	aFrames	 Номера кадров которые необходимо включить в новую анимацию.
+		 * @param	aName	 Имя новой анимации, если не указано, то будет использовано имя оригинальной анимации.
+		 * @param	aCopy	 Если true то будут созданы новые экземпляры кадров, иначе будут использоваться указатели на кадры из оригинальной анимации.
+		 * @return		Возвращает новый экземпляр текущей анимации (дубликат).
+		 */
+		public function dublicateWithFrames(aFrames:Array, aName:String = null, aCopy:Boolean = false):AntAnimation
+		{
+			var newAnim:AntAnimation = new AntAnimation((aName == null) ? name : aName);
+			newAnim.width = width;
+			newAnim.height = height;
+			newAnim.totalFrames = aFrames.length;
+			
+			var rect:Rectangle = new Rectangle();
+			var origBmp:BitmapData;
+			var newBmp:BitmapData;
+			var n:int = aFrames.length;
+			var frame:int;
+			for (var i:int = 0; i < n; i++)
+			{
+				frame = aFrames[i];
+				
+				if (aCopy)
+				{
+					origBmp = frames[frame] as BitmapData;
+					rect.x = rect.y = 0;
+					rect.width = origBmp.width;
+					rect.height = origBmp.height;
+					newBmp = new BitmapData(rect.width, rect.height, true, 0);
+					newBmp.copyPixels(origBmp, rect, DEST_POINT);
+					newAnim.frames[newAnim.frames.length] = newBmp;
+				}
+				else
+				{
+					newAnim.frames[newAnim.frames.length] = frames[frame];
+				}
+				
+				newAnim.offsetX = offsetX[frame];
+				newAnim.offsetY = offsetY[frame];
+			}
+			
+			return newAnim;
+		}
+		
 		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------
