@@ -294,27 +294,30 @@ package ru.antkarlov.anthill
 					return;
 				}
 
-				var e:AntEntity;
+				var entity:AntEntity;
 				var n:int = children.length;
 				for (var i:int = 0; i < n; i++)
 				{
-					e = children[i] as AntEntity;
-					if (e != null && e.exists)
+					entity = children[i] as AntEntity;
+					if (entity != null && entity.exists)
 					{
-						if (e.isGroup)
+						if (entity.isGroup)
 						{
-							e.reset(e.x + mx, e.y + my);
+							entity.reset(entity.x + mx, entity.y + my);
 						}
 						else
 						{
-							e.x += mx;
-							e.y += my;
+							entity.x += mx;
+							entity.y += my;
 						}
 					}
 				}
 			}
 			
-			saveLastPosition();
+			if (!_isVisual)
+			{
+				saveLastPosition();
+			}
 		}
 		
 		/**
@@ -490,6 +493,12 @@ package ru.antkarlov.anthill
 			
 			// Указатель на родительский объект (на себя).
 			aEntity.parent = this;
+			if (length >= 1)
+			{
+				aEntity.angle += angle;
+				aEntity.x += x;
+				aEntity.y += y;
+			}
 			
 			// Ищем пустую ячейку в массиве.
 			var n:int = children.length;
@@ -505,6 +514,7 @@ package ru.antkarlov.anthill
 			// Добавляем в конец массива.
 			children[n] = aEntity;
 			length = n + 1;
+			
 			return aEntity;
 		}
 		
