@@ -146,10 +146,9 @@ package ru.antkarlov.anthill
 			
 			if (!_cachedAnimations.containsKey(aKey))
 			{
-				anim = new AntAnimation();
+				anim = new AntAnimation(aKey);
 				clip = new (_classes.get(aKey) as Class);
 				anim.makeAnimation(clip);
-				anim.name = aKey;
 				_cachedAnimations.set(aKey, anim);
 			}
 			else
@@ -158,6 +157,19 @@ package ru.antkarlov.anthill
 			}
 			
 			return anim;
+		}
+		
+		/**
+		 * Помещает анимацию в кэш.
+		 * 
+		 * @param	aKey	 Имя анимации которую необходимо добавить.
+		 * @param	aAnim	 Анимация которую необходимо поместить в кэш.
+		 * @return		Возвращает указатель на добавленную анимацию.
+		 */
+		public function setAnimation(aKey:String, aAnim:AntAnimation):AntAnimation
+		{
+			_cachedAnimations.set(aKey, aAnim);
+			return aAnim;
 		}
 		
 		/**
