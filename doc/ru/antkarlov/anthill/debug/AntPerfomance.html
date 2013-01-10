@@ -1,86 +1,704 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../../override.css" type="text/css"><meta name="keywords" content="AntPerfomance,ru.antkarlov.anthill.debug.AntPerfomance,CLOSE,CONSOLE,DATA,DEBUGDRAW_OFF,DEBUGDRAW_ON,DEFAULT,ERROR,FONT_NAME,FONT_SIZE,ImgClose,ImgConsole,ImgDebugDrawOff,ImgDebugDrawOn,ImgMonitor,ImgPerfomance,ImgSoundOff,ImgSoundOn,MONITOR,PERFOMANCE,RESULT,SOUND_OFF,SOUND_ON,_background,_bitmap,_blinkInterval,_btnClose,_buffer,_canRedraw,_commandStr,_cursorVisible,_fButton,_fDefault,_fGray,_fInput,_fNumbering,_fWhite,_height,_hints,_isConsoleVisible,_isMonitorVisible,_isMove,_isOver,_isPerfomanceVisible,_isVisible,_kind,_lastCommands,_lastIndex,_lineFrom,_lineNum,_mask,_masked,_normal,_offsetX,_offsetY,_over,_parent,_prevHeight,_registry,_registry,_tfConsole,_tfInput,_tfKey,_tfNumbering,_tfTitle,_tfValue,_width,averageFps,color,console,currentFps,currentMem,enable,fpsList,history,intervalTime,kind,maxFps,maxMem,memList,minFps,minMem,monitor,onClick,perfomance,ratingPhysics,ratingRender,ratingTotal,ratingUpdate,runningTime,showAxis,showBorders,showBounds,title,addHandlers,addHandlers,beginWatch,callGarbageCollector,clear,create,create,create,create,dispose,draw,draw,draw,draw,drawAxis,drawCircle,drawLine,drawPoint,drawRect,endWatch,execute,hide,hide,keyDownHandler,lineTo,log,makeLabel,moveTo,nextCommand,onConsole,onMonitor,onPerfomance,prevCommand,redrawDisplay,refresh,registerCommand,removeHandlers,removeHandlers,scrollDown,scrollUp,setCamera,show,show,show,show,start,stop,track,unregisterCommand,unwatchValue,update,update,update,updateDisplay,updateDisplay,updateMinMax,updateVisualState,watchValue,write"><title>ru.antkarlov.anthill.debug.AntPerfomance</title></head><body><script language="javascript" type="text/javascript" src="../../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
+<meta content="AntPerfomance,ru.antkarlov.anthill.debug.AntPerfomance,fpsList,history,maxFps,maxMem,memList,minFps,minMem,ratingPlugins,ratingRender,ratingTotal,ratingUpdate,averageFps,currentFps,currentMem,intervalTime,runningTime,create,draw,redrawDisplay,show,start,stop,update,updateDisplay,updateMinMax" name="keywords">
+<title>ru.antkarlov.anthill.debug.AntPerfomance</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
 				asdocTitle = 'AntPerfomance - API Documentation';
 				var baseRef = '../../../../';
 				window.onload = configPage;
 			--></script>
-<script type="text/javascript">
-			scrollToNameAnchor();
-		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">API Documentation</td><td class="titleTableTopNav" align="right"><a href="../../../../package-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../../class-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../../all-index-A.html" onclick="loadClassListFrame('../../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../../index.html?ru/antkarlov/anthill/debug/AntPerfomance.html&amp;ru/antkarlov/anthill/debug/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">AntPerfomance</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
-				<!--
-				
-					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("AntPerfomance"); titleBar_setSubNav(true,true,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
-				-->
-			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">ru.antkarlov.anthill.debug</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  AntPerfomance</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">AntPerfomance  <img src="../../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> <a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a> <img src="../../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> flash.display.Sprite</td></tr></table><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Language Version :&nbsp;</b></td><td>ActionScript 3</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Since :&nbsp;</b></td><td>22.11.2011</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Runtime Versions :&nbsp;</b></td><td>AIR 1.0, Flash Player  9.0.0</td></tr></table><p></p><p></p><p></p>
-	 Отладочный класс собирающий и демонстрирующий статистику производительности игры.
-	 <p>За основу взят <a href="http://lostinactionscript.com/2008/10/06/as3-swf-profiler/" target="">SWFProfiler</a>
-               </p>
-	 
-	           <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><div class="showHideLinks"><div id="hideInheritedProperty" class="hideInheritedProperty"><a class="showHideLink" href="#propertySummary" onclick="javascript:setInheritedVisible(false,'Property');"><img class="showHideLinkImage" src="../../../../images/expanded.gif"> Hide Inherited Public Properties</a></div><div id="showInheritedProperty" class="showInheritedProperty"><a class="showHideLink" href="#propertySummary" onclick="javascript:setInheritedVisible(true,'Property');"><img class="showHideLinkImage" src="../../../../images/collapsed.gif"> Show Inherited Public Properties</a></div></div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#averageFps" class="signatureLink">averageFps</a> : Number<div class="summaryTableDescription">[read-only] 
-		 Определяет среднее количество кадров в секунду.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#currentFps" class="signatureLink">currentFps</a> : Number<div class="summaryTableDescription">[read-only] 
-		 Определяет текущее количество кадров в секунду.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#currentMem" class="signatureLink">currentMem</a> : Number<div class="summaryTableDescription">[read-only] 
-		 Определяет текущий объем занятой оперативной памяти.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#fpsList" class="signatureLink">fpsList</a> : Array<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#history" class="signatureLink">history</a> : int = 60<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#intervalTime" class="signatureLink">intervalTime</a> : Number<div class="summaryTableDescription">[read-only] 
-		 Определяет время с момента запуска отслеживания производительности.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#maxFps" class="signatureLink">maxFps</a> : Number<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#maxMem" class="signatureLink">maxMem</a> : Number<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#memList" class="signatureLink">memList</a> : Array<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#minFps" class="signatureLink">minFps</a> : Number<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#minMem" class="signatureLink">minMem</a> : Number<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#ratingPhysics" class="signatureLink">ratingPhysics</a> : <a href="../../../../ru/antkarlov/anthill/AntRating.html">AntRating</a><div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#ratingRender" class="signatureLink">ratingRender</a> : <a href="../../../../ru/antkarlov/anthill/AntRating.html">AntRating</a><div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#ratingTotal" class="signatureLink">ratingTotal</a> : <a href="../../../../ru/antkarlov/anthill/AntRating.html">AntRating</a><div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#ratingUpdate" class="signatureLink">ratingUpdate</a> : <a href="../../../../ru/antkarlov/anthill/AntRating.html">AntRating</a><div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#runningTime" class="signatureLink">runningTime</a> : Number<div class="summaryTableDescription">[read-only] 
-		 Определяет время с момента запуска приложения.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class="hideInheritedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#title" class="signatureLink">title</a> : String<div class="summaryTableDescription">[write-only] 
-		 Устанавливает заголовок окна.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr></table></div><a name="protectedPropertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Protected Properties</div><div class="showHideLinks"><div id="hideInheritedProtectedProperty" class="hideInheritedProtectedProperty"><a class="showHideLink" href="#protectedPropertySummary" onclick="javascript:setInheritedVisible(false,'ProtectedProperty');"><img class="showHideLinkImage" src="../../../../images/expanded.gif"> Hide Inherited Protected Properties</a></div><div id="showInheritedProtectedProperty" class="showInheritedProtectedProperty"><a class="showHideLink" href="#protectedPropertySummary" onclick="javascript:setInheritedVisible(true,'ProtectedProperty');"><img class="showHideLinkImage" src="../../../../images/collapsed.gif"> Show Inherited Protected Properties</a></div></div><table cellspacing="0" cellpadding="3" class="summaryTable hideInheritedProtectedProperty" id="summaryTableProtectedProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_btnClose" class="signatureLink">_btnClose</a> : <a href="../../../../ru/antkarlov/anthill/debug/AntGlyphButton.html">AntGlyphButton</a><div class="summaryTableDescription">
-		 Кнопка закрытия окна.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_fButton" class="signatureLink">_fButton</a> : TextFormat<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_fGray" class="signatureLink">_fGray</a> : TextFormat<div class="summaryTableDescription">
-		 Формат текста.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_fWhite" class="signatureLink">_fWhite</a> : TextFormat<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_height" class="signatureLink">_height</a> : int<div class="summaryTableDescription">
-		 Размер окна по высоте.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_isMove" class="signatureLink">_isMove</a> : Boolean<div class="summaryTableDescription">
-		 Флаг определяющий производится ли перетаскивание окна.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_offsetX" class="signatureLink">_offsetX</a> : int<div class="summaryTableDescription">
-		 Смещение по X.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_offsetY" class="signatureLink">_offsetY</a> : int<div class="summaryTableDescription">
-		 Смещение по Y.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_parent" class="signatureLink">_parent</a> : Sprite<div class="summaryTableDescription">
-		 Указатель на родительское окно (AntDebugger).</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_tfTitle" class="signatureLink">_tfTitle</a> : TextField<div class="summaryTableDescription">
-		 Текстовая метка заголовка окна.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedProtectedProperty"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#_width" class="signatureLink">_width</a> : int<div class="summaryTableDescription">
-		 Размер окна по ширине.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><div class="showHideLinks"><div id="hideInheritedMethod" class="hideInheritedMethod"><a class="showHideLink" href="#methodSummary" onclick="javascript:setInheritedVisible(false,'Method');"><img class="showHideLinkImage" src="../../../../images/expanded.gif"> Hide Inherited Public Methods</a></div><div id="showInheritedMethod" class="showInheritedMethod"><a class="showHideLink" href="#methodSummary" onclick="javascript:setInheritedVisible(true,'Method');"><img class="showHideLinkImage" src="../../../../images/collapsed.gif"> Show Inherited Public Methods</a></div></div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#AntPerfomance()" class="signatureLink">AntPerfomance</a>(aParent:Sprite, aX:Number, aY:Number)</div><div class="summaryTableDescription">
-		 </div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class="hideInheritedMethod"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#hide()" class="signatureLink">hide</a>():void</div><div class="summaryTableDescription">
-		 Скрывает окно.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#show()" class="signatureLink">show</a>():void</div><div class="summaryTableDescription">[override] 
-		 
-		 Отображает окно.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#start()" class="signatureLink">start</a>():void</div><div class="summaryTableDescription">
-		 Запуск сбора информации.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#stop()" class="signatureLink">stop</a>():void</div><div class="summaryTableDescription">
-		 Остановка сбора информации.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#update()" class="signatureLink">update</a>():void</div><div class="summaryTableDescription">
-		 Рассчет производительности.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr></table></div><a name="protectedMethodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Protected Methods </div><div class="showHideLinks"><div id="hideInheritedProtectedMethod" class="hideInheritedProtectedMethod"><a class="showHideLink" href="#protectedMethodSummary" onclick="javascript:setInheritedVisible(false,'ProtectedMethod');"><img class="showHideLinkImage" src="../../../../images/expanded.gif"> Show Inherited Protected Methods</a></div><div id="showInheritedProtectedMethod" class="showInheritedProtectedMethod"><a class="showHideLink" href="#protectedMethodSummary" onclick="javascript:setInheritedVisible(true,'ProtectedMethod');"><img class="showHideLinkImage" src="../../../../images/collapsed.gif"> Show Inherited Protected Methods</a></div></div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProtectedMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class="hideInheritedProtectedMethod"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#addHandlers()" class="signatureLink">addHandlers</a>():void</div><div class="summaryTableDescription">
-		 Устанавливает обработчики для работы окна.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#create()" class="signatureLink">create</a>():void</div><div class="summaryTableDescription">[override] 
-		 
-		 Инициализация окна.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#draw()" class="signatureLink">draw</a>():void</div><div class="summaryTableDescription">[override] 
-		 
-		 Отрисовка окна.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class="hideInheritedProtectedMethod"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#makeLabel()" class="signatureLink">makeLabel</a>(aX:Number, aY:Number, aTextFormat:TextFormat = null):TextField</div><div class="summaryTableDescription">
-		 Метод помошник для быстрого создания текстовых меток.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#redrawDisplay()" class="signatureLink">redrawDisplay</a>():void</div><div class="summaryTableDescription">
-		 Перерисовка графиков и значений в окне производительности.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class="hideInheritedProtectedMethod"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#removeHandlers()" class="signatureLink">removeHandlers</a>():void</div><div class="summaryTableDescription">
-		 Удаляет обработчики для работы окна.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#updateDisplay()" class="signatureLink">updateDisplay</a>():void</div><div class="summaryTableDescription">
-		 Обновление значений в окне производительности.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#updateMinMax()" class="signatureLink">updateMinMax</a>():void</div><div class="summaryTableDescription">
-		 Сбор статистики о производительности.</div></td><td class="summaryTableOwnerCol">AntPerfomance</td></tr></table></div><a name="constantSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Constants</div><div class="showHideLinks"><div id="hideInheritedConstant" class="hideInheritedConstant"><a class="showHideLink" href="#constantSummary" onclick="javascript:setInheritedVisible(false,'Constant');"><img class="showHideLinkImage" src="../../../../images/expanded.gif"> Hide Inherited Public Constants</a></div><div id="showInheritedConstant" class="showInheritedConstant"><a class="showHideLink" href="#constantSummary" onclick="javascript:setInheritedVisible(true,'Constant');"><img class="showHideLinkImage" src="../../../../images/collapsed.gif"> Show Inherited Public Constants</a></div></div><table cellspacing="0" cellpadding="3" class="summaryTable hideInheritedConstant" id="summaryTableConstant"><tr><th>&nbsp;</th><th colspan="2">Constant</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class="hideInheritedConstant"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#FONT_NAME" class="signatureLink">FONT_NAME</a> : String = system<div class="summaryTableDescription">[static] 
-		 Имя шрифта использующееся в текстах.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr><tr class="hideInheritedConstant"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img src="../../../../images/inheritedSummary.gif" alt="Inherited" title="Inherited" class="inheritedSummaryImage"></td><td class="summaryTableSignatureCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html#FONT_SIZE" class="signatureLink">FONT_SIZE</a> : int = 8<div class="summaryTableDescription">[static] 
-		 Размер шрифта использующегося в текстах.</div></td><td class="summaryTableOwnerCol"><a href="../../../../ru/antkarlov/anthill/debug/AntPopup.html">AntPopup</a></td></tr></table></div><script language="javascript" type="text/javascript"><!--
-										showHideInherited();
-										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="averageFps"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">averageFps</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>averageFps:Number</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
-		 Определяет среднее количество кадров в секунду.
-		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get averageFps():Number</code><br/></div><a name="propertyDetail"></a><a name="currentFps"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">currentFps</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>currentFps:Number</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
-		 Определяет текущее количество кадров в секунду.
-		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get currentFps():Number</code><br/></div><a name="propertyDetail"></a><a name="currentMem"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">currentMem</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>currentMem:Number</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
-		 Определяет текущий объем занятой оперативной памяти.
-		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get currentMem():Number</code><br/></div><a name="propertyDetail"></a><a name="fpsList"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">fpsList</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var fpsList:Array</code><p></p></div><a name="propertyDetail"></a><a name="history"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">history</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var history:int = 60</code><p></p></div><a name="propertyDetail"></a><a name="intervalTime"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">intervalTime</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>intervalTime:Number</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
-		 Определяет время с момента запуска отслеживания производительности.
-		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get intervalTime():Number</code><br/></div><a name="propertyDetail"></a><a name="maxFps"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">maxFps</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var maxFps:Number</code><p></p></div><a name="propertyDetail"></a><a name="maxMem"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">maxMem</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var maxMem:Number</code><p></p></div><a name="propertyDetail"></a><a name="memList"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">memList</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var memList:Array</code><p></p></div><a name="propertyDetail"></a><a name="minFps"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">minFps</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var minFps:Number</code><p></p></div><a name="propertyDetail"></a><a name="minMem"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">minMem</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var minMem:Number</code><p></p></div><a name="propertyDetail"></a><a name="ratingPhysics"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">ratingPhysics</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var ratingPhysics:<a href="../../../../ru/antkarlov/anthill/AntRating.html">AntRating</a></code><p></p></div><a name="propertyDetail"></a><a name="ratingRender"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">ratingRender</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var ratingRender:<a href="../../../../ru/antkarlov/anthill/AntRating.html">AntRating</a></code><p></p></div><a name="propertyDetail"></a><a name="ratingTotal"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">ratingTotal</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var ratingTotal:<a href="../../../../ru/antkarlov/anthill/AntRating.html">AntRating</a></code><p></p></div><a name="propertyDetail"></a><a name="ratingUpdate"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">ratingUpdate</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var ratingUpdate:<a href="../../../../ru/antkarlov/anthill/AntRating.html">AntRating</a></code><p></p></div><a name="propertyDetail"></a><a name="runningTime"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">runningTime</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>runningTime:Number</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
-		 Определяет время с момента запуска приложения.
-		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get runningTime():Number</code><br/></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="AntPerfomance()"></a><a name="AntPerfomance(flash.display.Sprite,Number,Number)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">AntPerfomance</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function AntPerfomance(aParent:Sprite, aX:Number, aY:Number)</code><p></p><p>
-		 </p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aParent</span>:Sprite</code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aX</span>:Number</code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aY</span>:Number</code></td></tr></table></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="create()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">create</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code>override protected function create():void</code><p></p><p></p><p>
-		 
-		 Инициализация окна.
-		 </p></div><a name="draw()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">draw</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>override protected function draw():void</code><p></p><p></p><p>
-		 
-		 Отрисовка окна.
-		 </p></div><a name="redrawDisplay()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">redrawDisplay</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function redrawDisplay():void</code><p></p><p></p><p>
-		 Перерисовка графиков и значений в окне производительности.
-		 </p></div><a name="show()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">show</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>override public function show():void</code><p></p><p></p><p>
-		 
-		 Отображает окно.
-		 </p></div><a name="start()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">start</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function start():void</code><p></p><p></p><p>
-		 Запуск сбора информации.
-		 </p></div><a name="stop()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">stop</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function stop():void</code><p></p><p></p><p>
-		 Остановка сбора информации.
-		 </p></div><a name="update()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">update</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function update():void</code><p></p><p></p><p>
-		 Рассчет производительности.
-		 </p></div><a name="updateDisplay()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">updateDisplay</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function updateDisplay():void</code><p></p><p></p><p>
-		 Обновление значений в окне производительности.
-		 </p></div><a name="updateMinMax()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">updateMinMax</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function updateMinMax():void</code><p></p><p></p><p>
-		 Сбор статистики о производительности.
-		 </p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Tue Sep 11 2012, 03:56 PM +04:00  </center></div></body></html><!--<br/>Tue Sep 11 2012, 03:56 PM +04:00  -->
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../index-list.html')" href="../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../index.html?ru/antkarlov/anthill/debug/AntPerfomance.html&amp;ru/antkarlov/anthill/debug/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;AntPerfomance</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class AntPerfomance"); titleBar_setSubNav(true,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">ru.antkarlov.anthill.debug</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class AntPerfomance</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">AntPerfomance <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../images/inherit-arrow.gif"> <a href="AntPopup.html">AntPopup</a> <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../images/inherit-arrow.gif"> flash.display.Sprite</td>
+</tr>
+</table>
+<p></p>
+  Отладочный класс собирающий и демонстрирующий статистику производительности игры.
+  <p>За основу взят <a href="http://lostinactionscript.com/2008/10/06/as3-swf-profiler/">SWFProfiler</a></p>
+  
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<div class="showHideLinks">
+<div class="hideInheritedProperty" id="hideInheritedProperty">
+<a onclick="javascript:setInheritedVisible(false,'Property');" href="#propertySummary" class="showHideLink"><img src="../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Properties</a>
+</div>
+<div class="showInheritedProperty" id="showInheritedProperty">
+<a onclick="javascript:setInheritedVisible(true,'Property');" href="#propertySummary" class="showHideLink"><img src="../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Properties</a>
+</div>
+</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#averageFps">averageFps</a> : Number<div class="summaryTableDescription">[read-only]
+   Определяет среднее количество кадров в секунду.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#currentFps">currentFps</a> : Number<div class="summaryTableDescription">[read-only]
+   Определяет текущее количество кадров в секунду.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#currentMem">currentMem</a> : Number<div class="summaryTableDescription">[read-only]
+   Определяет текущий объем занятой оперативной памяти.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#fpsList">fpsList</a> : Array<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#history">history</a> : int = 60<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#intervalTime">intervalTime</a> : Number<div class="summaryTableDescription">[read-only]
+   Определяет время с момента запуска отслеживания производительности.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#maxFps">maxFps</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#maxMem">maxMem</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#memList">memList</a> : Array<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#minFps">minFps</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#minMem">minMem</a> : Number<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#ratingPlugins">ratingPlugins</a> : <a href="../../anthill/AntRating.html">AntRating</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#ratingRender">ratingRender</a> : <a href="../../anthill/AntRating.html">AntRating</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#ratingTotal">ratingTotal</a> : <a href="../../anthill/AntRating.html">AntRating</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#ratingUpdate">ratingUpdate</a> : <a href="../../anthill/AntRating.html">AntRating</a>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#runningTime">runningTime</a> : Number<div class="summaryTableDescription">[read-only]
+   Определяет время с момента запуска приложения.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#title">title</a> : String<div class="summaryTableDescription">
+   Устанавливает заголовок окна.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+</table>
+</div>
+<a name="protectedPropertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Properties</div>
+<div class="showHideLinks">
+<div class="hideInheritedProtectedProperty" id="hideInheritedProtectedProperty">
+<a onclick="javascript:setInheritedVisible(false,'ProtectedProperty');" href="#protectedPropertySummary" class="showHideLink"><img src="../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Protected Properties</a>
+</div>
+<div class="showInheritedProtectedProperty" id="showInheritedProtectedProperty">
+<a onclick="javascript:setInheritedVisible(true,'ProtectedProperty');" href="#protectedPropertySummary" class="showHideLink"><img src="../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Protected Properties</a>
+</div>
+</div>
+<table id="summaryTableProtectedProperty" class="summaryTable hideInheritedProtectedProperty" cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_btnClose">_btnClose</a> : <a href="../debug/AntGlyphButton.html">AntGlyphButton</a>
+<div class="summaryTableDescription">
+   Кнопка закрытия окна.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_fButton">_fButton</a> : TextFormat<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_fGray">_fGray</a> : TextFormat<div class="summaryTableDescription">
+   Формат текста.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_fWhite">_fWhite</a> : TextFormat<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_height">_height</a> : int<div class="summaryTableDescription">
+   Размер окна по высоте.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_isMove">_isMove</a> : Boolean<div class="summaryTableDescription">
+   Флаг определяющий производится ли перетаскивание окна.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_offsetX">_offsetX</a> : int<div class="summaryTableDescription">
+   Смещение по X.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_offsetY">_offsetY</a> : int<div class="summaryTableDescription">
+   Смещение по Y.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_parent">_parent</a> : Sprite<div class="summaryTableDescription">
+   Указатель на родительское окно (AntDebugger).</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_tfTitle">_tfTitle</a> : TextField<div class="summaryTableDescription">
+   Текстовая метка заголовка окна.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedProtectedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#_width">_width</a> : int<div class="summaryTableDescription">
+   Размер окна по ширине.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<div class="showHideLinks">
+<div class="hideInheritedMethod" id="hideInheritedMethod">
+<a onclick="javascript:setInheritedVisible(false,'Method');" href="#methodSummary" class="showHideLink"><img src="../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Methods</a>
+</div>
+<div class="showInheritedMethod" id="showInheritedMethod">
+<a onclick="javascript:setInheritedVisible(true,'Method');" href="#methodSummary" class="showHideLink"><img src="../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Methods</a>
+</div>
+</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#AntPerfomance()">AntPerfomance</a>(aParent:Sprite, aX:Number, aY:Number)</div>
+<div class="summaryTableDescription">
+   </div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AntPopup.html#hide()">hide</a>():void</div>
+<div class="summaryTableDescription">
+   Скрывает окно.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#show()">show</a>():void</div>
+<div class="summaryTableDescription">
+   
+   Отображает окно.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#start()">start</a>():void</div>
+<div class="summaryTableDescription">
+   Запуск сбора информации.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#stop()">stop</a>():void</div>
+<div class="summaryTableDescription">
+   Остановка сбора информации.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#update()">update</a>():void</div>
+<div class="summaryTableDescription">
+   Рассчет производительности.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+</table>
+</div>
+<a name="protectedMethodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Methods</div>
+<div class="showHideLinks">
+<div class="hideInheritedProtectedMethod" id="hideInheritedProtectedMethod">
+<a onclick="javascript:setInheritedVisible(false,'ProtectedMethod');" href="#protectedMethodSummary" class="showHideLink"><img src="../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Protected Methods</a>
+</div>
+<div class="showInheritedProtectedMethod" id="showInheritedProtectedMethod">
+<a onclick="javascript:setInheritedVisible(true,'ProtectedMethod');" href="#protectedMethodSummary" class="showHideLink"><img src="../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Protected Methods</a>
+</div>
+</div>
+<table id="summaryTableProtectedMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="hideInheritedProtectedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AntPopup.html#addHandlers()">addHandlers</a>():void</div>
+<div class="summaryTableDescription">
+   Устанавливает обработчики для работы окна.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#create()">create</a>():void</div>
+<div class="summaryTableDescription">
+   
+   Инициализация окна.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#draw()">draw</a>():void</div>
+<div class="summaryTableDescription">
+   
+   Отрисовка окна.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="hideInheritedProtectedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AntPopup.html#makeLabel()">makeLabel</a>(aX:Number, aY:Number, aTextFormat:TextFormat = null):TextField</div>
+<div class="summaryTableDescription">
+   Метод помошник для быстрого создания текстовых меток.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#redrawDisplay()">redrawDisplay</a>():void</div>
+<div class="summaryTableDescription">
+   Перерисовка графиков и значений в окне производительности.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="hideInheritedProtectedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="AntPopup.html#removeHandlers()">removeHandlers</a>():void</div>
+<div class="summaryTableDescription">
+   Удаляет обработчики для работы окна.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#updateDisplay()">updateDisplay</a>():void</div>
+<div class="summaryTableDescription">
+   Обновление значений в окне производительности.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#updateMinMax()">updateMinMax</a>():void</div>
+<div class="summaryTableDescription">
+   Сбор статистики о производительности.</div>
+</td><td class="summaryTableOwnerCol">AntPerfomance</td>
+</tr>
+</table>
+</div>
+<a name="constantSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Constants</div>
+<div class="showHideLinks">
+<div class="hideInheritedConstant" id="hideInheritedConstant">
+<a onclick="javascript:setInheritedVisible(false,'Constant');" href="#constantSummary" class="showHideLink"><img src="../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Constants</a>
+</div>
+<div class="showInheritedConstant" id="showInheritedConstant">
+<a onclick="javascript:setInheritedVisible(true,'Constant');" href="#constantSummary" class="showHideLink"><img src="../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Constants</a>
+</div>
+</div>
+<table id="summaryTableConstant" class="summaryTable hideInheritedConstant" cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Constant</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="hideInheritedConstant">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#FONT_NAME">FONT_NAME</a> : String = "system"<div class="summaryTableDescription">[static]
+   Имя шрифта использующееся в текстах.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+<tr class="hideInheritedConstant">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="AntPopup.html#FONT_SIZE">FONT_SIZE</a> : int = 8<div class="summaryTableDescription">[static]
+   Размер шрифта использующегося в текстах.</div>
+</td><td class="summaryTableOwnerCol"><a href="AntPopup.html">AntPopup</a></td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="averageFps"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">averageFps</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>averageFps:Number</code>&nbsp;&nbsp;[read-only]<p>
+   Определяет среднее количество кадров в секунду.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get averageFps():Number</code>
+<br>
+</div>
+<a name="currentFps"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">currentFps</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>currentFps:Number</code>&nbsp;&nbsp;[read-only]<p>
+   Определяет текущее количество кадров в секунду.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get currentFps():Number</code>
+<br>
+</div>
+<a name="currentMem"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">currentMem</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>currentMem:Number</code>&nbsp;&nbsp;[read-only]<p>
+   Определяет текущий объем занятой оперативной памяти.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get currentMem():Number</code>
+<br>
+</div>
+<a name="fpsList"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">fpsList</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var fpsList:Array</code>
+</div>
+<a name="history"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">history</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var history:int = 60</code>
+</div>
+<a name="intervalTime"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">intervalTime</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>intervalTime:Number</code>&nbsp;&nbsp;[read-only]<p>
+   Определяет время с момента запуска отслеживания производительности.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get intervalTime():Number</code>
+<br>
+</div>
+<a name="maxFps"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">maxFps</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var maxFps:Number</code>
+</div>
+<a name="maxMem"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">maxMem</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var maxMem:Number</code>
+</div>
+<a name="memList"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">memList</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var memList:Array</code>
+</div>
+<a name="minFps"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">minFps</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var minFps:Number</code>
+</div>
+<a name="minMem"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">minMem</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var minMem:Number</code>
+</div>
+<a name="ratingPlugins"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ratingPlugins</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var ratingPlugins:<a href="../../anthill/AntRating.html">AntRating</a></code>
+</div>
+<a name="ratingRender"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ratingRender</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var ratingRender:<a href="../../anthill/AntRating.html">AntRating</a></code>
+</div>
+<a name="ratingTotal"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ratingTotal</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var ratingTotal:<a href="../../anthill/AntRating.html">AntRating</a></code>
+</div>
+<a name="ratingUpdate"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ratingUpdate</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var ratingUpdate:<a href="../../anthill/AntRating.html">AntRating</a></code>
+</div>
+<a name="runningTime"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">runningTime</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>runningTime:Number</code>&nbsp;&nbsp;[read-only]<p>
+   Определяет время с момента запуска приложения.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get runningTime():Number</code>
+<br>
+</div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="AntPerfomance()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">AntPerfomance</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function AntPerfomance(aParent:Sprite, aX:Number, aY:Number)</code><p>
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aParent</span>:Sprite</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aX</span>:Number</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aY</span>:Number</code></td>
+</tr>
+</table>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="create()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">create</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected override function create():void</code><p>
+   
+   Инициализация окна.
+   </p></div>
+<a name="draw()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">draw</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected override function draw():void</code><p>
+   
+   Отрисовка окна.
+   </p></div>
+<a name="redrawDisplay()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">redrawDisplay</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function redrawDisplay():void</code><p>
+   Перерисовка графиков и значений в окне производительности.
+   </p></div>
+<a name="show()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">show</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public override function show():void</code><p>
+   
+   Отображает окно.
+   </p></div>
+<a name="start()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">start</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function start():void</code><p>
+   Запуск сбора информации.
+   </p></div>
+<a name="stop()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">stop</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function stop():void</code><p>
+   Остановка сбора информации.
+   </p></div>
+<a name="update()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">update</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function update():void</code><p>
+   Рассчет производительности.
+   </p></div>
+<a name="updateDisplay()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">updateDisplay</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function updateDisplay():void</code><p>
+   Обновление значений в окне производительности.
+   </p></div>
+<a name="updateMinMax()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">updateMinMax</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function updateMinMax():void</code><p>
+   Сбор статистики о производительности.
+   </p></div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

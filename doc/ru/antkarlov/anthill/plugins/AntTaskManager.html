@@ -1,0 +1,789 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
+<meta content="AntTaskManager,ru.antkarlov.anthill.plugins.AntTaskManager,_cycle,_delay,_isPaused,_isStarted,_result,_task,eventComplete,isStarted,numTasks,pause,addInstantTask,addPause,addTask,addUrgentInstantTask,addUrgentTask,clear,destroy,nextTask,postUpdate,preUpdate,push,shift,start,stop,taskPause,unshift,update" name="keywords">
+<title>ru.antkarlov.anthill.plugins.AntTaskManager</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'AntTaskManager - API Documentation';
+				var baseRef = '../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../index-list.html')" href="../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../index.html?ru/antkarlov/anthill/plugins/AntTaskManager.html&amp;ru/antkarlov/anthill/plugins/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;AntTaskManager</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class AntTaskManager"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">ru.antkarlov.anthill.plugins</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class AntTaskManager</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Implements</td><td><a href="IPlugin.html">IPlugin</a></td>
+</tr>
+</table>
+<p></p>
+  Менеджер задач используется для выполнения задач (вызова указанных методов) в заданном порядке.
+  Позволяет легко и быстро программировать последовательность каких-либо действий, например появление кнопок в игровых меню.
+  <p>Менеджер задач запускается автоматически при добавлении хотябы одной задачи и останавливается когда все задачи выполнены.</p>
+  <p>Примечание: Идея взята у <a href="http://xitri.com/2010/10/27/ai-creation-tool-casual-connect-kiev-2010.html">Xitri.com</a></p>
+  
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#eventComplete">eventComplete</a> : <a href="../../anthill/AntEvent.html">AntEvent</a>
+<div class="summaryTableDescription">
+   Событие которое генерируется при завершении всех задач в менеджере задач.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#isStarted">isStarted</a> : Boolean<div class="summaryTableDescription">[read-only]
+   Определяет запущен ли менеджер задач.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#numTasks">numTasks</a> : int<div class="summaryTableDescription">[read-only]
+   Определяет количество задач.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#pause">pause</a> : Boolean<div class="summaryTableDescription">
+   Определяет режим паузы для менеджера задач.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+</table>
+</div>
+<a name="protectedPropertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Properties</div>
+<table id="summaryTableProtectedProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_cycle">_cycle</a> : Boolean<div class="summaryTableDescription">
+   Определяет выполняются ли задачи в цикле.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_delay">_delay</a> : Number<div class="summaryTableDescription">
+   Используется для рассчета текущей паузы между задачами.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_isPaused">_isPaused</a> : Boolean<div class="summaryTableDescription">
+   Определеяет поставленно ли выполнение задач на паузу.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_isStarted">_isStarted</a> : Boolean<div class="summaryTableDescription">
+   Определяет запущенна ли работа менеджера.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_result">_result</a> : Boolean<div class="summaryTableDescription">
+   Помошник для определения завершения текущей задачи.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_task">_task</a> : <a href="../../anthill/AntList.html">AntList</a>
+<div class="summaryTableDescription">
+   Список всех активных задач.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#AntTaskManager()">AntTaskManager</a>(aCycle:Boolean = false)</div>
+<div class="summaryTableDescription">
+   </div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addInstantTask()">addInstantTask</a>(aFunc:Function, aArgs:Array = null, aIgnoreCycle:Boolean = false):void</div>
+<div class="summaryTableDescription">
+   Добавляет задачу в конец очереди, указанный метод будет выполнен только один раз, после чего будет осуществлен
+   переход к следующей задачи не зависимо от того, что вернет метод-задача и вернет ли вообще.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addPause()">addPause</a>(aDelay:Number, aIgnoreCycle:Boolean = false):void</div>
+<div class="summaryTableDescription">
+   Добавляет паузу между задачами.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addTask()">addTask</a>(aFunc:Function, aArgs:Array = null, aIgnoreCycle:Boolean = false):void</div>
+<div class="summaryTableDescription">
+   Добавляет задачу в конец очереди, указанный метод будет выполнятся до тех пор пока не вернет <code>true</code>.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addUrgentInstantTask()">addUrgentInstantTask</a>(aFunc:Function, aArgs:Array = null, aIgnoreCycle:Boolean = false):void</div>
+<div class="summaryTableDescription">
+   Добавляет задачу в начало очереди, указанный метод будет выполнен только один раз, после чего будет осуществлен
+   переход к следующей задачи не зависимо от того, что вернет метод задача и вернет ли вообще.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addUrgentTask()">addUrgentTask</a>(aFunc:Function, aArgs:Array = null, aIgnoreCycle:Boolean = false):void</div>
+<div class="summaryTableDescription">
+   Добавляет задачу в начало очереди, указанный метод будет выполнятся до тех пор пока не вернет <code>true</code>.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#clear()">clear</a>():void</div>
+<div class="summaryTableDescription">
+   Удаляет все задачи из менеджера и останавливает его работу.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#destroy()">destroy</a>():void</div>
+<div class="summaryTableDescription">
+   Освобождает ресурсы занимаемые мендежером задач.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#nextTask()">nextTask</a>(aIgnoreCycle:Boolean = false):void</div>
+<div class="summaryTableDescription">
+   Переход к следующей задаче.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#postUpdate()">postUpdate</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#preUpdate()">preUpdate</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#update()">update</a>():void</div>
+<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+</table>
+</div>
+<a name="protectedMethodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Methods</div>
+<table id="summaryTableProtectedMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#push()">push</a>(aObj:Object):Object</div>
+<div class="summaryTableDescription">
+   Добавляет указанный объект в конец списка.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#shift()">shift</a>():Object</div>
+<div class="summaryTableDescription">
+   Удаляет первый объект из списка.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#start()">start</a>():void</div>
+<div class="summaryTableDescription">
+   Запускает работу менеджера задача.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#stop()">stop</a>():void</div>
+<div class="summaryTableDescription">
+   Останавливает работу менеджера задач.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#taskPause()">taskPause</a>(aDelay:Number):Boolean</div>
+<div class="summaryTableDescription">
+   Метод-задача для реализации паузы между задачами.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#unshift()">unshift</a>(aObj:Object):Object</div>
+<div class="summaryTableDescription">
+   Добавляет указанный объект в начало списка.</div>
+</td><td class="summaryTableOwnerCol">AntTaskManager</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="_cycle"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_cycle</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _cycle:Boolean</code><p>
+   Определяет выполняются ли задачи в цикле.
+   </p><p>The default value is <code>false</code>.</p>
+</div>
+<a name="_delay"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_delay</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _delay:Number</code><p>
+   Используется для рассчета текущей паузы между задачами.
+   </p><p>The default value is <code>0</code>.</p>
+</div>
+<a name="eventComplete"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">eventComplete</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var eventComplete:<a href="../../anthill/AntEvent.html">AntEvent</a></code><p>
+   Событие которое генерируется при завершении всех задач в менеджере задач.
+   Пример использования: 
+   <code>
+   taskManager.eventComplete.add(onComplete);
+   function onComplete():void {
+     trace("All tasks completed!");
+   }
+   </code>
+   </p></div>
+<a name="_isPaused"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_isPaused</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _isPaused:Boolean</code><p>
+   Определеяет поставленно ли выполнение задач на паузу.
+   </p><p>The default value is <code>false</code>.</p>
+</div>
+<a name="_isStarted"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_isStarted</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _isStarted:Boolean</code><p>
+   Определяет запущенна ли работа менеджера.
+   </p><p>The default value is <code>false</code>.</p>
+</div>
+<a name="isStarted"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">isStarted</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>isStarted:Boolean</code>&nbsp;&nbsp;[read-only]<p>
+   Определяет запущен ли менеджер задач.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get isStarted():Boolean</code>
+<br>
+</div>
+<a name="numTasks"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">numTasks</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>numTasks:int</code>&nbsp;&nbsp;[read-only]<p>
+   Определяет количество задач.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get numTasks():int</code>
+<br>
+</div>
+<a name="pause"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">pause</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>pause:Boolean</code>&nbsp;&nbsp;[read-write]<p>
+   Определяет режим паузы для менеджера задач.
+   </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get pause():Boolean</code>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function set pause(value:Boolean):void</code>
+<br>
+</div>
+<a name="_result"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_result</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _result:Boolean</code><p>
+   Помошник для определения завершения текущей задачи.
+   </p><p>The default value is <code>false</code>.</p>
+</div>
+<a name="_task"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_task</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _task:<a href="../../anthill/AntList.html">AntList</a></code><p>
+   Список всех активных задач.
+   </p></div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="AntTaskManager()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">AntTaskManager</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function AntTaskManager(aCycle:Boolean = false)</code><p>
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aCycle</span>:Boolean</code> (default = <code>false</code>)<code></code></td>
+</tr>
+</table>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="addInstantTask()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addInstantTask</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addInstantTask(aFunc:Function, aArgs:Array = null, aIgnoreCycle:Boolean = false):void</code><p>
+   Добавляет задачу в конец очереди, указанный метод будет выполнен только один раз, после чего будет осуществлен
+   переход к следующей задачи не зависимо от того, что вернет метод-задача и вернет ли вообще.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aFunc</span>:Function</code> &mdash;  Метод-задача который будет выполнятся в порядке очереди.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aArgs</span>:Array</code> (default = <code>null</code>)<code></code> &mdash;  Массив аргументов которые могут быть переданны методу задачи.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aIgnoreCycle</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Если true то задача будет удалена из менеджера сразу после выполнения.
+   </td>
+</tr>
+</table>
+</div>
+<a name="addPause()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addPause</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addPause(aDelay:Number, aIgnoreCycle:Boolean = false):void</code><p>
+   Добавляет паузу между задачами.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aDelay</span>:Number</code> &mdash;  Время паузы.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aIgnoreCycle</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Если true то пауза будет выполнена только один раз за цикл.
+   </td>
+</tr>
+</table>
+</div>
+<a name="addTask()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addTask</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addTask(aFunc:Function, aArgs:Array = null, aIgnoreCycle:Boolean = false):void</code><p>
+   Добавляет задачу в конец очереди, указанный метод будет выполнятся до тех пор пока не вернет <code>true</code>.
+   Только после того как метод вернет <code>true</code>, задача будет считаться выполненный и менеджер
+   перейдет к следующей задачи.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aFunc</span>:Function</code> &mdash;  Метод-задача который будет выполнятся в порядке очереди.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aArgs</span>:Array</code> (default = <code>null</code>)<code></code> &mdash;  Массив аргументов которые могут быть переданны методу задачи.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aIgnoreCycle</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Если true то задача будет удалена из менеджера сразу после выполнения.
+   </td>
+</tr>
+</table>
+</div>
+<a name="addUrgentInstantTask()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addUrgentInstantTask</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addUrgentInstantTask(aFunc:Function, aArgs:Array = null, aIgnoreCycle:Boolean = false):void</code><p>
+   Добавляет задачу в начало очереди, указанный метод будет выполнен только один раз, после чего будет осуществлен
+   переход к следующей задачи не зависимо от того, что вернет метод задача и вернет ли вообще.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aFunc</span>:Function</code> &mdash;  Метод-задача который будет выполнятся в порядке очереди.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aArgs</span>:Array</code> (default = <code>null</code>)<code></code> &mdash;  Массив аргументов которые могут быть переданны методу задачи.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aIgnoreCycle</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Если true то задача будет удалена из менеджера сразу после выполнения.
+   </td>
+</tr>
+</table>
+</div>
+<a name="addUrgentTask()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addUrgentTask</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addUrgentTask(aFunc:Function, aArgs:Array = null, aIgnoreCycle:Boolean = false):void</code><p>
+   Добавляет задачу в начало очереди, указанный метод будет выполнятся до тех пор пока не вернет <code>true</code>.
+   Только после того как метод вернет <code>true</code>, задача будет считаться выполненной и менеджер
+   перейдет к следующей задачи.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aFunc</span>:Function</code> &mdash;  Метод-задача который будет выполнятся в порядке очереди.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aArgs</span>:Array</code> (default = <code>null</code>)<code></code> &mdash;  Массив аргументов которые могут быть переданны методу задачи.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aIgnoreCycle</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Если true то задача будет удалена из менеджера сразу после выполнения.
+   </td>
+</tr>
+</table>
+</div>
+<a name="clear()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">clear</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function clear():void</code><p>
+   Удаляет все задачи из менеджера и останавливает его работу.
+   </p></div>
+<a name="destroy()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">destroy</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function destroy():void</code><p>
+   Освобождает ресурсы занимаемые мендежером задач.
+   Следует вызывать перед удалением.
+   </p></div>
+<a name="nextTask()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">nextTask</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function nextTask(aIgnoreCycle:Boolean = false):void</code><p>
+   Переход к следующей задаче.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aIgnoreCycle</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Флаг определяющий следует ли оставить предыдущую задачу в диспетчере.
+   </td>
+</tr>
+</table>
+</div>
+<a name="postUpdate()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">postUpdate</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function postUpdate():void</code>
+</div>
+<a name="preUpdate()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">preUpdate</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function preUpdate():void</code>
+</div>
+<a name="push()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">push</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function push(aObj:Object):Object</code><p>
+   Добавляет указанный объект в конец списка.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aObj</span>:Object</code> &mdash;  Объект который необходимо добавить.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Object</code> &mdash;  Возвращает указатель на добавленный объект.
+   </td>
+</tr>
+</table>
+</div>
+<a name="shift()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">shift</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function shift():Object</code><p>
+   Удаляет первый объект из списка.
+   
+   </p><p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Object</code> &mdash;  Возвращает указатель на удаленный объект.
+   </td>
+</tr>
+</table>
+</div>
+<a name="start()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">start</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function start():void</code><p>
+   Запускает работу менеджера задача.
+   </p></div>
+<a name="stop()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">stop</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function stop():void</code><p>
+   Останавливает работу менеджера задач.
+   </p></div>
+<a name="taskPause()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">taskPause</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function taskPause(aDelay:Number):Boolean</code><p>
+   Метод-задача для реализации паузы между задачами.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aDelay</span>:Number</code> &mdash;  Задержка.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Boolean</code> &mdash;  Возвращает true когда задача выполнена.
+   </td>
+</tr>
+</table>
+</div>
+<a name="unshift()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">unshift</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function unshift(aObj:Object):Object</code><p>
+   Добавляет указанный объект в начало списка.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aObj</span>:Object</code> &mdash;  Объект который необходимо добавить.
+   </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Object</code> &mdash;  Возвращает указатель на добавленный объект.
+   </td>
+</tr>
+</table>
+</div>
+<a name="update()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">update</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function update():void</code>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->

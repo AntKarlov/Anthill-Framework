@@ -1,53 +1,604 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../../override.css" type="text/css"><meta name="keywords" content="AntDebugger,ru.antkarlov.anthill.debug.AntDebugger,CLOSE,CONSOLE,DATA,DEBUGDRAW_OFF,DEBUGDRAW_ON,DEFAULT,ERROR,FONT_NAME,FONT_SIZE,ImgClose,ImgConsole,ImgDebugDrawOff,ImgDebugDrawOn,ImgMonitor,ImgPerfomance,ImgSoundOff,ImgSoundOn,MONITOR,PERFOMANCE,RESULT,SOUND_OFF,SOUND_ON,_background,_bitmap,_blinkInterval,_btnClose,_buffer,_canRedraw,_commandStr,_cursorVisible,_fButton,_fDefault,_fGray,_fInput,_fNumbering,_fWhite,_height,_hints,_isConsoleVisible,_isMonitorVisible,_isMove,_isOver,_isPerfomanceVisible,_isVisible,_kind,_lastCommands,_lastIndex,_lineFrom,_lineNum,_mask,_masked,_normal,_offsetX,_offsetY,_over,_parent,_prevHeight,_registry,_registry,_tfConsole,_tfInput,_tfKey,_tfNumbering,_tfTitle,_tfValue,_width,averageFps,color,console,currentFps,currentMem,enable,fpsList,history,intervalTime,kind,maxFps,maxMem,memList,minFps,minMem,monitor,onClick,perfomance,ratingPhysics,ratingRender,ratingTotal,ratingUpdate,runningTime,showAxis,showBorders,showBounds,title,addHandlers,addHandlers,beginWatch,callGarbageCollector,clear,create,create,create,create,dispose,draw,draw,draw,draw,drawAxis,drawCircle,drawLine,drawPoint,drawRect,endWatch,execute,hide,hide,keyDownHandler,lineTo,log,makeLabel,moveTo,nextCommand,onConsole,onMonitor,onPerfomance,prevCommand,redrawDisplay,refresh,registerCommand,removeHandlers,removeHandlers,scrollDown,scrollUp,setCamera,show,show,show,show,start,stop,track,unregisterCommand,unwatchValue,update,update,update,updateDisplay,updateDisplay,updateMinMax,updateVisualState,watchValue,write"><title>ru.antkarlov.anthill.debug.AntDebugger</title></head><body><script language="javascript" type="text/javascript" src="../../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
+<meta content="AntDebugger,ru.antkarlov.anthill.debug.AntDebugger,_isConsoleVisible,_isDebugDraw,_isMonitorVisible,_isPerfomanceVisible,_isVisible,console,enable,monitor,perfomance,addButton,addSeparator,draw,hide,makeButton,onCloseClick,onConsoleClick,onDebugDrawClick,onMonitorClick,onMuteClick,onPerfomanceClick,removeAllButtons,show,update" name="keywords">
+<title>ru.antkarlov.anthill.debug.AntDebugger</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
 				asdocTitle = 'AntDebugger - API Documentation';
 				var baseRef = '../../../../';
 				window.onload = configPage;
 			--></script>
-<script type="text/javascript">
-			scrollToNameAnchor();
-		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">API Documentation</td><td class="titleTableTopNav" align="right"><a href="../../../../package-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../../class-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../../all-index-A.html" onclick="loadClassListFrame('../../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../../index.html?ru/antkarlov/anthill/debug/AntDebugger.html&amp;ru/antkarlov/anthill/debug/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">AntDebugger</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
-				<!--
-				
-					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("AntDebugger"); titleBar_setSubNav(false,true,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
-				-->
-			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">ru.antkarlov.anthill.debug</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  AntDebugger</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">AntDebugger  <img src="../../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> flash.display.Sprite</td></tr></table><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Language Version :&nbsp;</b></td><td>ActionScript 3</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Since :&nbsp;</b></td><td>22.11.2011</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Runtime Versions :&nbsp;</b></td><td>AIR 1.0, Flash Player  9.0.0</td></tr></table><p></p><p></p><p></p>
-	 Объеденяет в себе все классы использующиеся для отладки игры.
-	 
-	 <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#console" class="signatureLink">console</a> : <a href="../../../../ru/antkarlov/anthill/debug/AntConsole.html">AntConsole</a><div class="summaryTableDescription">
-		 Указатель на консоль.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#enable" class="signatureLink">enable</a> : Boolean<div class="summaryTableDescription">
-		 Флаг определяющий активирован ли отладчик.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#monitor" class="signatureLink">monitor</a> : <a href="../../../../ru/antkarlov/anthill/debug/AntMonitor.html">AntMonitor</a><div class="summaryTableDescription">
-		 Указатель на монитор пользовательских данных.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#perfomance" class="signatureLink">perfomance</a> : <a href="../../../../ru/antkarlov/anthill/debug/AntPerfomance.html">AntPerfomance</a><div class="summaryTableDescription">
-		 Указатель на монитор производительности.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr></table></div><a name="protectedPropertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Protected Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProtectedProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#_isConsoleVisible" class="signatureLink">_isConsoleVisible</a> : Boolean = true<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#_isMonitorVisible" class="signatureLink">_isMonitorVisible</a> : Boolean = true<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#_isPerfomanceVisible" class="signatureLink">_isPerfomanceVisible</a> : Boolean = true<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#_isVisible" class="signatureLink">_isVisible</a> : Boolean = false<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#AntDebugger()" class="signatureLink">AntDebugger</a>()</div><div class="summaryTableDescription">
-		 </div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#hide()" class="signatureLink">hide</a>():void</div><div class="summaryTableDescription">
-		 Скрывает отладчик.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#show()" class="signatureLink">show</a>():void</div><div class="summaryTableDescription">
-		 Отображает отладчик.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#update()" class="signatureLink">update</a>():void</div><div class="summaryTableDescription">
-		 Процессинг классов которым это необходимо.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr></table></div><a name="protectedMethodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Protected Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProtectedMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#draw()" class="signatureLink">draw</a>():void</div><div class="summaryTableDescription">
-		 Перерисовывает окно отладчика.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#onConsole()" class="signatureLink">onConsole</a>():void</div><div class="summaryTableDescription">
-		 Обработка клика по кнопке консоли в тулбаре отладчика.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#onMonitor()" class="signatureLink">onMonitor</a>():void</div><div class="summaryTableDescription">
-		 Обработка клика по кнопке монитора пользовательских данных в тулбаре отладчика.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#onPerfomance()" class="signatureLink">onPerfomance</a>():void</div><div class="summaryTableDescription">
-		 Обработка клика по кнопке монитора производительности в тулбаре отладчика.</div></td><td class="summaryTableOwnerCol">AntDebugger</td></tr></table></div><script language="javascript" type="text/javascript"><!--
-										showHideInherited();
-										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="_isConsoleVisible"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">_isConsoleVisible</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>protected var _isConsoleVisible:Boolean = true</code><p></p></div><a name="propertyDetail"></a><a name="_isMonitorVisible"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">_isMonitorVisible</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>protected var _isMonitorVisible:Boolean = true</code><p></p></div><a name="propertyDetail"></a><a name="_isPerfomanceVisible"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">_isPerfomanceVisible</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>protected var _isPerfomanceVisible:Boolean = true</code><p></p></div><a name="propertyDetail"></a><a name="_isVisible"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">_isVisible</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>protected var _isVisible:Boolean = false</code><p></p></div><a name="propertyDetail"></a><a name="console"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">console</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var console:<a href="../../../../ru/antkarlov/anthill/debug/AntConsole.html">AntConsole</a></code><p></p><p></p><p>
-		 Указатель на консоль.
-		 </p></div><a name="propertyDetail"></a><a name="enable"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">enable</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var enable:Boolean</code><p></p><p></p><p>
-		 Флаг определяющий активирован ли отладчик.
-		 </p><p> The default value is <code>true</code>.</p></div><a name="propertyDetail"></a><a name="monitor"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">monitor</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var monitor:<a href="../../../../ru/antkarlov/anthill/debug/AntMonitor.html">AntMonitor</a></code><p></p><p></p><p>
-		 Указатель на монитор пользовательских данных.
-		 </p></div><a name="propertyDetail"></a><a name="perfomance"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">perfomance</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var perfomance:<a href="../../../../ru/antkarlov/anthill/debug/AntPerfomance.html">AntPerfomance</a></code><p></p><p></p><p>
-		 Указатель на монитор производительности.
-		 </p></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="AntDebugger()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">AntDebugger</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function AntDebugger()</code><p></p><p>
-		 </p></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="draw()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">draw</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> protected function draw():void</code><p></p><p></p><p>
-		 Перерисовывает окно отладчика.
-		 </p></div><a name="hide()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">hide</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function hide():void</code><p></p><p></p><p>
-		 Скрывает отладчик.
-		 </p></div><a name="onConsole()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">onConsole</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function onConsole():void</code><p></p><p></p><p>
-		 Обработка клика по кнопке консоли в тулбаре отладчика.
-		 </p></div><a name="onMonitor()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">onMonitor</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function onMonitor():void</code><p></p><p></p><p>
-		 Обработка клика по кнопке монитора пользовательских данных в тулбаре отладчика.
-		 </p></div><a name="onPerfomance()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">onPerfomance</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function onPerfomance():void</code><p></p><p></p><p>
-		 Обработка клика по кнопке монитора производительности в тулбаре отладчика.
-		 </p></div><a name="show()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">show</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function show():void</code><p></p><p></p><p>
-		 Отображает отладчик.
-		 </p></div><a name="update()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">update</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function update():void</code><p></p><p></p><p>
-		 Процессинг классов которым это необходимо.
-		 </p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Tue Sep 11 2012, 03:56 PM +04:00  </center></div></body></html><!--<br/>Tue Sep 11 2012, 03:56 PM +04:00  -->
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../index-list.html')" href="../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../index.html?ru/antkarlov/anthill/debug/AntDebugger.html&amp;ru/antkarlov/anthill/debug/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;AntDebugger</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class AntDebugger"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">ru.antkarlov.anthill.debug</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class AntDebugger</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">AntDebugger <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../images/inherit-arrow.gif"> flash.display.Sprite</td>
+</tr>
+</table>
+<p></p>
+  Объеденяет в себе все классы использующиеся для отладки игры.
+  
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#console">console</a> : <a href="../debug/AntConsole.html">AntConsole</a>
+<div class="summaryTableDescription">
+   Указатель на консоль.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#enable">enable</a> : Boolean<div class="summaryTableDescription">
+   Флаг определяющий активирован ли отладчик.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#monitor">monitor</a> : <a href="../debug/AntMonitor.html">AntMonitor</a>
+<div class="summaryTableDescription">
+   Указатель на монитор пользовательских данных.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#perfomance">perfomance</a> : <a href="../debug/AntPerfomance.html">AntPerfomance</a>
+<div class="summaryTableDescription">
+   Указатель на монитор производительности.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+</table>
+</div>
+<a name="protectedPropertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Properties</div>
+<table id="summaryTableProtectedProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_isConsoleVisible">_isConsoleVisible</a> : Boolean = true<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_isDebugDraw">_isDebugDraw</a> : Boolean = false<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_isMonitorVisible">_isMonitorVisible</a> : Boolean = true<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_isPerfomanceVisible">_isPerfomanceVisible</a> : Boolean = true<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_isVisible">_isVisible</a> : Boolean = false<div class="summaryTableDescription"></div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#AntDebugger()">AntDebugger</a>()</div>
+<div class="summaryTableDescription">
+   </div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addButton()">addButton</a>(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>, aOnClick:Function, aSystem:Boolean = false):<a href="../debug/AntGlyphButton.html">AntGlyphButton</a>
+</div>
+<div class="summaryTableDescription">
+   Добавляет нопку в окно отладчика.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addSeparator()">addSeparator</a>():void</div>
+<div class="summaryTableDescription">
+   Добавляет разделитель между кнопками.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#hide()">hide</a>():void</div>
+<div class="summaryTableDescription">
+   Скрывает отладчик.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#makeButton()">makeButton</a>(aButtonKind:uint, aOnClick:Function, aSystem:Boolean = false):<a href="../debug/AntGlyphButton.html">AntGlyphButton</a>
+</div>
+<div class="summaryTableDescription">
+   Создает и добавляет новую кнопку в окно отлдачика.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#removeAllButtons()">removeAllButtons</a>():void</div>
+<div class="summaryTableDescription">
+   Удаляет все добавленные кнопки.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#show()">show</a>():void</div>
+<div class="summaryTableDescription">
+   Отображает отладчик.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#update()">update</a>():void</div>
+<div class="summaryTableDescription">
+   Процессинг классов которым это необходимо.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+</table>
+</div>
+<a name="protectedMethodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Protected Methods</div>
+<table id="summaryTableProtectedMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#draw()">draw</a>():void</div>
+<div class="summaryTableDescription">
+   Перерисовывает окно отладчика.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#onCloseClick()">onCloseClick</a>(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</div>
+<div class="summaryTableDescription">
+   Обработчик клика по кнопке скрыть (закрыть).</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#onConsoleClick()">onConsoleClick</a>(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</div>
+<div class="summaryTableDescription">
+   Обработчик клика по кнопке показать/скрыть консоль.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#onDebugDrawClick()">onDebugDrawClick</a>(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</div>
+<div class="summaryTableDescription">
+   Обработчик клика по кнопке вкл/выкл отладочную отрисовку.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#onMonitorClick()">onMonitorClick</a>(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</div>
+<div class="summaryTableDescription">
+   Обработчик клика по кнопке показать/скрыть монитор.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#onMuteClick()">onMuteClick</a>(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</div>
+<div class="summaryTableDescription">
+   Обработчик клика по кнопке вкл/выкл звуки.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#onPerfomanceClick()">onPerfomanceClick</a>(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</div>
+<div class="summaryTableDescription">
+   Обработчик клика по кнопке показать/скрыть окно производительности.</div>
+</td><td class="summaryTableOwnerCol">AntDebugger</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="console"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">console</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var console:<a href="../debug/AntConsole.html">AntConsole</a></code><p>
+   Указатель на консоль.
+   </p></div>
+<a name="enable"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">enable</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var enable:Boolean</code><p>
+   Флаг определяющий активирован ли отладчик.
+   </p><p>The default value is <code>true</code>.</p>
+</div>
+<a name="_isConsoleVisible"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_isConsoleVisible</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _isConsoleVisible:Boolean = true</code>
+</div>
+<a name="_isDebugDraw"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_isDebugDraw</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _isDebugDraw:Boolean = false</code>
+</div>
+<a name="_isMonitorVisible"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_isMonitorVisible</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _isMonitorVisible:Boolean = true</code>
+</div>
+<a name="_isPerfomanceVisible"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_isPerfomanceVisible</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _isPerfomanceVisible:Boolean = true</code>
+</div>
+<a name="_isVisible"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">_isVisible</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected var _isVisible:Boolean = false</code>
+</div>
+<a name="monitor"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">monitor</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var monitor:<a href="../debug/AntMonitor.html">AntMonitor</a></code><p>
+   Указатель на монитор пользовательских данных.
+   </p></div>
+<a name="perfomance"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">perfomance</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public var perfomance:<a href="../debug/AntPerfomance.html">AntPerfomance</a></code><p>
+   Указатель на монитор производительности.
+   </p></div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="AntDebugger()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">AntDebugger</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function AntDebugger()</code><p>
+   </p></div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="addButton()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addButton</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addButton(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>, aOnClick:Function, aSystem:Boolean = false):<a href="../debug/AntGlyphButton.html">AntGlyphButton</a></code><p>
+   Добавляет нопку в окно отладчика.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aButton</span>:<a href="AntGlyphButton.html">AntGlyphButton</a></code> &mdash;  Указатель на добавляемую кнопку.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aOnClick</span>:Function</code> &mdash;  Указатель на метод обработчик клика по кнопке.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aSystem</span>:Boolean</code> (default = <code>false</code>)<code></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../debug/AntGlyphButton.html">AntGlyphButton</a></code></td>
+</tr>
+</table>
+</div>
+<a name="addSeparator()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addSeparator</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addSeparator():void</code><p>
+   Добавляет разделитель между кнопками.
+   </p></div>
+<a name="draw()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">draw</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function draw():void</code><p>
+   Перерисовывает окно отладчика.
+   </p></div>
+<a name="hide()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">hide</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function hide():void</code><p>
+   Скрывает отладчик.
+   </p></div>
+<a name="makeButton()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">makeButton</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function makeButton(aButtonKind:uint, aOnClick:Function, aSystem:Boolean = false):<a href="../debug/AntGlyphButton.html">AntGlyphButton</a></code><p>
+   Создает и добавляет новую кнопку в окно отлдачика.
+   
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aButtonKind</span>:uint</code> &mdash;  Вид кнопки.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aOnClick</span>:Function</code> &mdash;  Указатель на метод обработчик клика по кнопке.
+   </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">aSystem</span>:Boolean</code> (default = <code>false</code>)<code></code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../debug/AntGlyphButton.html">AntGlyphButton</a></code> &mdash; 
+                         Возвращает указатель на созданную и добавленную кнопку.
+   
+                        
+                     </td>
+</tr>
+</table>
+</div>
+<a name="onCloseClick()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">onCloseClick</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function onCloseClick(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</code><p>
+   Обработчик клика по кнопке скрыть (закрыть).
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aButton</span>:<a href="AntGlyphButton.html">AntGlyphButton</a></code></td>
+</tr>
+</table>
+</div>
+<a name="onConsoleClick()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">onConsoleClick</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function onConsoleClick(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</code><p>
+   Обработчик клика по кнопке показать/скрыть консоль.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aButton</span>:<a href="AntGlyphButton.html">AntGlyphButton</a></code></td>
+</tr>
+</table>
+</div>
+<a name="onDebugDrawClick()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">onDebugDrawClick</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function onDebugDrawClick(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</code><p>
+   Обработчик клика по кнопке вкл/выкл отладочную отрисовку.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aButton</span>:<a href="AntGlyphButton.html">AntGlyphButton</a></code></td>
+</tr>
+</table>
+</div>
+<a name="onMonitorClick()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">onMonitorClick</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function onMonitorClick(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</code><p>
+   Обработчик клика по кнопке показать/скрыть монитор.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aButton</span>:<a href="AntGlyphButton.html">AntGlyphButton</a></code></td>
+</tr>
+</table>
+</div>
+<a name="onMuteClick()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">onMuteClick</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function onMuteClick(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</code><p>
+   Обработчик клика по кнопке вкл/выкл звуки.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aButton</span>:<a href="AntGlyphButton.html">AntGlyphButton</a></code></td>
+</tr>
+</table>
+</div>
+<a name="onPerfomanceClick()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">onPerfomanceClick</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>protected function onPerfomanceClick(aButton:<a href="AntGlyphButton.html">AntGlyphButton</a>):void</code><p>
+   Обработчик клика по кнопке показать/скрыть окно производительности.
+   </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">aButton</span>:<a href="AntGlyphButton.html">AntGlyphButton</a></code></td>
+</tr>
+</table>
+</div>
+<a name="removeAllButtons()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">removeAllButtons</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function removeAllButtons():void</code><p>
+   Удаляет все добавленные кнопки.
+   </p></div>
+<a name="show()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">show</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function show():void</code><p>
+   Отображает отладчик.
+   </p></div>
+<a name="update()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">update</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function update():void</code><p>
+   Процессинг классов которым это необходимо.
+   </p></div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
