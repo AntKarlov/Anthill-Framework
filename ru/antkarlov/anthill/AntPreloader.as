@@ -58,9 +58,20 @@ package ru.antkarlov.anthill
 		{
 			// Стандартная полоса загрузки.
 			graphics.clear();
-			graphics.beginFill(0xC2758B, 1);
-			graphics.drawRect(0, stage.stageHeight / 2 - 10, stage.stageWidth * aPercent, 20);
+			
+			var sw:int = 640;//stage.stageWidth;
+			var sh:int = 480; //stage.stageHeight;
+			graphics.lineStyle(1, 0x000000);
+			graphics.moveTo(sw * 0.5 - 50, sh * 0.5 + 5);
+			graphics.lineTo(sw * 0.5 + 50, sh * 0.5 + 5);
+			
+			graphics.beginFill(0x000000, 1);
+			graphics.drawRect(sw * 0.5 - 50, sh, 100 * aPercent, 5);
 			graphics.endFill();
+			
+			/*graphics.beginFill(0xC2758B, 1);
+			graphics.drawRect(0, stage.stageHeight / 2 - 10, stage.stageWidth * aPercent, 20);
+			graphics.endFill();*/
 		}
 		
 		/**
