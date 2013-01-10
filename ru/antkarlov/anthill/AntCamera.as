@@ -1,11 +1,11 @@
 package ru.antkarlov.anthill
 {
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	
+
 	/**
 	 * Реализует рендеринг всех визуальных сущностей.
 	 * <p>Чтобы реализовать перемещение камеры (скролл уровней), используйте атрибут <code>scroll</code>
@@ -74,19 +74,19 @@ package ru.antkarlov.anthill
 		/**
 		 * @constructor
 		 */
-		public function AntCamera(aWidth:Number, aHeight:Number, aZoom:int = 1)
+		public function AntCamera(aWidth:int, aHeight:int, aZoom:int = 1)
 		{
 			super();
 			
 			fillBackground = false;
 			backgroundColor = 0xFF000000;
-			
 			scroll = new AntPoint();
-			
-			_bitmap = new Bitmap(new BitmapData(aWidth, aHeight, true, 0xff000000));
-			addChild(_bitmap);
 			zoom = aZoom;
+			
+			_bitmap = new Bitmap(new BitmapData(aWidth, aHeight, true, backgroundColor));
 			_bitmap.scaleX = _bitmap.scaleY = zoom;
+			addChild(_bitmap);
+			
 			buffer = _bitmap.bitmapData;
 			buffer.lock();
 			
@@ -96,19 +96,19 @@ package ru.antkarlov.anthill
 		/**
 		 * Уничтожает экземпляр камеры и осовобождает память.
 		 */
-		public function dispose():void
+		public function destroy():void
 		{
 			AntG.removeCamera(this);
+			
+			buffer.unlock();
+			buffer.dispose();
+			buffer = null;
 			
 			if (contains(_bitmap))
 			{
 				removeChild(_bitmap);
 			}
 			_bitmap = null;
-			
-			buffer.unlock();
-			buffer.dispose();
-			buffer = null;
 			
 			if (parent != null)
 			{
@@ -121,22 +121,21 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
-		 * @private
+		 * Обработка действий камеры.
 		 */
 		public function update():void
 		{
-			/*
-				TODO 
-			*/
+			//
 		}
 		
 		/**
-		 * @private
+		 * Отрисовка буфера камеры на экран.
 		 */
 		public function draw():void
 		{
 			buffer.unlock();
 			buffer.lock();
+			
 			if (fillBackground)
 			{
 				buffer.fillRect(_flashRect, backgroundColor);
