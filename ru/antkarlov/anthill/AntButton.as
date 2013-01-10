@@ -6,8 +6,6 @@ package ru.antkarlov.anthill
 	import flash.geom.Point;
 	import flash.geom.Matrix;
 	
-	import ru.antkarlov.anthill.debug.AntDrawer;
-	
 	/**
 	 * Кнопка обыкновенная.
 	 * 
@@ -56,34 +54,80 @@ package ru.antkarlov.anthill
 		public var status:uint;
 		
 		/**
-		 * Событие выполняющееся когда кнопка нажата. В качестве атрибута в метод подписчика передается указатель на кнопку.
+		 * Событие выполняющееся когда кнопка нажата. 
+		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
 		 */
 		public var eventDown:AntEvent;
 		
 		/**
-		 * Событие выполняющееся когда на кнопку наведен курсор мыши. В качестве атрибута в метод подписчика передается указатель на кнопку.
+		 * Событие выполняющееся когда на кнопку наведен курсор мыши. 
+		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
 		 */
 		public var eventOver:AntEvent;
 		
 		/**
-		 * Событие выполняющееся когда курсор мыши вышел за пределы кнопки. В качестве атрибута в метод подписчика передается указатель на кнопку.
+		 * Событие выполняющееся когда курсор мыши вышел за пределы кнопки. 
+		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
 		 */
 		public var eventOut:AntEvent;
 		
 		/**
-		 * Событие выполняющееся когда кнопка отпущена. В качестве атрибута в метод подписчика передается указатель на кнопку.
+		 * Событие выполняющееся когда кнопка отпущена. 
+		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
 		 */
 		public var eventUp:AntEvent;
 		
 		/**
-		 * Смещение текстовой метки при нажатии на кнопку.
-		 * @default    0,1
+		 * Событие выполняющееся когда был произведен клик по кнопке (нажатие и отпускание мыши в пределах кнопки). 
+		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
+		 */
+		public var eventClick:AntEvent;
+		
+		/**
+		 * Указатель на текстовую метку кнопки.
+		 * @default    null
+		 */
+		public var label:AntLabel;
+		
+		/**
+		 * Смещение текстовой метки при нажатии.
+		 * @default    (0,1)
 		 */
 		public var labelOffset:AntPoint;
-				
+		
+		/**
+		 * @private
+		 */
+		public var overCursorAnim:String;
+		public var downCursorAnim:String;
+		
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
+		
+		/**
+		 * Определяет наведен ли курсор мышки на кнопку.
+		 * @default    false
+		 */
+		protected var _over:Boolean;
+		
+		/**
+		 * Определяет нажата ли кнопка.
+		 * @default    false
+		 */
+		protected var _down:Boolean;
+		
+		/**
+		 * Определяет является ли кнопка в данный момент выбранной (зажатой). 
+		 * @default    false
+		 */
+		protected var _selected:Boolean;
+		
+		/**
+		 * Определяет может ли быть кнопка выбрана (зажата).
+		 * @default    false
+		 */
+		protected var _toggle:Boolean;
 		
 		/**
 		 * Текущая прозрачность кнопки.
@@ -140,27 +184,9 @@ package ru.antkarlov.anthill
 		protected var _buffer:BitmapData;
 		
 		/**
-		 * Помошник для определения пересечения точки с кнопкой.
+		 * Помошник для определения пересечения курсора мышки с кнопкой.
 		 */
 		protected var _point:AntPoint;
-		
-		/**
-		 * Определяет может ли быть кнопка выбрана (зажата).
-		 * @default    false
-		 */
-		protected var _toggle:Boolean;
-		
-		/**
-		 * Определяет является ли кнопка в данный момент выбранной (зажатой). 
-		 * @default    false
-		 */
-		protected var _selected:Boolean;
-		
-		/**
-		 * Определяет наведен ли курсор мышки на кнопку.
-		 * @default    false
-		 */
-		protected var _over:Boolean;
 		
 		/**
 		 * Внутренний помошник для отрисовки графического контента.
@@ -182,21 +208,6 @@ package ru.antkarlov.anthill
 		 */
 		protected var _matrix:Matrix;
 		
-		/**
-		 * Предыдущий размер, используется для оптимизации перерассчетов.
-		 */
-		protected var _lastSize:AntPoint;
-		
-		/**
-		 * Предыдущее масштабирование, используется для оптимизации перерассчетов.
-		 */
-		protected var _lastScale:AntPoint;
-		
-		/**
-		 * Предыдущее положение, используется для возвращения текстовой метки в исходное положение.
-		 */
-		protected var _lastLabelPosition:AntPoint;
-		
 		//---------------------------------------
 		// CONSTRUCTOR
 		//---------------------------------------
@@ -210,6 +221,11 @@ package ru.antkarlov.anthill
 			smoothing = true;
 			status = NORMAL;
 			
+			_over = false;
+			_down = false;
+			_selected = false;
+			_toggle = false;
+			
 			_alpha = 1;
 			_color = 0x00FFFFFF;
 			_colorTransform = null;
@@ -222,83 +238,76 @@ package ru.antkarlov.anthill
 			_pixels = null;
 			_buffer = null;
 			_point = new AntPoint();
-			_toggle = false;
-			_selected = false;
-			_over = false;
 			
 			_flashRect = new Rectangle();
 			_flashPoint = new Point();
 			_flashPointZero = new Point();
 			_matrix = new Matrix();
 			
-			_lastSize = new AntPoint();
-			_lastScale = new AntPoint();
-			_lastLabelPosition = new AntPoint();
-			
 			super();
-			
-			_isVisual = true;
 			
 			eventDown = new AntEvent();
 			eventOver = new AntEvent();
 			eventOut = new AntEvent();
 			eventUp = new AntEvent();
+			eventClick = new AntEvent();
 			
-			AntG.mouse.eventUp.add(onMouseUp);
-			
+			label = null;
 			labelOffset = new AntPoint(0, 1);
 		}
 		
 		/**
-		 * Альтернативный конструктор позволяющий быстро создать кнопку с текстом.
+		 * Альтернативный конструктор кнопки для быстрого создания кнопки с текстом и без.
 		 * 
-		 * @param	aAnimName	 Глобальное имя анимации кнопки в кэше анимаций.
+		 * @param	aAnimName	 Имя анимации для кнопки в хранилище анимаций.
 		 * @param	aText	 Текст на кнопке.
-		 * @param	aFontName	 Имя шрифта для текстовой метки.
-		 * @param	aFontSize	 Размер шрифта для текстовой метки.
-		 * @param	aFontColor	 Цвет шрифта которым будет написан текст.
-		 * @param	aEmbedFont	 Если false то предполагается что необходимо использовать шрифт установленый в ОС, иначе шрифт зашит в флешку.
-		 * @return		Возвращает указатель на кнопку с вложенной текстовой меткой.
+		 * @param	aLabel	 Текстовая метка для кнопки.
+		 * @param	aIsScrolled	 Определяет привязана кнопка в игровому миру или к камере.
+		 * @return		Возвращает указатель на новую кнопку.
 		 */
-		public static function makeTextButton(aAnimName:String, aText:String, aFontName:String = "system", 
-			aFontSize:int = 8, aFontColor:uint = 0xFFFFFF, aEmbedFont:Boolean = true, aIsScrolled:Boolean = false):AntButton
+		public static function makeButton(aAnimName:String, aText:String = null, 
+			aLabel:AntLabel = null, aIsScrolled:Boolean = false):AntButton
 		{
-			var label:AntLabel = new AntLabel(aFontName, aFontSize, aFontColor, aEmbedFont);
-			label.text = aText;
+			if (aLabel != null && aText != null)
+			{
+				aLabel.text = aText;
+			}
 			
-			var button:AntButton = new AntButton();
-			button.addAnimationFromCache(aAnimName);
-			button.add(label);
-			
-			label.x = button.width * 0.5 - label.width * 0.5 + button.axis.x;
-			label.y = button.height * 0.5 - label.height * 0.5 + button.axis.y;
+			var btn:AntButton = new AntButton();
+			btn.addAnimationFromCache(aAnimName);
+			if (aLabel != null)
+			{
+				btn.label = aLabel;
+				btn.add(aLabel);
+				aLabel.x = btn.width * 0.5 - aLabel.width * 0.5 + btn.axis.x;
+				aLabel.y = btn.height * 0.5 - aLabel.height * 0.5 + btn.axis.y;
+			}
 			
 			if (!aIsScrolled)
 			{
-				button.scrollFactor.set(0, 0);
-				label.scrollFactor.set(0, 0);
+				btn.isScrolled = false;
+				aLabel.isScrolled = false;
 			}
 			
-			
-			return button;
+			return btn;
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		override public function dispose():void
+		override public function destroy():void
 		{
-			AntG.mouse.eventUp.remove(onMouseUp);
-			
 			eventDown.clear();
 			eventOver.clear();
 			eventOut.clear();
 			eventUp.clear();
+			eventClick.clear();
 			
 			eventDown = null;
 			eventOver = null;
 			eventOut = null;
 			eventUp = null;
+			eventClick = null;
 			
 			_animations.clear();
 			_animations = null;
@@ -314,25 +323,7 @@ package ru.antkarlov.anthill
 					
 			_pixels = null;
 			
-			super.dispose();
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function reset(aX:Number = 0, aY:Number = 0):void
-		{
-			super.reset(aX, aY);
-			updateBounds();
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function resetRotation(aAngle:Number = 0):void
-		{
-			super.resetRotation(aAngle);
-			updateBounds();
+			super.destroy();
 		}
 		
 		/**
@@ -349,70 +340,27 @@ package ru.antkarlov.anthill
 		 */
 		override public function draw():void
 		{
+			updateBounds();
+			
 			if (cameras == null)
 			{
 				cameras = AntG.cameras;
 			}
 			
 			var cam:AntCamera;
+			var i:int = 0;
 			var n:int = cameras.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				cam = cameras[i] as AntCamera;
 				if (cam != null)
 				{
 					drawButton(cam);
-					_numOfVisible++;
-					if (AntG.debugDrawer != null && allowDebugDraw)
-					{
-						debugDraw(cam);
-					}
 				}
+				i++;
 			}
-
+			
 			super.draw();
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function debugDraw(aCamera:AntCamera):void
-		{
-			if (!onScreen())
-			{
-				return;
-			}
-			
-			var p1:AntPoint = new AntPoint();
-			var p2:AntPoint = new AntPoint();
-			var drawer:AntDrawer = AntG.debugDrawer;
-			drawer.setCamera(aCamera);
-			
-			if (drawer.showBorders)
-			{
-				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p1);
-				drawer.moveTo(p1.x, p1.y);			
-				var n:int = vertices.length;
-				for (var i:int = 0; i < n; i++)
-				{
-					toScreenPosition(vertices[i].x, vertices[i].y, aCamera, p1);
-					drawer.lineTo(p1.x, p1.y, 0xffadff54);
-				}
-				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p1);
-				drawer.lineTo(p1.x, p1.y, 0xffadff54);
-			}
-			
-			if (drawer.showBounds)
-			{
-				toScreenPosition(bounds.x, bounds.y, aCamera, p1);
-				drawer.drawRect(p1.x, p1.y, bounds.width, bounds.height);
-			}
-			
-			if (drawer.showAxis)
-			{
-				toScreenPosition(x, y, aCamera, p1);
-				drawer.drawAxis(p1.x, p1.y, 0xff70cbff);
-			}
 		}
 		
 		/**
@@ -468,108 +416,35 @@ package ru.antkarlov.anthill
 				_curAnimName = aName;
 				_prevFrame = -1;
 				resetHelpers();
-				goto(status);
+				updateVisualStatus();
 			}
 			else
 			{
-				throw new Error("AntActor::switchAnimation() - Missing animation \"" + aName +"\".");
+				throw new Error("AntButton::switchAnimation() - Missing animation \"" + aName +"\".");
 			}
-		}
-		
-		/**
-		 * Проверяет попадает ли кнопка на экран указанной камеры. Если камера не указана то используется камера по умолчанию.
-		 * 
-		 * @param	aCamera	 Камера для которой нужно проверить видимость кнопки.
-		 * @return		Возвращает true если кнопка попадает в экран указанной камеры.
-		 */
-		override public function onScreen(aCamera:AntCamera = null):Boolean
-		{
-			if (aCamera == null)
-			{
-				aCamera = AntG.getDefaultCamera();
-			}
-			
-			updateBounds();
-			
-			return bounds.intersects(aCamera.scroll.x * -1 * scrollFactor.x, aCamera.scroll.y * -1 * scrollFactor.y, 
-				aCamera.width / aCamera.zoom, aCamera.height / aCamera.zoom);
-		}
-		
-		/**
-		 * Обновляет положение и размеры прямоугольника определяющего занимаеммую область объектом в игровом мире.
-		 * 
-		 * <p>Примечание: Данный метод выполняется каждый раз перед отрисовкой объекта, но если вы изменили
-		 * размеры объекта, положение объекта или положение оси объекта, то прежде чем производить
-		 * какие-либо рассчеты с прямоугольником определяющего занимаемую область, необходимо вызывать данный
-		 * метод вручную!</p>
-		 * 
-		 * @param	aForce	 Если true то положение и размеры прямоугольника будут обновлены принудительно.
-		 */
-		public function updateBounds(aForce:Boolean = false):void
-		{
-			var p:AntPoint;
-			var i:int;
-
-			// Если угол и размеры не изменились, то...
-			if (_lastAngle == angle && _lastSize.x == width && _lastSize.y == height &&
-				_lastScale.x == scale.x && _lastScale.y == scale.y && !aForce)
-			{
-				// Если изменилось положение, то обновляем позицию баундсректа и углов.
-				if (_lastPosition.x != x || _lastPosition.y != y)
-				{
-					
-					var mx:Number = x - _lastPosition.x;
-					var my:Number = y - _lastPosition.y;
-					bounds.x += mx;
-					bounds.y += my;
-
-					for (i = 0; i < 4; i++)
-					{
-						p = vertices[i];
-						p.x += mx;
-						p.y += my;
-					}
-				}
-				
-				saveLastPosition();
-				return;
-			}
-			
-			// Делаем полноценный перерассчет положения углов и баундсректа.
-			vertices[0].set(x + axis.x * scale.x, y + axis.y * scale.y); // top left
-			vertices[1].set(x + width * scale.x + axis.x * scale.x, y + axis.y * scale.y); // top right
-			vertices[2].set(x + width * scale.x + axis.x * scale.x, y + height * scale.y + axis.y * scale.y); // bottom right
-			vertices[3].set(x + axis.x * scale.x, y + height * scale.y + axis.y * scale.y); // bottom left
-			
-			var dx:Number;
-			var dy:Number;
-			var maxX:Number = 0;
-			var maxY:Number = 0;
-			var minX:Number = 10000;
-			var minY:Number = 10000;
-			var ang:Number = -angle * Math.PI / 180; // Angle in radians
-
-			for (i = 0; i < 4; i++)
-			{
-				p = vertices[i];
-				
-				dx = x + (p.x - x) * Math.cos(ang) + (p.y - y) * Math.sin(ang);
-				dy = y - (p.x - x) * Math.sin(ang) + (p.y - y) * Math.cos(ang);
-				
-				maxX = (dx > maxX) ? dx : maxX;
-				maxY = (dy > maxY) ? dy : maxY;
-				minX = (dx < minX) ? dx : minX;
-				minY = (dy < minY) ? dy : minY;
-				p.set(dx, dy);
-			}
-
-			bounds.set(minX, minY, maxX - minX, maxY - minY);
-			saveLastPosition();
 		}
 		
 		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------
+		
+		/**
+		 * Обновляет положение текстовой метки.
+		 */
+		protected function updateLabel():void
+		{
+			if (label != null)
+			{
+				label.x = width * 0.5 - label.width * 0.5 + axis.x;
+				label.y = height * 0.5 - label.height * 0.5 + axis.y;
+
+				if (_down)
+				{
+					label.x += labelOffset.x;
+					label.y += labelOffset.y;
+				}
+			}
+		}
 		
 		/**
 		 * Обработка логики кнопки.
@@ -581,59 +456,138 @@ package ru.antkarlov.anthill
 				cameras = AntG.cameras;
 			}
 			
-			var l:AntLabel = label;
-			var cam:AntCamera;
+			var i:int = 0;
 			var n:int = cameras.length;
-			var resetStatus:Boolean = true;
-			for (var i:int = 0; i < n; i++)
+			var cam:AntCamera;
+			while (i < n)
 			{
 				cam = cameras[i] as AntCamera;
 				if (cam != null)
 				{
-					(scrolled) ? AntG.mouse.getWorldPosition(cam, _point) : AntG.mouse.getScreenPosition(cam, _point);
-					if (intersectsPoint(_point))
+					(isScrolled) ? AntG.mouse.getWorldPosition(cam, _point) : AntG.mouse.getScreenPosition(cam, _point);
+					if (isInsidePoint(_point))
 					{
-						resetStatus = false;
+						onMouseOver();
 						if (AntG.mouse.isPressed())
 						{
-							status = DOWN;
-							goto(status);
-							if (l != null)
-							{
-								_lastLabelPosition.set(l.x, l.y);
-								l.x += labelOffset.x;
-								l.y += labelOffset.y;
-							}
-							eventDown.send([ this ]);
+							onMouseDown();
 						}
-						
-						if (status == NORMAL)
+						else if (AntG.mouse.isReleased())
 						{
-							_over = true;
-							status = OVER;
-							goto(status);
-							eventOver.send([ this ]);
+							onMouseUp();
+						}
+					}
+					else
+					{
+						if (_over)
+						{
+							onMouseOut();
+						}
+
+						if (_down && AntG.mouse.isReleased())
+						{
+							onMouseUp();
 						}
 					}
 				}
+				i++;
 			}
 			
-			if (resetStatus && status != DOWN)
+			updateVisualStatus();
+		}
+		
+		/**
+		 * Обработчик наведения мышки на кнопку.
+		 */
+		protected function onMouseOver():void
+		{
+			var o:Boolean = _over;
+			_over = true;
+			if (o != _over)
 			{
-				if (!_selected)
-				{
-					if (status != NORMAL)
-					{
-						eventOut.send([ this ]);
-					}
-					status = NORMAL;
-					goto(status);
-				}
-				
-				_over = false;
+				eventOver.send([ this ]);
+			}
+			
+			if (!_down && overCursorAnim != null)
+			{
+				AntG.mouse.changeCursor(overCursorAnim);
 			}
 		}
 		
+		/**
+		 * Обработчик выхода мышки за пределы кнопки.
+		 */
+		protected function onMouseOut():void
+		{
+			var o:Boolean = _over;
+			_over = false;
+			if (o != _over)
+			{
+				eventOut.send([ this ]);
+				AntG.mouse.changeCursor();
+			}
+		}
+		
+		/**
+		 * Обработчик нажатия кнопки мыши.
+		 */
+		protected function onMouseDown():void
+		{
+			var o:Boolean = _down;
+			_down = true;
+			if (o != _down)
+			{
+				eventDown.send([ this ]);
+				AntG.mouse.changeCursor(downCursorAnim);
+			}
+		}
+		
+		/**
+		 * Обработчик отпускания кнопки мыши.
+		 */
+		protected function onMouseUp():void
+		{
+			eventUp.send([ this ]);
+			
+			if (_toggle && _over)
+			{
+				_selected = !_selected;
+			}
+			_down = _selected;
+			
+			if (_over)
+			{
+				eventClick.send([ this ]);
+				AntG.mouse.changeCursor(overCursorAnim);
+			}
+			else
+			{
+				AntG.mouse.changeCursor();
+			}
+		}
+		
+		/**
+		 * Обновляет визуальное представление кнопки в зависимости от текущего состояния.
+		 */
+		protected function updateVisualStatus():void
+		{
+			if ((_over && _down) || (!_over && _down) || _selected)
+			{
+				status = DOWN;
+			}
+			else if (_over && !_down)
+			{
+				status = OVER;
+			}
+			else
+			{
+				status = NORMAL;
+			}
+			
+			goto(status);
+			updateLabel();
+		}
+
 		/**
 		 * Отрисовка кнопки в буффер указанной камеры.
 		 * 
@@ -641,6 +595,8 @@ package ru.antkarlov.anthill
 		 */
 		protected function drawButton(aCamera:AntCamera):void
 		{
+			_numOfVisible++;
+			
 			// Если нет текущего кадра или объект не попадает в камеру.
 			if (_pixels == null || !onScreen(aCamera))
 			{
@@ -655,7 +611,7 @@ package ru.antkarlov.anthill
 			_flashRect.height = _pixels.height;
 			
 			// Если не применено никаких трансформаций то выполняем простой рендер через copyPixels().
-			if (angle == 0 && scale.x == 1 && scale.y == 1 && blend == null)
+			if (globalAngle == 0 && scale.x == 1 && scale.y == 1 && blend == null)
 			{
 				aCamera.buffer.copyPixels((_buffer != null) ? _buffer : _pixels, _flashRect, _flashPoint, null, null, true);
 			}
@@ -666,24 +622,14 @@ package ru.antkarlov.anthill
 				_matrix.translate(axis.x, axis.y);
 				_matrix.scale(scale.x, scale.y);
 				
-				if (angle != 0)
+				if (globalAngle != 0)
 				{
-					_matrix.rotate(Math.PI * 2 * (angle / 360));
+					_matrix.rotate(Math.PI * 2 * (globalAngle / 360));
 				}
 				
 				_matrix.translate(_flashPoint.x - axis.x, _flashPoint.y - axis.y);
 				aCamera.buffer.draw((_buffer != null) ? _buffer : _pixels, _matrix, null, blend, null, smoothing);
 			}
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override protected function saveLastPosition():void
-		{
-			super.saveLastPosition();
-			_lastSize.set(width, height);
-			_lastScale.set(scale.x, scale.y);
 		}
 		
 		/**
@@ -707,7 +653,7 @@ package ru.antkarlov.anthill
 			}
 			
 			calcFrame();
-			updateBounds(true);
+			updateBounds();
 		}
 		
 		/**
@@ -748,13 +694,10 @@ package ru.antkarlov.anthill
 				return;
 			}
 			
+			// Кнопка содержит два состояния: обычное и нажатое
 			if (_curAnim.totalFrames == 2 && aFrame == 2)
 			{
 				aFrame = 1;
-			}
-			else if (_selected && _curAnim.totalFrames == 4)
-			{
-				aFrame = 4;
 			}
 			
 			aFrame = (aFrame <= 1) ? 1 : (aFrame >= _curAnim.totalFrames) ? _curAnim.totalFrames : aFrame;
@@ -765,118 +708,25 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		/**
-		 * Обработчик отпускания кнопки мыши.
-		 */
-		protected function onMouseUp():void
-		{
-			if (!exists || !visible || !active || status != DOWN)
-			{
-				return;
-			}
-			
-			var sendEvent:Boolean = !_toggle;
-			if (_toggle)
-			{	
-				if (cameras == null)
-				{
-					cameras = AntG.cameras;
-				}
-				
-				var cam:AntCamera;
-				var n:int = cameras.length;
-				for (var i:int = 0; i < n; i++)
-				{
-					cam = cameras[i] as AntCamera;
-					if (cam != null)
-					{
-						(scrolled) ? AntG.mouse.getWorldPosition(cam, _point) : AntG.mouse.getScreenPosition(cam, _point);
-						if (intersectsPoint(_point))
-						{
-							_selected = !_selected;
-							sendEvent = true;
-							break;
-						}
-					}
-				}
-			}
-			
-			status = (_selected) ? DOWN : ((_over) ? OVER : NORMAL);
-			
-			if (status != DOWN)
-			{
-				var l:AntLabel = label;
-				if (l != null)
-				{
-					label.x = width * 0.5 - label.width * 0.5 + axis.x + x;
-					label.y = height * 0.5 - label.height * 0.5 + axis.y + y;
-
-					var p:AntPoint = AntMath.rotateDeg(label.x, label.y, x, y, angle);
-					label.x = p.x;
-					label.y = p.y;
-				}
-			}
-			
-			goto(status);
-			if (sendEvent)
-			{
-				eventUp.send([ this ]);
-			}
-		}
-		
 		//---------------------------------------
 		// GETTER / SETTERS
 		//---------------------------------------
 		
 		/**
-		 * Возвращает первую попавшуюся текстовую метку кнопки. Если текстовых меток нет, то вернет <code>null</code>.
-		 */
-		public function get label():AntLabel
-		{
-			return getExtant(AntLabel) as AntLabel;
-		}
-		
-		/**
-		 * Устанавливает новый текст для текстовой метки и выравнивает метку по центру кнопки. 
-		 * Работает только в том случае если у кнопки есть хотя бы одна вложенная текстовая метка.
-		 * Если у кнопки более одной вложенной текстовой метки, то текст будет применен 
-		 * только для первой попавшейся.
-		 * 
-		 * @param	value	 Новый текст.
+		 * Определяет текст для текстовой метки у кнопки.
 		 */
 		public function set text(value:String):void
 		{
-			var label:AntLabel = getExtant(AntLabel) as AntLabel;
 			if (label != null)
 			{
 				label.text = value;
-				label.x = width * 0.5 - label.width * 0.5 + axis.x + x;
-				label.y = height * 0.5 - label.height * 0.5 + axis.y + y;
-				
-				if (status == DOWN)
-				{
-					label.x += labelOffset.x;
-					label.y += labelOffset.y;
-				}
-				
-				var p:AntPoint = AntMath.rotateDeg(label.x, label.y, x, y, angle);
-				label.x = p.x;
-				label.y = p.y;
+				updateLabel();
 			}
 		}
 		
-		/**
-		 * Возвращает текст кнопки. Если у кнопки нет ни одной вложенной текстовой метки, то вернет <code>null</code>.
-		 */
 		public function get text():String
 		{
-			var label:AntLabel = getExtant(AntLabel) as AntLabel;
-			if (label != null)
-			{
-				return label.text;
-			}
-			
-			return null;
+			return label.text;
 		}
 		
 		/**
@@ -890,13 +740,9 @@ package ru.antkarlov.anthill
 			}
 			
 			_selected = value;
-			status = (_selected) ? DOWN : NORMAL;
-			goto(status);
+			updateVisualStatus();
 		}
 		
-		/**
-		 * @private
-		 */
 		public function get selected():Boolean
 		{
 			return _selected;
@@ -910,9 +756,6 @@ package ru.antkarlov.anthill
 			_toggle = value;
 		}
 		
-		/**
-		 * @private
-		 */
 		public function get toggle():Boolean
 		{
 			return _toggle;
@@ -928,14 +771,6 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Определяет текущую прозрачность.
-		 */
-		public function get alpha():Number
-		{
-			return _alpha;
-		}
-		
-		/**
-		 * @private
 		 */
 		public function set alpha(value:Number):void
 		{
@@ -969,16 +804,13 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		/**
-		 * Определяет текущий цвет.
-		 */
-		public function get color():uint
+		public function get alpha():Number
 		{
-			return _color;
+			return _alpha;
 		}
 		
 		/**
-		 * @private
+		 * Определяет текущий цвет.
 		 */
 		public function set color(value:uint):void
 		{
@@ -1009,6 +841,11 @@ package ru.antkarlov.anthill
 				
 				calcFrame(status - 1);
 			}
+		}
+		
+		public function get color():uint
+		{
+			return _color;
 		}
 
 	}
