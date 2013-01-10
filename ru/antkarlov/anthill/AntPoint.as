@@ -1,7 +1,7 @@
 package ru.antkarlov.anthill
 {
 	/**
-	 * Класс помошник для работы с двухмерной системой координат.
+	 * Используется для хранения значений в двухмерной системе координат.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -16,12 +16,14 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
-		 * Позиция по X.
+		 * Значение по X.
+		 * @default    0
 		 */
 		public var x:Number;
 		
 		/**
-		 * Позиция по Y.
+		 * Значение по Y.
+		 * @default    0
 		 */
 		public var y:Number;
 		
@@ -39,6 +41,10 @@ package ru.antkarlov.anthill
 			x = aX;
 			y = aY;
 		}
+		
+		//---------------------------------------
+		// PUBLIC METHODS
+		//---------------------------------------
 		
 		/**
 		 * Устанавливает новые значения.
@@ -162,7 +168,7 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * @private
+		 * Определяет длину точки.
 		 */
 		public function length():Number
 		{
@@ -170,20 +176,32 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * @private
+		 * Производит сравнивание указанных значений со значениями текущей точки.
+		 * 
+		 * @param	aX	 Координата X которую следует сравнить с текущей координатой.
+		 * @param	aY	 Координата Y которую следует сравнить с текущей координатой.
+		 * @param	aDiff	 Допустимая погрешность при сравнении.
+		 * @return		Возвращает true если указанные значения равны значениям текущей точки с учетом допустимой погрешности.
 		 */
-		public function equal(aPoint:AntPoint, aDiff:Number =  0.000001):Boolean
+		public function equal(aX:Number, aY:Number, aDiff:Number = 0.000001):Boolean
 		{
-			if (AntMath.equal(x, aPoint.x, aDiff) && AntMath.equal(y, aPoint.y, aDiff))
-			{
-				return true;
-			}
-			
-			return false;
+			return (AntMath.equal(x, aX, aDiff) && AntMath.equal(y, aY, aDiff));
 		}
 		
 		/**
-		 * @private
+		 * Производит сравнивание указанной точки со значениями текущей точки.
+		 * 
+		 * @param	aPoint	 Точка значения которой следует сравнить с текущими.
+		 * @param	aDiff	 Допустимая погрешность при сравнении.
+		 * @return		Возвращает true если значения указанной точки равны значениям текущей точки с учетом допустимой погрешности.
+		 */
+		public function equalPoint(aPoint:AntPoint, aDiff:Number = 0.000001):Boolean
+		{
+			return (AntMath.equal(x, aPoint.x, aDiff) && AntMath.equal(y, aPoint.y, aDiff));
+		}
+		
+		/**
+		 * Преобразует значения точки в текст.
 		 */
 		public function toString():String
 		{
