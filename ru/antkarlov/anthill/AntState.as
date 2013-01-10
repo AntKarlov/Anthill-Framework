@@ -19,17 +19,17 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
-		 * Основная группа объектов для текущего состояния.
+		 * Основная группа сущностей для текущего состояния.
 		 */
-		public var defGang:AntEntity;
+		public var defGroup:AntEntity;
 		
 		/**
-		 * Указатель на метод <code>defGang.add()</code>.
+		 * Указатель на метод <code>defGroup.add()</code>.
 		 */
 		public var add:Function;
 		
 		/**
-		 * Указатель на метод <code>defGang.remove()</code>.
+		 * Указатель на метод <code>defGroup.remove()</code>.
 		 */
 		public var remove:Function;
 		
@@ -43,27 +43,36 @@ package ru.antkarlov.anthill
 		public function AntState()
 		{
 			super();
-			defGang = new AntEntity();
-			add = defGang.add;
-			remove = defGang.remove;
+			
+			defGroup = new AntEntity();
+			add = defGroup.add;
+			remove = defGroup.remove;
 		}
 		
+		//---------------------------------------
+		// PUBLIC METHODS
+		//---------------------------------------
+		
 		/**
-		 * Инициализация состояния. Вызывается автоматически после создания и добавления 
-		 * в структуру игрового движка.
+		 * Инициализация состояния. 
+		 * Вызывается автоматически после создания и добавления в структуру игрового движка.
 		 */
 		public function create():void
 		{
-			// ...
+			/*
+				Перекройте этот метод чтобы в нем корректно создавать все игровые объекты.
+			*/
 		}
 		
 		/**
-		 * Уничтожение остояния. Вызывается автоматически перед удалением состояния из 
-		 * структуры игрового движка.
+		 * Уничтожение остояния. 
+		 * Вызывается автоматически перед удалением состояния из структуры игрового движка.
 		 */
-		public function dispose():void
+		public function destroy():void
 		{
-			defGang.dispose();
+			/*
+				Перекройте этот метод чтобы в нем корректно освобождать все игровые объекты.
+			*/
 		}
 		
 		/**
@@ -71,17 +80,17 @@ package ru.antkarlov.anthill
 		 */
 		public function preUpdate():void
 		{
-			// ...
+			//
 		}
 		
 		/**
-		 * Вызывается каждый кадр.
+		 * Вызывается каждый кадр после вызова метода <code>preUpdate()</code>.
 		 */
 		public function update():void
 		{
-			defGang.preUpdate();
-			defGang.update();
-			defGang.postUpdate();
+			defGroup.preUpdate();
+			defGroup.update();
+			defGroup.postUpdate();
 		}
 		
 		/**
@@ -89,7 +98,7 @@ package ru.antkarlov.anthill
 		 */
 		public function postUpdate():void
 		{
-			// ...
+			//
 		}
 		
 		/**
@@ -97,7 +106,32 @@ package ru.antkarlov.anthill
 		 */
 		public function draw():void
 		{
-			defGang.draw();
+			defGroup.draw();
+			debugDraw();
+			AntG.mouse.draw();
+		}
+		
+		/**
+		 * Вызывается каждый кадр после метода <code>draw()</code> для отладочной отрисовки визуальных объектов.
+		 */
+		public function debugDraw():void
+		{
+			if (AntG.debugDrawer != null)
+			{
+				var i:int = 0;
+				var n:int = AntG.cameras.length;
+				var camera:AntCamera;
+				while (i < n)
+				{
+					camera = AntG.cameras[i] as AntCamera;
+					if (camera != null)
+					{
+						AntG.debugDrawer.buffer = camera.buffer;
+						defGroup.debugDraw(camera);
+					}
+					i++;
+				}
+			}
 		}
 
 	}
