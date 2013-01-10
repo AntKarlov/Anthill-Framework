@@ -1,12 +1,13 @@
 package ru.antkarlov.anthill
 {
 	import flash.display.Stage;
-	import flash.display.BitmapData;
+	import flash.ui.Mouse;
 	
+	import ru.antkarlov.anthill.plugins.IPlugin;
 	import ru.antkarlov.anthill.debug.*;
 	
 	/**
-	 * Глобальное хранилище с указателями на часто использующиеся экземпляры классов и их методы.
+	 * Глобальное хранилище с указателями на часто используемые утилитные классы и их методы.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -16,52 +17,72 @@ package ru.antkarlov.anthill
 	 */
 	public class AntG extends Object
 	{
+		//---------------------------------------
+		// CLASS CONSTANTS
+		//---------------------------------------
+		
 		/**
-		 * Имя движка.
+		 * Название фреймворка.
 		 */
 		public static const LIB_NAME:String = "Anthill Alpha";
 		
 		/**
 		 * Версия основного релиза.
 		 */
-		public static const LIB_MAJOR_VERSION:int = 0;
+		public static const LIB_MAJOR_VERSION:uint = 0;
 		
 		/**
 		 * Версия второстепенного релиза.
 		 */
-		public static const LIB_MINOR_VERSION:int = 1;
+		public static const LIB_MINOR_VERSION:uint = 2;
 		
 		/**
 		 * Версия обслуживания.
 		 */
-		public static const LIB_MAINTENANCE:int = 2;
+		public static const LIB_MAINTENANCE:uint = 0;
+		
+		//---------------------------------------
+		// PUBLIC VARIABLES
+		//---------------------------------------
+		
+		/**
+		 * Указатель на stage.
+		 * Устанавливается автоматически при инициализации.
+		 * @default    null
+		 */
+		public static var stage:Stage;
 		
 		/**
 		 * Размер окна по ширине. 
-		 * @default    Определяется автоматически из stage.stageWidth.
+		 * Определяется автоматически при инициализации.
+		 * @default    stage.stageWidth
 		 */
 		public static var width:int;
 		
 		/**
 		 * Размер окна по высоте.
-		 * @default    Определяется автоматически из stage.stageHeight.
+		 * Определяется автоматически при инициализации.
+		 * @default    stage.stageHeight
 		 */
 		public static var height:int;
 		
 		/**
 		 * Половина ширины окна или центр экрана по X.
-		 * @default    Вычисляется автоматически из stage.stageWidth.
+		 * Определяется автоматически при инициализации.
+		 * @default    (stage.stageWidth / 2)
 		 */
 		public static var widthHalf:int;
 		
 		/**
 		 * Половина высоты окна или центр экрана по Y.
-		 * @default    Вычисляется автоматически из stage.stageHeight.
+		 * Определяется автоматически при инициализации.
+		 * @default    (stage.stageHeight / 2)
 		 */
 		public static var heightHalf:int;
 		
 		/**
-		 * Как быстро протекает время в игровом мире. Изменяя этот параметр можно получить эффект слоу-мо.
+		 * Как быстро протекает время в игровом мире. 
+		 * Изменяя этот параметр можно получить эффект слоу-мо.
 		 * @default    0.5
 		 */
 		public static var timeScale:Number;
@@ -79,48 +100,54 @@ package ru.antkarlov.anthill
 		public static var maxElapsed:Number;
 		
 		/**
-		 * Список камер.
+		 * Массив добавленных камер.
 		 */
 		public static var cameras:Array;
 		
 		/**
 		 * Указатель на последнюю добавленную камеру. Для безопасного получения указателя
-		 * на текущую камеру используйте метод: <code>AntG.getDefaultCamera();</code>
+		 * на текущую камеру используйте метод: <code>AntG.getCamera();</code>
 		 */
 		public static var camera:AntCamera;
 		
 		/**
-		 * Указатель на класс для обработки действий мыши.
+		 * Массив добавленных плагинов.
+		 */
+		public static var plugins:Array;
+				
+		/**
+		 * Указатель на класс для работы с мышкой.
 		 */
 		public static var mouse:AntMouse;
 		
 		/**
-		 * Указатель на класс для обработки действий с клавиатуры.
+		 * Указатель на класс для работы с клавиатурой.
 		 */
 		public static var keys:AntKeyboard;
 		
 		/**
-		 * @private
+		 * Указатель на класс для работы со звуками.
 		 */
 		public static var sounds:AntSoundManager;
 		
 		/**
-		 * Указатель на класс процессор для невидимых объектов и помошников.
-		 */
-		public static var updater:AntUpdater;
-		
-		/**
-		 * Указатель на класс кэша с растровыми анимациями.
+		 * Указатель на класс коллекцию растровых анимаций.
 		 */
 		public static var cache:AntCache;
-
+		
 		/**
 		 * Указатель на отладчик.
 		 */
 		public static var debugger:AntDebugger;
 		
 		/**
-		 * Указатель на класс отслеживающий удаление объектов.
+		 * Указатель на дебаг отрисовщик.
+		 * @default    null
+		 */
+		public static var debugDrawer:AntDrawer;
+		
+		/**
+		 * Указатель на класс следящий за удалением объектов из памяти.
 		 */
 		public static var memory:AntMemory;
 		
@@ -139,7 +166,7 @@ package ru.antkarlov.anthill
 		public static var registerCommand:Function;
 		
 		/**
-		 * Указатель на метод <code>unregisterCommand()</code> класса AntConsole для быстрого удаления зарегистрированных
+		 * Указатель на метод <code>unregisterCommand()</code> класса <code>AntConsole</code> для быстрого удаления зарегистрированных
 		 * пользовальских команд из консоли. Пример использования <code>AntG.unregisterCommand("test");</code>
 		 * <p>Примичание: в качестве идентификатора команды может быть указатель на метод который выполняет команда.</p>
 		 */
@@ -166,10 +193,12 @@ package ru.antkarlov.anthill
 		/**
 		 * Указатель на метод <code>beginWatch()</code> класса <code>AntMonitor</code> используется для блокировки обновления окна
 		 * монитора при обновлении сразу двух и более значений в мониторе. Пример использования:
-		 * <code>AntG.beginWatch();
+		 * <code>
+		 * AntG.beginWatch();
 		 * AntG.watchValue("someValue1", value1);
 		 * AntG.watchValue("someValue2", value2);
-		 * AntG.endWatch();</code>
+		 * AntG.endWatch();
+		 * </code>
 		 */
 		public static var beginWatch:Function;
 		
@@ -179,19 +208,22 @@ package ru.antkarlov.anthill
 		 */
 		public static var endWatch:Function;
 		
+		//---------------------------------------
+		// PROTECTED VARIABLES
+		//---------------------------------------
+		
 		/**
 		 * Указатель на экземпляр класса <code>Anthill</code>.
 		 */
-		internal static var _anthill:Anthill = null;
+		internal static var _anthill:Anthill;
+		
+		//---------------------------------------
+		// PUBLIC METHODS
+		//---------------------------------------
 		
 		/**
-		 * Указатель на экземпляр класса <code>AntDrawer</code>.
-		 */
-		public static var debugDrawer:AntDrawer = null;
-		
-		/**
-		 * Инициализация глобального хранилища и его переменных.
-		 * <p>Примечание: Вызывается автоматически при инициализации игрового движка.</p>
+		 * Инициализация глобального хранилища и его переменных. Вызывается автоматически при инициализации игрового движка.
+		 * @param	aAnthill	 Указатель на ядро фреймворка.
 		 */
 		public static function init(aAnthill:Anthill):void
 		{
@@ -200,20 +232,22 @@ package ru.antkarlov.anthill
 			maxElapsed = 0.0333333;
 			
 			_anthill = aAnthill;
-			width = _anthill.stage.stageWidth;
-			height = _anthill.stage.stageHeight;
-			widthHalf = _anthill.stage.stageWidth * 0.5;
-			heightHalf = _anthill.stage.stageHeight * 0.5;
+			stage = _anthill.stage;
+			width = stage.stageWidth;
+			height = stage.stageHeight;
+			widthHalf = stage.stageWidth * 0.5;
+			heightHalf = stage.stageHeight * 0.5;
 			
 			cameras = [];
+			plugins = [];
 			
 			mouse = new AntMouse();
 			keys = new AntKeyboard();
 			sounds = new AntSoundManager();
-			updater = new AntUpdater();
 			cache = new AntCache();
 			
 			debugger = new AntDebugger();
+			debugDrawer = null;
 
 			track = AntMemory.track;
 			
@@ -230,7 +264,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Позволяет задать размеры окна вручную.
 		 * <p>Примичание: по умолчанию размер экрана определятся исходя из размера <code>stage.stageWidth</code> и <code>stage.stageHeight.</code></p>
-		 * Внимание: установленный размер экрана никак не влияет на работу с камерами.
+		 * <p>Внимание: размеры экрана никак не влияют на работу с камерами.</p>
 		 * 
 		 * @param	aWidth	 Новая ширина экрана.
 		 * @param	aHeight	 Новая высота экрана.
@@ -244,37 +278,142 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Возвращает указатель на <code>stage</code>. Если игровой движок не инициализирован, вернет <code>null</code>.
+		 * Обработка классов пользовательского ввода.
 		 */
-		public static function get stage():Stage
+		public static function updateInput():void
 		{
-			return (_anthill != null) ? _anthill.stage : null;
+			mouse.update(stage.mouseX, stage.mouseY);
+			keys.update();
 		}
 		
 		/**
-		 * Добавляет новую камеру в игровой движок.
+		 * Обработка классов звука.
+		 */
+		public static function updateSounds():void
+		{
+			sounds.update();
+		}
+		
+		/**
+		 * Обработка плагинов.
+		 */
+		public static function updatePlugins():void
+		{
+			var i:int = 0;
+			var n:int = plugins.length;
+			var plugin:IPlugin;
+			while (i < n)
+			{
+				plugin = plugins[i] as IPlugin;
+				if (plugin != null)
+				{
+					plugin.preUpdate();
+					plugin.update();
+					plugin.postUpdate();
+				}
+				i++;
+			}
+		}
+		
+		/**
+		 * Обработка камер.
+		 */
+		public static function updateCameras():void
+		{
+			var i:int = 0;
+			var n:int = cameras.length;
+			var cam:AntCamera;
+			while (i < n)
+			{
+				cam = cameras[i] as AntCamera;
+				if (cam != null)
+				{
+					cam.update();
+					cam.draw();
+				}
+				i++;
+			}
+		}
+		
+		/**
+		 * Добавляет плагин в список для обработки.
+		 * 
+		 * @param	aPlugin	 Плагин который необходимо добавить.
+		 * @param	aSingle	 Если true то один и тот же экземпляр плагина не может быть добавлен дважды.
+		 * @return		Возвращает указатель на добавленный плагин.
+		 */
+		public static function addPlugin(aPlugin:IPlugin, aSingle:Boolean = true):IPlugin
+		{
+			if (aSingle && plugins.indexOf(aPlugin) > -1)
+			{
+				return aPlugin;
+			}
+			
+			var i:int = 0;
+			var n:int = plugins.length;
+			while (i < n)
+			{
+				if (plugins[i] == null)
+				{
+					plugins[i] = aPlugin;
+					return aPlugin;
+				}
+				i++;
+			}
+			
+			plugins[plugins.length] = aPlugin;
+			return aPlugin;
+		}
+		
+		/**
+		 * Удаляет плагин из списка для обработки.
+		 * 
+		 * @param	aPlugin	 Плагин который необходимо удалить.
+		 * @param	aSplice	 Если true то элемент массива в котором размещался плагин так же будет удален.
+		 * @default    Возвращает указатель на удаленный плагин.
+		 */
+		public static function removePlugin(aPlugin:IPlugin, aSplice:Boolean = false):IPlugin
+		{
+			var i:int = plugins.indexOf(aPlugin);
+			if (i >= 0 && i < plugins.length)
+			{
+				plugins[i] = null;
+				if (aSplice)
+				{
+					plugins.splice(i, 1);
+				}
+			}
+			
+			return aPlugin;
+		}
+		
+		/**
+		 * Добавляет камеру в список для обработки.
 		 * 
 		 * @param	aCamera	 Камера которую необходимо добавить.
 		 * @return		Возвращает указатель на добавленную камеру.
 		 */
 		public static function addCamera(aCamera:AntCamera):AntCamera
 		{
-			if (cameras.indexOf(aCamera) == -1)
+			if (cameras.indexOf(aCamera) > -1)
 			{
-				var n:int = cameras.length;
-				for (var i:int = 0; i < n; i++)
-				{
-					if (cameras[i] == null)
-					{
-						cameras[i] = aCamera;
-						camera = aCamera;
-						return aCamera;
-					}
-				}
-				
-				cameras[cameras.length] = aCamera;
+				return aCamera;
 			}
 			
+			var i:int = 0;
+			var n:int = cameras.length;
+			while (i < n)
+			{
+				if (cameras[i] == null)
+				{
+					cameras[i] = aCamera;
+					camera = aCamera;
+					return aCamera;
+				}
+				i++;
+			}
+			
+			cameras[cameras.length] = aCamera;
 			camera = aCamera;
 			return aCamera;
 		}
@@ -283,76 +422,111 @@ package ru.antkarlov.anthill
 		 * Удаляет камеру из игрового движка.
 		 * 
 		 * @param	aCamera	 Камера которую необходимо удалить.
+		 * @param	aSplice	 Если true то элемент массива в котором размещалась камера так же будет удален.
 		 * @return		Возвращает указатель на удаленную камеру.
 		 */
 		public static function removeCamera(aCamera:AntCamera, aSplice:Boolean = false):AntCamera
 		{
 			var i:int = cameras.indexOf(aCamera);
-			if (i > -1)
+			if (i < 0 || i >= cameras.length)
 			{
-				cameras[i] = null;
-				if (aSplice)
-				{
-					cameras.splice(i, 1);
-				}
+				return aCamera;
+			}
+			
+			cameras[i] = null;
+			if (aSplice)
+			{
+				cameras.splice(i, 1);
 			}
 			
 			return aCamera;
 		}
 		
 		/**
-		 * Безопасный метод получения текущей активной камеры.
+		 * Безопасный метод извлечения камеры.
+		 * 
+		 * @param	aIndex	 Индекс камеры которую необходимо получить.
+		 * @return		Указатель на камеру.
 		 */
-		public static function getDefaultCamera():AntCamera
+		public static function getCamera(aIndex:int = -1):AntCamera
 		{
-			if (camera == null)
+			if (aIndex == -1)
 			{
-				throw new Error("AntG::getDefaultCamera() - Hey, we don't have a camera.");
+				return camera;
 			}
 			
-			return camera;
+			if (aIndex >= 0 && aIndex < cameras.length)
+			{
+				return cameras[aIndex];
+			}
+			
+			return null;
 		}
 		
 		/**
-		 * Возвращает установленную частоту кадров.
+		 * Определяет используется в игре системный курсор или нет.
 		 */
-		public static function getFramerate():uint
+		public static function set useSystemCursor(value:Boolean):void
 		{
-			return _anthill.framerate;
+			if (_anthill != null)
+			{
+				if (_anthill._useSystemCursor != value)
+				{
+					_anthill._useSystemCursor = value;
+					if (!debugger.visible)
+					{
+						(value) ? flash.ui.Mouse.show() : flash.ui.Mouse.hide();
+					}
+				}
+			}
+		}
+		
+		public static function get useSystemCursor():Boolean
+		{
+			return (_anthill != null) ? _anthill._useSystemCursor : true;
 		}
 		
 		/**
-		 * Устанавливает новую частоту кадров.
+		 * Определяет частоту кадров.
 		 */
-		public static function setFramerate(value:uint):void
+		public static function set frameRate(value:uint):void
 		{
-			_anthill.framerate = value;
+			if (stage != null)
+			{
+				stage.frameRate = value;
+			}
+		}
+		
+		public static function get frameRate():uint
+		{
+			return (stage != null) ? stage.frameRate : 0;
 		}
 		
 		/**
-		 * Обновляет классы работающие с вводом данных.
+		 * Переключает игровые состояния.
+		 * 
+		 * @param	aState	 Новое состояние на которое необходимо произвести переключение.
 		 */
-		internal static function updateInput():void
+		public static function switchState(aState:AntState):AntState
 		{
-			mouse.update(stage.mouseX, stage.mouseY);
-			keys.update();
-			updater.update();
+			if (_anthill != null)
+			{
+				_anthill.switchState(aState);
+			}
+			
+			return aState;
 		}
 		
 		/**
-		 * Обновляет звуковые классы.
+		 * Возвращает указатель на текущее игровое состояние.
 		 */
-		internal static function updateSounds():void
+		public static function get state():AntState
 		{
-			sounds.update();
+			return (_anthill != null) ? _anthill.state : null;
 		}
 		
-		//---------------------------------------
-		// GETTER / SETTERS
-		//---------------------------------------
-		
 		/**
-		 * Возвращает указатель на экземпляр игрового движка.
+		 * @private
 		 */
 		public static function get anthill():Anthill
 		{
@@ -383,7 +557,7 @@ package ru.antkarlov.anthill
 		{
 			return AntBasic._numOnScreen;
 		}
-
+		
 	}
 
 }
