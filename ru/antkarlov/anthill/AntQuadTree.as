@@ -251,13 +251,17 @@ package ru.antkarlov.anthill
 		 */
 		public function debugDraw(aCamera:AntCamera = null):void
 		{
+			if (AntG.debugDrawer == null)
+			{
+				return;
+			}
+			
 			if (aCamera == null)
 			{
-				aCamera = AntG.camera;
+				aCamera = AntG.getCamera();
 			}
 			
 			var drawer:AntDrawer = AntG.debugDrawer;
-			drawer.setCamera(aCamera);
 			drawer.drawRect(x + aCamera.scroll.x, y + aCamera.scroll.y, width, height, 0xFFa6a6a6);
 			
 			if (northWest != null)
