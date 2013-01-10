@@ -120,10 +120,12 @@ package ru.antkarlov.anthill
 		 */
 		public function addClips(aClipClasses:Array, aWeak:Boolean = false):void
 		{
+			var i:int = 0;
 			var n:int = aClipClasses.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				addClip(aClipClasses[i], null, aWeak);
+				i++;
 			}
 		}
 		
@@ -193,11 +195,11 @@ package ru.antkarlov.anthill
 		 * Удаляет анимацию из кэша.
 		 * 
 		 * Примечание: Если после удалении анимации из кэша её более не планируется
-		 * использовать, то следует вызвать метод dispose() для удаленной анимации 
+		 * использовать, то следует вызвать метод destroy() для удаленной анимации 
 		 * чтобы освободить память.
 		 * 
 		 * Внимание: Если удаленная анимация была ранее добавлена в Акетов, то прежде чем
-		 * вызывать метод dispose() для удаляемой анимации следует убедится в том, что 
+		 * вызывать метод destroy() для удаляемой анимации следует убедится в том, что 
 		 * вы удалили эту анимацию из актеров.
 		 * 
 		 * @param	aKey	 Имя анимации которую необходимо удалить.
@@ -216,8 +218,9 @@ package ru.antkarlov.anthill
 		{
 			var anim:AntAnimation;
 			var key:String;
+			var i:int = 0;
 			var n:int = _weakList.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				key = _weakList[i];
 				if (_queue.indexOf(key) == -1)
@@ -227,10 +230,11 @@ package ru.antkarlov.anthill
 						anim = _cachedAnimations.remove(key) as AntAnimation;
 						if (anim != null)
 						{
-							anim.dispose();
+							anim.destroy();
 						}
 					}
 				}
+				i++;
 			}
 		}
 		
@@ -242,10 +246,12 @@ package ru.antkarlov.anthill
 		public function cacheWeakClips(aKeys:Array):void
 		{
 			_queue.length = 0;
+			var i:int = 0;
 			var n:int = aKeys.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				_queue[_queue.length] = aKeys[i];
+				i++;
 			}
 			cacheClips();
 		}
