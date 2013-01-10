@@ -10,6 +10,8 @@ package ru.antkarlov.anthill
 	import flash.text.AntiAliasType;
 	import flash.text.GridFitType;
 	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormatAlign;
+	import flash.filters.GlowFilter;
 	
 	import ru.antkarlov.anthill.debug.AntDrawer;
 	
@@ -27,26 +29,10 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		// CLASS CONSTANTS
 		//---------------------------------------
-		
-		/**
-		 * Выранивание отсуствует.
-		 */
-		public static const ALIGN_NONE:String = "none";
-		
-		/**
-		 * Выравнивание по левому краю.
-		 */
-		public static const ALIGN_LEFT:String = "left";
-		
-		/**
-		 * Выравнивание по правому краю.
-		 */
-		public static const ALIGN_RIGHT:String = "right";
-		
-		/**
-		 * Выравнивание по центру.
-		 */
-		public static const ALIGN_CENTER:String = "center";
+		public static const LEFT:String = "left";
+		public static const RIGHT:String = "right";
+		public static const CENTER:String = "center";
+		public static const JUSTIFY:String = "justify";
 		
 		//---------------------------------------
 		// PUBLIC VARIABLES
@@ -84,6 +70,12 @@ package ru.antkarlov.anthill
 		 * @default    ALIGN_LEFT
 		 */
 		protected var _align:String;
+		
+		/**
+		 * Определяет авто обновление размера текстовой метки в зависимости от объема текста.
+		 * @default    true
+		 */
+		protected var _autoSize:Boolean;
 		
 		/**
 		 * Внутренний буфер в который производится растеризация текста.
@@ -129,16 +121,6 @@ package ru.antkarlov.anthill
 		protected var _matrix:Matrix;
 		
 		/**
-		 * Предыдущий размер, используется для оптимизации перерассчетов.
-		 */
-		protected var _lastSize:AntPoint;
-		
-		/**
-		 * Предыдущее масштабирование, используется для оптимизации перерассчетов.
-		 */
-		protected var _lastScale:AntPoint;
-		
-		/**
 		 * Флаг определяющий возможно ли пересчитать растровый кадр при изменений данных.
 		 */
 		protected var _canRedraw:Boolean;
@@ -150,8 +132,7 @@ package ru.antkarlov.anthill
 		/**
 		 * @constructor
 		 */
-		public function AntLabel(aFontName:String, aFontSize:int = 8, aColor:uint = 0xFFFFFF,
-			aEmbedFont:Boolean = true)
+		public function AntLabel(aFontName:String, aFontSize:int = 8, aColor:uint = 0xFFFFFF, aEmbedFont:Boolean = true)
 		{
 			super();
 			
@@ -167,31 +148,27 @@ package ru.antkarlov.anthill
 			_textField.gridFitType = GridFitType.PIXEL;
 			_textField.defaultTextFormat = _textFormat;
 			_textField.autoSize = TextFieldAutoSize.LEFT;
+			_autoSize = true;
 			
-			width = _textField.width;
-			height = _textField.height;
+			width = _textField.width = 100;
+			height = _textField.height = 100;
 			
 			_flashRect = new Rectangle();
 			_flashPoint = new Point();
 			_flashPointZero = new Point();
 			_matrix = new Matrix();
 			
-			_lastSize = new AntPoint();
-			_lastScale = new AntPoint();
-			
 			_canRedraw = true;
 			
-			_align = ALIGN_LEFT;
+			_align = LEFT;
 			_color = 0xFFFFFF;
 			_alpha = 1;
-			
-			_isVisual = true;
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		override public function dispose():void
+		override public function destroy():void
 		{
 			_textField = null;
 			_textFormat = null;
@@ -203,7 +180,7 @@ package ru.antkarlov.anthill
 				_buffer = null;
 			}
 			
-			super.dispose();
+			super.destroy();
 		}
 		
 		//---------------------------------------
@@ -250,8 +227,8 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Устанавливает размер текстового поля в ручную. Актуально только если 
-		 * <code>align = ALIGN_NONE</code> и <code>wordWrap = true</code>.
+		 * Устанавливает размер текстового поля в ручную.
+		 * Если autoSize = true то размеры будут автоматически изменены при обновлении текста.
 		 * 
 		 * @param	aWidth	 Размер текстового поля по ширине.
 		 * @param	aHeight	 Размер текстового поля по высоте.
@@ -275,27 +252,40 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Запрещает растерезацию текста до тех пор пока не будет вызван метод <code>endUpdate()</code>.
+		 * Устанавливает однопиксельную обводку для текстового поля.
+		 * 
+		 * @param	aColor	 Цвет обводки.
+		 */
+		public function setStroke(aColor:uint = 0xFF000000):void
+		{
+			applyFilters([ new GlowFilter(aColor, 1, 2, 2, 5) ]);
+		}
+		
+		/**
+		 * Запрещает обновление текста до тех пор пока не будет вызван <code>endChange()</code>.
 		 * Следует вызывать перед тем как необходимо применить сразу много сложных операций к тексту.
-		 * <p>Пример использования:
-		 * <code>label.beginUpdate();
+		 * <p>Пример использования:</p>
+		 * 
+		 * <code>
+		 * label.beginChange();
 		 * label.setSize(200, 50);
 		 * label.text = "some big text here";
 		 * label.setColor(0x00FF00, 0, 4);
-		 * label.endUpdate();</code></p>
+		 * label.endChange();
+		 * </code>
 		 */
-		public function beginUpdate():void
+		public function beginChange():void
 		{
 			_canRedraw = false;
 		}
 		
 		/**
-		 * Разрешает растеризацию текста. Обязательно вызывать после того как был вызван метод <code>beginUpdate()</code>.
+		 * Разрешает обновление текста. Обязательно вызывать после того как был вызван метод <code>beginChange()</code>.
 		 */
-		public function endUpdate():void
+		public function endChange():void
 		{
 			_canRedraw = true;
-			calcFrame();
+			resetHelpers();
 		}
 		
 		/**
@@ -303,160 +293,27 @@ package ru.antkarlov.anthill
 		 */
 		override public function draw():void
 		{
+			updateBounds();
+			
 			if (cameras == null)
 			{
 				cameras = AntG.cameras;
 			}
 			
 			var cam:AntCamera;
+			var i:int = 0;
 			var n:int = cameras.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				cam = cameras[i] as AntCamera;
 				if (cam != null)
 				{
 					drawText(cam);
-					_numOfVisible++;
-					if (AntG.debugDrawer != null && allowDebugDraw)
-					{
-						debugDraw(cam);
-					}
 				}
+				i++;
 			}
 			
 			super.draw();
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function debugDraw(aCamera:AntCamera):void
-		{
-			if (!onScreen())
-			{
-				return;
-			}
-			
-			var p1:AntPoint = new AntPoint();
-			var p2:AntPoint = new AntPoint();
-			var drawer:AntDrawer = AntG.debugDrawer;
-			drawer.setCamera(aCamera);
-			
-			if (drawer.showBorders)
-			{
-				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p1);
-				drawer.moveTo(p1.x, p1.y);			
-				var n:int = vertices.length;
-				for (var i:int = 0; i < n; i++)
-				{
-					toScreenPosition(vertices[i].x, vertices[i].y, aCamera, p1);
-					drawer.lineTo(p1.x, p1.y, 0xffadff54);
-				}
-				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p1);
-				drawer.lineTo(p1.x, p1.y, 0xffadff54);
-			}
-			
-			if (drawer.showBounds)
-			{
-				toScreenPosition(bounds.x, bounds.y, aCamera, p1);
-				drawer.drawRect(p1.x, p1.y, bounds.width, bounds.height);
-			}
-			
-			if (drawer.showAxis)
-			{
-				toScreenPosition(x, y, aCamera, p1);
-				drawer.drawAxis(p1.x, p1.y, 0xff70cbff);
-			}
-		}
-		
-		/**
-		 * Проверяет попадает ли текст на экран указанной камеры. Если камера не указана то используется камера по умолчанию.
-		 * 
-		 * @param	aCamera	 Камера для которой нужно проверить видимость текста.
-		 * @return		Возвращает true если текст попадает в экран указанной камеры.
-		 */
-		override public function onScreen(aCamera:AntCamera = null):Boolean
-		{
-			if (aCamera == null)
-			{
-				aCamera = AntG.getDefaultCamera();
-			}
-			
-			updateBounds();
-			
-			return bounds.intersects(aCamera.scroll.x * -1 * scrollFactor.x, aCamera.scroll.y * -1 * scrollFactor.y, 
-				aCamera.width / aCamera.zoom, aCamera.height / aCamera.zoom);
-		}
-		
-		/**
-		 * Обновляет положение и размеры прямоугольника определяющего занимаеммую область объектом в игровом мире.
-		 * <p>Внимание: Данный метод выполняется каждый раз перед отрисовкой объекта, но если вы изменили
-		 * размеры объекта, положение объекта или положение оси объекта, то прежде чем производить
-		 * какие-либо рассчеты с прямоугольником определяющего занимаемую область, необходимо вызывать данный
-		 * метод вручную!</p>
-		 * 
-		 * @param	aForce	 Если true то положение и размеры прямоугольника будут обновлены принудительно.
-		 */
-		public function updateBounds(aForce:Boolean = false):void
-		{
-			var p:AntPoint;
-			var i:int;
-			
-			// Если угол не изменился...
-			if (_lastAngle == angle && _lastScale.x == scale.x && _lastScale.y == scale.y && !aForce)
-			{
-				// Но изменилось положение, то обновляем позицию баундсректа и углов.
-				if (_lastPosition.x != x || _lastPosition.y != y)
-				{
-					var mx:Number = x - _lastPosition.x;
-					var my:Number = y - _lastPosition.y;
-					bounds.x += mx;
-					bounds.y += my;
-
-					for (i = 0; i < 4; i++)
-					{
-						p = vertices[i];
-						p.x += mx;
-						p.y += my;
-					}
-
-					saveLastPosition();
-				}
-				
-				return;
-			}
-			
-			// Делаем полноценный перерассчет положения углов и баундсректа.
-			
-			vertices[0].set(x - axis.x * scale.x, y - axis.y * scale.y); // top left
-			vertices[1].set(x + width * scale.x - axis.x * scale.x, y - axis.y * scale.y); // top right
-			vertices[2].set(x + width * scale.x - axis.x * scale.x, y + height * scale.y - axis.y * scale.y); // bottom right
-			vertices[3].set(x - axis.x * scale.x, y + height * scale.y - axis.y * scale.y); // bottom left
-
-			var maxX:Number = 0;
-			var maxY:Number = 0;
-			var minX:Number = 10000;
-			var minY:Number = 10000;
-			var dx:Number;
-			var dy:Number;
-			var ang:Number = -angle * Math.PI / 180; // Angle in radians
-
-			for (i = 0; i < 4; i++)
-			{
-				p = vertices[i];
-				
-				dx = x + (p.x - x) * Math.cos(ang) + (p.y - y) * Math.sin(ang);
-				dy = y - (p.x - x) * Math.sin(ang) + (p.y - y) * Math.cos(ang);
-				
-				maxX = (dx > maxX) ? dx : maxX;
-				maxY = (dy > maxY) ? dy : maxY;
-				minX = (dx < minX) ? dx : minX;
-				minY = (dy < minY) ? dy : minY;
-				p.set(dx, dy);
-			}
-
-			bounds.set(minX, minY, maxX - minX, maxY - minY);
-			saveLastPosition();
 		}
 		
 		//---------------------------------------
@@ -466,11 +323,121 @@ package ru.antkarlov.anthill
 		/**
 		 * @inheritDoc
 		 */
-		override protected function saveLastPosition():void
+		/*override public function updateBounds():void
 		{
-			super.saveLastPosition();
-			_lastSize.set(width, height);
-			_lastScale.set(scale.x, scale.y);
+			// Ничего не изменилось.
+			if (_oldAngle == globalAngle && _oldPosition.x == globalX && _oldPosition.y == globalY)
+			{
+				return;
+			}
+			
+			var p:AntPoint;
+			var i:int = 0;
+			
+			if (_oldAngle == globalAngle && (_oldPosition.x != globalX || _oldPosition.y != globalY))
+			{
+				var mx:Number = globalX - _oldPosition.x;
+				var my:Number = globalY - _oldPosition.y;
+				bounds.x += mx;
+				bounds.y += my;
+				
+				while (i < 4)
+				{
+					p = vertices[i];
+					p.x += mx;
+					p.y += my;
+					i++;
+				}
+				
+				saveOldPosition();
+				return;
+			}
+			
+			// Делаем полноценный перерассчет положения углов и баундсректа.
+			vertices[0].set(globalX - axis.x * scale.x, globalY - axis.y * scale.y); // top left
+			vertices[1].set(globalX + width * scale.x - axis.x * scale.x, globalY - axis.y * scale.y); // top right
+			vertices[2].set(globalX + width * scale.x - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom right
+			vertices[3].set(globalX - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom left
+			
+			var dx:Number;
+			var dy:Number;
+			var maxX:Number = vertices[0].x;
+			var maxY:Number = vertices[0].y;
+			var minX:Number = vertices[2].x;
+			var minY:Number = vertices[2].y;
+			var rad:Number = -globalAngle * Math.PI / 180; // Radians
+			
+			i = 0;
+			while (i < 4)
+			{
+				p = vertices[i];
+				dx = globalX + (p.x - globalX) * Math.cos(rad) + (p.y - globalY) * Math.sin(rad);
+				dy = globalY - (p.x - globalX) * Math.sin(rad) + (p.y - globalY) * Math.cos(rad);
+				maxX = (dx > maxX) ? dx : maxX;
+				maxY = (dy > maxY) ? dy : maxY;
+				minX = (dx < minX) ? dx : minX;
+				minY = (dy < minY) ? dy : minY;
+				p.x = dx;
+				p.y = dy;
+				i++;
+			}
+			
+			bounds.set(minX, minY, maxX - minX, maxY - minY);
+			saveOldPosition();
+		}*/
+		
+		/**
+		 * @private
+		 */
+		override protected function calcBounds():void
+		{
+			vertices[0].set(globalX - axis.x * scale.x, globalY - axis.y * scale.y); // top left
+			vertices[1].set(globalX + width * scale.x - axis.x * scale.x, globalY - axis.y * scale.y); // top right
+			vertices[2].set(globalX + width * scale.x - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom right
+			vertices[3].set(globalX - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom left
+			var tl:AntPoint = vertices[0];
+			var br:AntPoint = vertices[2];
+			bounds.set(tl.x, tl.y, br.x - tl.x, br.y - tl.y);
+			saveOldPosition();
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override protected function rotateBounds():void
+		{
+			vertices[0].set(globalX - axis.x * scale.x, globalY - axis.y * scale.y); // top left
+			vertices[1].set(globalX + width * scale.x - axis.x * scale.x, globalY - axis.y * scale.y); // top right
+			vertices[2].set(globalX + width * scale.x - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom right
+			vertices[3].set(globalX - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom left
+			
+			var dx:Number;
+			var dy:Number;
+			var p:AntPoint = vertices[0];
+			var maxX:Number = p.x;
+			var maxY:Number = p.y;
+			p = vertices[2];
+			var minX:Number = p.x;
+			var minY:Number = p.y;
+			var rad:Number = -globalAngle * Math.PI / 180; // Radians
+			
+			var i:int = 0;
+			while (i < 4)
+			{
+				p = vertices[i];
+				dx = globalX + (p.x - globalX) * Math.cos(rad) + (p.y - globalY) * Math.sin(rad);
+				dy = globalY - (p.x - globalX) * Math.sin(rad) + (p.y - globalY) * Math.cos(rad);
+				maxX = (dx > maxX) ? dx : maxX;
+				maxY = (dy > maxY) ? dy : maxY;
+				minX = (dx < minX) ? dx : minX;
+				minY = (dy < minY) ? dy : minY;
+				p.x = dx;
+				p.y = dy;
+				i++;
+			}
+			
+			bounds.set(minX, minY, maxX - minX, maxY - minY);
+			saveOldPosition();
 		}
 		
 		/**
@@ -480,6 +447,8 @@ package ru.antkarlov.anthill
 		 */
 		protected function drawText(aCamera:AntCamera):void
 		{
+			_numOfVisible++;
+			
 			if (_buffer == null || !onScreen(aCamera))
 			{
 				return;
@@ -491,7 +460,7 @@ package ru.antkarlov.anthill
 			_flashPoint.y = p.y - axis.y;
 			
 			// Если не применено никаких трансформаций то выполняем простой рендер через copyPixels().
-			if (angle == 0 && scale.x == 1 && scale.y == 1 && blend == null)
+			if (globalAngle == 0 && scale.x == 1 && scale.y == 1 && blend == null)
 			{
 				aCamera.buffer.copyPixels(_buffer, _flashRect, _flashPoint, null, null, true);
 			}
@@ -502,9 +471,9 @@ package ru.antkarlov.anthill
 				_matrix.translate(-axis.x, -axis.y);
 				_matrix.scale(scale.x, scale.y);
 				
-				if (angle != 0)
+				if (globalAngle != 0)
 				{
-					_matrix.rotate(Math.PI * 2 * (angle / 360));
+					_matrix.rotate(Math.PI * 2 * (globalAngle / 360));
 				}
 				
 				_matrix.translate(_flashPoint.x + axis.x, _flashPoint.y + axis.y);
@@ -534,11 +503,11 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Сброс помошников.
+		 * Сброс помошников и обновление битмапа.
 		 */
 		protected function resetHelpers():void
 		{
-			if (width == 0 || height == 0)
+			if (width == 0 || height == 0 || !_canRedraw)
 			{
 				return;
 			}
@@ -558,7 +527,7 @@ package ru.antkarlov.anthill
 			}
 			
 			calcFrame();
-			updateBounds(true);
+			updateBounds();
 		}
 		
 		//---------------------------------------
@@ -573,14 +542,11 @@ package ru.antkarlov.anthill
 			if (_textFormat.bold != value)
 			{
 				_textFormat.bold = value;
-				_textField.setTextFormat(_textFormat, 0, _textField.length);
-				calcFrame();
+				_textField.setTextFormat(_textFormat);
+				resetHelpers();
 			}
 		}
 		
-		/**
-		 * @private
-		 */
 		public function get bold():Boolean
 		{
 			return _textFormat.bold;
@@ -600,14 +566,31 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		/**
-		 * @private
-		 */
 		public function get text():String
 		{
 			return _textField.text;
 		}
-
+		
+		/**
+		 * Определяет изменяется ли текстовое поле автоматически исходя из количества текста.
+		 * Выравнивание текста не работает при авто изменении размера поля.
+		 */
+		public function set autoSize(value:Boolean):void
+		{
+			if (_autoSize != value)
+			{
+				_autoSize = value;
+				_textField.autoSize = (_autoSize) ? TextFieldAutoSize.LEFT : TextFieldAutoSize.NONE;			
+				align = _align;
+				resetHelpers();
+			}
+		}
+		
+		public function get autoSize():Boolean
+		{
+			return _autoSize;
+		}
+		
 		/**
 		 * Определяет возможен ли перенос строк.
 		 */
@@ -621,9 +604,6 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		/**
-		 * @private
-		 */
 		public function get wordWrap():Boolean
 		{
 			return _textField.wordWrap;
@@ -634,50 +614,26 @@ package ru.antkarlov.anthill
 		 */
 		public function set align(value:String):void
 		{
-			if (_align != value)
-			{
-				_align = value;
-				switch (_align)
-				{
-					case ALIGN_NONE :
-						_textField.autoSize = TextFieldAutoSize.NONE;
-					break;
-					
-					case ALIGN_LEFT :
-						_textField.autoSize = TextFieldAutoSize.LEFT;
-					break;
-					
-					case ALIGN_RIGHT :
-						_textField.autoSize = TextFieldAutoSize.RIGHT;
-					break;
-					
-					case ALIGN_CENTER :
-						_textField.autoSize = TextFieldAutoSize.CENTER;
-					break;
-				}
-				
-				resetHelpers();
+			_align = value;
+			switch (_align)
+			{				
+				case LEFT : _textFormat.align = TextFormatAlign.LEFT; break;
+				case RIGHT : _textFormat.align = TextFormatAlign.RIGHT; break;
+				case CENTER : _textFormat.align = TextFormatAlign.CENTER; break;
+				case JUSTIFY : _textFormat.align = TextFormatAlign.JUSTIFY; break;
 			}
+
+			_textField.setTextFormat(_textFormat);
+			resetHelpers();
 		}
 		
-		/**
-		 * @private
-		 */
 		public function get align():String
 		{
 			return _align;
 		}
 		
 		/**
-		 * Определяет текущую прозрачность.
-		 */
-		public function get alpha():Number
-		{
-			return _alpha;
-		}
-		
-		/**
-		 * @private
+		 * Определяет текущую прозрачность кэшированного битмапа текстовой метки.
 		 */
 		public function set alpha(value:Number):void
 		{
@@ -701,16 +657,13 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		/**
-		 * Определяет текущий цвет.
-		 */
-		public function get color():uint
+		public function get alpha():Number
 		{
-			return _color;
+			return _alpha;
 		}
 		
 		/**
-		 * @private
+		 * Определяет текущий цвет кэшированного битмапа текстовой метки.
 		 */
 		public function set color(value:uint):void
 		{
@@ -731,6 +684,11 @@ package ru.antkarlov.anthill
 				
 				calcFrame();
 			}
+		}
+		
+		public function get color():uint
+		{
+			return _color;
 		}
 		
 		/**
