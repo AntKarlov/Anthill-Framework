@@ -9,16 +9,10 @@ package ru.antkarlov.anthill
 	import flash.events.MouseEvent;
 	import flash.events.KeyboardEvent;
 	import flash.utils.getTimer;
+	import flash.ui.Mouse;
 	
-	/**
-	 * Ядро игрового движка.
-	 * 
-	 * @langversion ActionScript 3
-	 * @playerversion Flash 9.0.0
-	 * 
-	 * @author Anton Karlov
-	 * @since  29.08.2012
-	 */
+	import ru.antkarlov.anthill.debug.AntPerfomance;
+	
 	public class Anthill extends Sprite
 	{
 		//Flex v4.x SDK
@@ -32,11 +26,11 @@ package ru.antkarlov.anthill
 			unicodeRange="U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E,U+0400-U+04CE,U+2000-U+206F,U+20A0-U+20CF,U+2100-U+2183")] protected var junk:String;
 		
 		//---------------------------------------
-		// PUBLIC VARIABLES
+		// PROTECTED VARIABLES
 		//---------------------------------------
 		
 		/**
-		 * Текущее игровое состояние.
+		 * Указатель на текущее игровое состояние.
 		 */
 		public var state:AntState;
 		
@@ -45,37 +39,47 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
-		 * Класс игрового состояния которое будет создано при инициализации движка.
+		 * Класс игрового состояния которое будет создано при инициализации.
 		 */
 		protected var _initialState:Class;
 		
 		/**
-		 * Определяет ограничение количества кадров в секунду.
+		 * Количество кадров в секунду при инициализации.
 		 * @default    35
 		 */
-		protected var _framerate:uint;
+		protected var _frameRate:uint;
 		
 		/**
-		 * Флаг определяющий проинициализирован ли игровой движок.
+		 * Флаг определяющий инициализацию фреймворка.
 		 * @default    false
 		 */
 		protected var _isCreated:Boolean;
 		
 		/**
-		 * Флаг определяющий запущен ли игровой движок.
-		 * @default    false
+		 * Флаг определяющий запуск процесса обработки фреймворка.
 		 */
 		protected var _isStarted:Boolean;
 		
 		/**
 		 * Помошник для рассчета игрового времени.
 		 */
-		internal var _elapsed:Number;
+		protected var _elapsed:Number;
 		
 		/**
 		 * Помошник для рассчета игрового времени.
 		 */
 		internal var _total:uint;
+		
+		/**
+		 * Указатель на сборщик информации о производительности.
+		 */
+		protected var _perfomance:AntPerfomance;
+		
+		/**
+		 * Определяет используется в игре системный курсор или нет.
+		 * @default    true
+		 */
+		internal var _useSystemCursor:Boolean;
 		
 		//---------------------------------------
 		// CONSTRUCTOR
@@ -84,22 +88,30 @@ package ru.antkarlov.anthill
 		/**
 		 * @constructor
 		 */
-		public function Anthill(aInitialState:Class = null)
+		public function Anthill(aInitialState:Class = null, aFrameRate:uint = 35, aUseSystemCursor:Boolean = true)
 		{
 			super();
 			
+			_useSystemCursor = aUseSystemCursor;
+			if (!_useSystemCursor)
+			{
+				flash.ui.Mouse.hide();
+			}
+			
 			_initialState = aInitialState;
-			_framerate = 35;
+			_frameRate = aFrameRate;
 			_isCreated = false;
 			_isStarted = false;
 			
-			(stage == null) ? addEventListener(Event.ADDED_TO_STAGE, create) : create();
+			(stage == null) ? addEventListener(Event.ADDED_TO_STAGE, create) : create(null);
 		}
 		
 		/**
-		 * Инициализация игрового движка.
+		 * Инициализация фреймворка.
+		 * 
+		 * @param	event	 Стандартное события Flash.
 		 */
-		public function create(event:Event = null):void
+		protected function create(event:Event):void
 		{
 			if (event != null)
 			{
@@ -107,10 +119,11 @@ package ru.antkarlov.anthill
 			}
 			
 			AntG.init(this);
+			_perfomance = AntG.debugger.perfomance;
 			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
-			stage.frameRate = _framerate;
+			stage.frameRate = _frameRate;
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, AntG.debugger.console.keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, AntG.keys.keyDownHandler);
@@ -121,19 +134,18 @@ package ru.antkarlov.anthill
 			stage.addEventListener(MouseEvent.MOUSE_OVER, AntG.mouse.mouseOverHandler);
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, AntG.mouse.mouseWheelHandler);
 			
-			AntG.debugger.perfomance.start();
+			_perfomance.start();
 			
 			_isCreated = true;
-			switchState(new _initialState());
-			start();
+			if (_initialState != null)
+			{
+				switchState(new _initialState());
+				start();
+			}
 		}
 		
-		//---------------------------------------
-		// PUBLIC METHODS
-		//---------------------------------------
-		
 		/**
-		 * Запускает процессинг игрового движка.
+		 * Запускает процессинг фреймворка.
 		 */
 		public function start():void
 		{
@@ -145,7 +157,7 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Останавливает процессинг игрового движка.
+		 * Останавливает процессинг фреймворка.
 		 */
 		public function stop():void
 		{
@@ -162,15 +174,15 @@ package ru.antkarlov.anthill
 		 * @param	aState	 Новое состояние на которое необходимо произвести переключение.
 		 */
 		public function switchState(aState:AntState):void
-		{
+		{	
 			addChild(aState);
 			if (state != null)
 			{
-				state.dispose();
+				state.destroy();
 				swapChildren(state, aState);
 				removeChild(state);
 			}
-			
+
 			state = aState;
 			state.create();
 		}
@@ -185,11 +197,11 @@ package ru.antkarlov.anthill
 		protected function enterFrameHandler(event:Event):void
 		{
 			// Рассчет времени между кадрами.
-			var ct:uint = getTimer();
-			var ems:uint = ct - _total;
-			AntG.debugger.perfomance.ratingTotal.add(ems);
-			_elapsed = ems / 1000;
-			_total = ct;
+			var curTime:uint = getTimer();
+			var elapsedMs:uint = curTime - _total;
+			_perfomance.ratingTotal.add(elapsedMs);
+			_elapsed = elapsedMs / 1000;
+			_total = curTime;
 			AntG.elapsed = (_elapsed > AntG.maxElapsed) ? AntG.maxElapsed : _elapsed;
 			AntG.elapsed *= AntG.timeScale;
 			
@@ -205,74 +217,32 @@ package ru.antkarlov.anthill
 			//else
 			//{
 				AntBasic._numOfActive = 0;
-				
 				state.preUpdate();
 				state.update();
 				state.postUpdate();
 			//}
 			
 			// Расчет времени ушедшего на процессинг.
-			var updCt:uint = getTimer();
-			AntG.debugger.perfomance.ratingUpdate.add(updCt - ct);
+			var updTime:uint = getTimer();
+			_perfomance.ratingUpdate.add(updTime - curTime);
 			
 			// Рендер графического контента.
 			AntBasic._numOfVisible = 0;
 			AntBasic._numOnScreen = 0;
-			
-			// Подготовка камер к рендеру.
-			var cam:AntCamera;
-			var n:int = AntG.cameras.length;
-			for (var i:int = 0; i < n; i++)
-			{
-				cam = AntG.cameras[i] as AntCamera;
-				if (cam != null)
-				{
-					cam.draw();
-				}
-			}
-			
-			// Рендер состояния.
+			AntG.updateCameras();
 			state.draw();
 			
 			// Рассчет времени ушедшего на рендер.
-			var rndCt:uint = getTimer();
-			AntG.debugger.perfomance.ratingRender.add(rndCt - updCt);
+			var rndTime:uint = getTimer();
+			_perfomance.ratingRender.add(rndTime - updTime);
 			
-			// Процессинг физики.
-			/*if (AntG.physics != null)
-			{
-				AntG.physics.update();
-			}*/
+			AntG.updatePlugins();
 			
-			// Рассчет времени ушедшего на физику.
-			AntG.debugger.perfomance.ratingPhysics.add(getTimer() - rndCt);
+			// Рассчет времени ушедшего на плагины.
+			_perfomance.ratingPlugins.add(getTimer() - rndTime);
 			AntG.debugger.update();
 		}
-		
-		//---------------------------------------
-		// GETTER / SETTERS
-		//---------------------------------------
-		
-		/**
-		 * Определяет максимально допустимый FPS.
-		 */
-		public function set framerate(value:uint):void
-		{
-			_framerate = value;
-			if (stage != null)
-			{
-				stage.frameRate = _framerate;
-			}
-		}
-		
-		/**
-		 * @private
-		 */
-		public function get framerate():uint
-		{
-			return _framerate;
-		}
-		
+
 	}
 
 }
