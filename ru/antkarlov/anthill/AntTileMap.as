@@ -229,8 +229,7 @@ package ru.antkarlov.anthill
 			drawQuickly = false;
 			
 			children = [];
-			length = 0;
-			_isGroup = true;
+			numChildren = 0;
 			
 			_tileWidth = 32;
 			_tileHeight = 32;
@@ -265,7 +264,7 @@ package ru.antkarlov.anthill
 		/**
 		 * @inheritDoc
 		 */
-		override public function dispose():void
+		override public function destroy():void
 		{
 			eventStart.clear();
 			eventProcess.clear();
@@ -277,19 +276,21 @@ package ru.antkarlov.anthill
 			
 			if (_internalTileSet != null)
 			{
-				_internalTileSet.dispose();
+				_internalTileSet.destroy();
 				_internalTileSet = null;
 			}
 			
+			var i:int = 0;
 			var n:int = tiles.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				tiles[i] = null;
+				i++;
 			}
 			tiles = null;
 			
 			_externalTileSet = null;
-			super.dispose();
+			super.destroy();
 		}
 		
 		//---------------------------------------
@@ -382,7 +383,8 @@ package ru.antkarlov.anthill
 			var tile:AntActor;
 			var bmpData:BitmapData;
 			
-			for (var i:int = 0; i < _numTiles; i++)
+			var i:int = 0;
+			while (i < _numTiles)
 			{
 				tileY = AntMath.floor(i / _numCols);
 				tileX = i - tileY * _numCols;
@@ -411,6 +413,8 @@ package ru.antkarlov.anthill
 				tile.x = _rect.x;
 				tile.y = _rect.y;
 				tiles[i] = tile;
+				add(tile);
+				i++;
 			}
 			
 			revive();
@@ -453,7 +457,8 @@ package ru.antkarlov.anthill
 		{
 			_externalTileSet = aAnimation;
 			var actor:AntActor;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				actor = children[i] as AntActor;
 				if (actor != null)
@@ -462,11 +467,12 @@ package ru.antkarlov.anthill
 					actor.addAnimation(_externalTileSet);
 					actor.gotoAndStop(1);
 				}
+				i++;
 			}
 			
 			if (_internalTileSet != null)
 			{
-				_internalTileSet.dispose();
+				_internalTileSet.destroy();
 				_internalTileSet = null;
 			}
 		}
@@ -490,13 +496,15 @@ package ru.antkarlov.anthill
 		public function setScrollFactor(aX:Number = 1, aY:Number = 1):void
 		{
 			var actor:AntActor;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				actor = children[i] as AntActor;
 				if (actor != null)
 				{
 					actor.scrollFactor.set(aX, aY);
 				}
+				i++;
 			}
 			
 			scrollFactor.set(aX, aY);
@@ -543,8 +551,8 @@ package ru.antkarlov.anthill
 		 */
 		public function getIndexByPosition(aX:Number, aY:Number):int
 		{
-			var tileX:int = AntMath.floor((aX - x + tileAxisOffset.x) / _tileWidth);
-			var tileY:int = AntMath.floor((aY - y + tileAxisOffset.y) / _tileHeight);
+			var tileX:int = AntMath.floor((aX - globalX + tileAxisOffset.x) / _tileWidth);
+			var tileY:int = AntMath.floor((aY - globalY + tileAxisOffset.y) / _tileHeight);
 			return getIndex(AntMath.trimToRange(tileX, 0, _numCols - 1), AntMath.trimToRange(tileY, 0, _numRows - 1));
 		}
 		
@@ -586,6 +594,25 @@ package ru.antkarlov.anthill
 			getCoordinates(aIndex, aResult);
 			aResult.x = aResult.x * _tileWidth + x - tileAxisOffset.x;
 			aResult.y = aResult.y * _tileHeight + y - tileAxisOffset.y;
+			return aResult;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function getGlobalPosition(aIndex:int, aResult:AntPoint = null):AntPoint
+		{
+			if (aResult == null)
+			{
+				aResult = new AntPoint();
+			}
+			
+			getPosition(aIndex, aResult);
+			if (parent != null)
+			{
+				aResult.x += parent.globalX;
+				aResult.y += parent.globalY;
+			}
 			return aResult;
 		}
 		
@@ -651,18 +678,25 @@ package ru.antkarlov.anthill
 					{
 						tile.revive();
 						tile.clearAnimations();
+						
+						var ind:int = tiles.indexOf(tile);
+						if (ind >= 0 && ind < tiles.length)
+						{
+							tiles[ind] = null;
+						}
 					}
 
 					if (_externalTileSet != null)
 					{
 						tile.addAnimation(_externalTileSet);
+						tile.gotoAndStop(1);
 					}
 					
 					tile.active = false;
-					tile.gotoAndStop(1);
 					tile.x = point.x * _tileWidth;
 					tile.y = point.y * _tileHeight;
 					tiles[aIndex] = tile;
+					add(tile);
 					return tile;
 				}
 				
@@ -742,20 +776,6 @@ package ru.antkarlov.anthill
 			{
 				super.draw();
 			}
-			
-			if (AntG.debugDrawer != null && allowDebugDraw)
-			{
-				var cam:AntCamera;
-				var n:int = AntG.cameras.length;
-				for (var i:int = 0; i < n; i++)
-				{
-					cam = AntG.cameras[i] as AntCamera;
-					if (cam != null)
-					{
-						debugDraw(cam);
-					}
-				}
-			}
 		}
 		
 		/**
@@ -766,27 +786,27 @@ package ru.antkarlov.anthill
 			var p1:AntPoint = new AntPoint();
 			var p2:AntPoint = new AntPoint();
 			var drawer:AntDrawer = AntG.debugDrawer;
-			drawer.setCamera(aCamera);
-			
-			if (drawer.showBorders)
+			if (drawer.showGrid)
 			{
 				var i:int = 0;
 				for (i = 0; i < _numRows + 1; i++)
 				{
-					p1.x = x + aCamera.scroll.x * scrollFactor.x;
-					p2.x = x + _tileWidth * _numCols + aCamera.scroll.x * scrollFactor.x;
-					p1.y = p2.y = y + _tileHeight * i + aCamera.scroll.y * scrollFactor.y;
+					p1.x = globalX + aCamera.scroll.x * scrollFactor.x - tileAxisOffset.x;
+					p2.x = globalX + _tileWidth * _numCols + aCamera.scroll.x * scrollFactor.x - tileAxisOffset.x;
+					p1.y = p2.y = globalY + _tileHeight * i + aCamera.scroll.y * scrollFactor.y - tileAxisOffset.y;
 					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, 0x5E5E5E);
 				}
 				
 				for (i = 0; i < _numCols + 1; i++)
 				{
-					p1.x = p2.x = x + _tileWidth * i + aCamera.scroll.x * scrollFactor.x;
-					p1.y = y + aCamera.scroll.y * scrollFactor.y;
-					p2.y = y + _tileHeight * _numRows + aCamera.scroll.y * scrollFactor.y;
+					p1.x = p2.x = globalX + _tileWidth * i + aCamera.scroll.x * scrollFactor.x - tileAxisOffset.x;
+					p1.y = globalY + aCamera.scroll.y * scrollFactor.y - tileAxisOffset.y;
+					p2.y = globalY + _tileHeight * _numRows + aCamera.scroll.y * scrollFactor.y - tileAxisOffset.y;
 					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, 0x5E5E5E);
 				}
 			}
+			
+			super.debugDraw(aCamera);
 		}
 		
 		//---------------------------------------
@@ -836,12 +856,8 @@ package ru.antkarlov.anthill
 						tile = tiles[getIndex(_curPoint.x, _curPoint.y)] as AntActor;
 						if (tile != null && tile.exists && tile.visible)
 						{
+							tile.updateBounds();
 							tile.drawActor(camera);
-							_numOfVisible++;
-							if (AntG.debugDrawer != null && tile.allowDebugDraw)
-							{
-								tile.debugDraw(camera);
-							}
 						}
 						
 						_curPoint.x++;
@@ -862,7 +878,7 @@ package ru.antkarlov.anthill
 		{
 			if (_internalTileSet != null)
 			{
-				_internalTileSet.dispose();
+				_internalTileSet.destroy();
 			}
 			
 			_internalTileSet = new AntAnimation("TileMap");
@@ -882,7 +898,7 @@ package ru.antkarlov.anthill
 			width = _numCols * _tileWidth;
 			height = _numRows * _tileHeight;
 			
-			var i:int;
+			var i:int = 0;
 			var n:int = tiles.length;
 			var tile:AntActor;
 			
@@ -892,23 +908,25 @@ package ru.antkarlov.anthill
 			}
 			else if (tiles.length > _numTiles)
 			{
-				
-				for (i = _numTiles - 1; i < n; i++)
+				i = _numTiles - 1;
+				while (i < n)
 				{
 					tile = tiles[i] as AntActor;
 					if (tile != null)
 					{
-						tile.dispose();
+						tile.destroy();
 					}
 					
 					tiles[i] = null;
+					i++;
 				}
 				
 				tiles.length = _numTiles;
 			}
 			
 			var pos:AntPoint = new AntPoint();
-			for (i = 0; i < n; i++)
+			i = 0;
+			while (i < n)
 			{
 				getCoordinates(i, pos);
 				tile = tiles[i] as AntActor;
@@ -917,6 +935,7 @@ package ru.antkarlov.anthill
 					tile.x = pos.x * _tileWidth;
 					tile.y = pos.y * _tileHeight;
 				}
+				i++;
 			}
 		}
 		
@@ -981,7 +1000,7 @@ package ru.antkarlov.anthill
 				tile.x = _rect.x + _tileOffsetX * _tileWidth;
 				tile.y = _rect.y + _tileOffsetY * _tileHeight;
 				tiles[i] = tile;
-				
+				add(tile);
 				_processCurrent++;
 			}
 			
@@ -1074,6 +1093,22 @@ package ru.antkarlov.anthill
 		public function get tileHeight():int
 		{
 			return _tileHeight;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get mapWidth():int
+		{
+			return _numCols * _tileWidth;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get mapHeight():int
+		{
+			return _numRows * _tileHeight;
 		}
 	
 	}
