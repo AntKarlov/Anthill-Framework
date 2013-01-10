@@ -35,7 +35,7 @@ package ru.antkarlov.anthill.debug
 		public var fpsList:Array = [];
 		public var memList:Array = [];
 		
-		public var ratingPhysics:AntRating = new AntRating(30);
+		public var ratingPlugins:AntRating = new AntRating(30);
 		public var ratingUpdate:AntRating = new AntRating(30);
 		public var ratingRender:AntRating = new AntRating(30);
 		public var ratingTotal:AntRating = new AntRating(30);
@@ -266,7 +266,7 @@ package ru.antkarlov.anthill.debug
 			var tot:uint = ratingTotal.average();
 			var upd:uint = ratingUpdate.average();
 			var rnd:uint = ratingRender.average();
-			var box:uint = ratingPhysics.average();
+			var box:uint = ratingPlugins.average();
 			var ant:uint = upd + rnd + box;
 			
 			_tfRating.text = "";
@@ -274,7 +274,7 @@ package ru.antkarlov.anthill.debug
 			appendText(_tfRating, upd.toString(), _fWhite);
 			appendText(_tfRating, " ms : Rnd ", _fGray);
 			appendText(_tfRating, rnd.toString(), _fWhite);
-			appendText(_tfRating, " ms : Box2d ", _fGray);
+			appendText(_tfRating, " ms : Plg ", _fGray);
 			appendText(_tfRating, box.toString(), _fWhite);
 			appendText(_tfRating, " ms : Flash ", _fGray);
 			appendText(_tfRating, (tot - ant).toString(), _fWhite);
