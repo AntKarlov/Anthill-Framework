@@ -1,13 +1,11 @@
 package ru.antkarlov.anthill
-{	
+{
 	import flash.display.BitmapData;
 	import flash.geom.ColorTransform;
 	import flash.geom.Rectangle;
 	import flash.geom.Point;
 	import flash.geom.Matrix;
 	
-	import ru.antkarlov.anthill.debug.AntDrawer;
-
 	/**
 	 * Данный класс занимается воспроизведением и отображением растеризированных анимаций.
 	 * От этого класса следует наследовать все визуальные игровые объекты.
@@ -19,7 +17,7 @@ package ru.antkarlov.anthill
 	 * @since  21.08.2012
 	 */
 	public class AntActor extends AntEntity
-	{	
+	{
 		//---------------------------------------
 		// PUBLIC VARIABLES
 		//---------------------------------------
@@ -38,11 +36,13 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Номер текущего кадра с учетом скорости анимации. Значение может быть дробным.
+		 * @default    1
 		 */
 		public var currentFrame:Number;
 		
 		/**
 		 * Общее количество кадров для текущей анимации.
+		 * @default    1
 		 */
 		public var totalFrames:int;
 		
@@ -66,7 +66,7 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Событие срабатывающее по окончанию проигрывания анимации.
-		 * Добавляемый метод слушатель должен иметь аргумент типа <code>function onComplete(actor:AntActor):void {}</code>
+		 * Добавляемый метод должен иметь аргумент типа <code>function onComplete(actor:AntActor):void {}</code>
 		 */
 		public var eventComplete:AntEvent;
 		
@@ -154,15 +154,9 @@ package ru.antkarlov.anthill
 		 */
 		protected var _matrix:Matrix;
 		
-		/**
-		 * Предыдущий размер, используется для оптимизации перерассчетов.
-		 */
-		protected var _lastSize:AntPoint;
-		
-		/**
-		 * Предыдущее масштабирование, используется для оптимизации перерассчетов.
-		 */
-		protected var _lastScale:AntPoint;
+		//---------------------------------------
+		// CONSTRUCTOR
+		//---------------------------------------
 		
 		/**
 		 * @constructor
@@ -196,18 +190,13 @@ package ru.antkarlov.anthill
 			_flashPointZero = new Point();
 			_matrix = new Matrix();
 			
-			_lastSize = new AntPoint();
-			_lastScale = new AntPoint();
-			
 			super();
-			
-			_isVisual = true;
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		override public function dispose():void
+		override public function destroy():void
 		{
 			_animations.clear();
 			_animations = null;
@@ -224,26 +213,7 @@ package ru.antkarlov.anthill
 			}
 			
 			_pixels = null;
-			
-			super.dispose();
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function reset(aX:Number = 0, aY:Number = 0):void
-		{
-			super.reset(aX, aY);
-			updateBounds(true);
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function resetRotation(aAngle:Number = 0):void
-		{
-			super.resetRotation(aAngle);
-			updateBounds();
+			super.destroy();
 		}
 		
 		/**
@@ -260,70 +230,27 @@ package ru.antkarlov.anthill
 		 */
 		override public function draw():void
 		{
+			updateBounds();
+			
 			if (cameras == null)
 			{
 				cameras = AntG.cameras;
 			}
 			
 			var cam:AntCamera;
+			var i:int = 0;
 			var n:int = cameras.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				cam = cameras[i] as AntCamera;
 				if (cam != null)
 				{
 					drawActor(cam);
-					_numOfVisible++;
-					if (AntG.debugDrawer != null && allowDebugDraw)
-					{
-						debugDraw(cam);
-					}
 				}
+				i++;
 			}
 			
 			super.draw();
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override public function debugDraw(aCamera:AntCamera):void
-		{
-			if (!onScreen(aCamera))
-			{
-				return;
-			}
-			
-			var p1:AntPoint = new AntPoint();
-			var p2:AntPoint = new AntPoint();
-			var drawer:AntDrawer = AntG.debugDrawer;
-			drawer.setCamera(aCamera);
-			
-			if (drawer.showBorders)
-			{
-				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p1);
-				drawer.moveTo(p1.x, p1.y);			
-				var n:int = vertices.length;
-				for (var i:int = 0; i < n; i++)
-				{
-					toScreenPosition(vertices[i].x, vertices[i].y, aCamera, p1);
-					drawer.lineTo(p1.x, p1.y, 0xffadff54);
-				}
-				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p1);
-				drawer.lineTo(p1.x, p1.y, 0xffadff54);
-			}
-			
-			if (drawer.showBounds)
-			{
-				toScreenPosition(bounds.x, bounds.y, aCamera, p1);
-				drawer.drawRect(p1.x, p1.y, bounds.width, bounds.height);
-			}
-			
-			if (drawer.showAxis)
-			{
-				toScreenPosition(x, y, aCamera, p1);
-				drawer.drawAxis(p1.x, p1.y, 0xff70cbff);
-			}
 		}
 		
 		/**
@@ -478,109 +405,9 @@ package ru.antkarlov.anthill
 			goto(currentFrame);
 		}
 		
-		/**
-		 * Проверяет попадает ли актер на экран указанной камеры. Если камера не указана то используется камера по умолчанию.
-		 * 
-		 * @param	aCamera	 Камера для которой нужно проверить видимость актера.
-		 * @return		Возвращает true если актер попадает в экран указанной камеры.
-		 */
-		override public function onScreen(aCamera:AntCamera = null):Boolean
-		{
-			if (aCamera == null)
-			{
-				aCamera = AntG.getDefaultCamera();
-			}
-			
-			updateBounds();
-			
-			return bounds.intersects(aCamera.scroll.x * -1 * scrollFactor.x, aCamera.scroll.y * -1 * scrollFactor.y,
-				aCamera.width / aCamera.zoom, aCamera.height / aCamera.zoom);
-		}
-		
-		/**
-		 * Обновляет положение и размеры прямоугольника определяющего занимаеммую область актером в игровом мире.
-		 * 
-		 * <p>Примечание: Данный метод выполняется каждый раз перед отрисовкой объекта, но если вы изменили
-		 * размеры объекта, положение объекта или положение оси объекта, то прежде чем производить
-		 * какие-либо рассчеты с прямоугольником определяющего занимаемую область, необходимо вызывать данный
-		 * метод вручную.</p>
-		 * 
-		 * @param	aForce	 Если true то положение и размеры прямоугольника будут обновлены принудительно.
-		 */
-		public function updateBounds(aForce:Boolean = false):void
-		{
-			var p:AntPoint;
-			var i:int;
-
-			// Если угол и размеры не изменились, то...
-			if (_lastAngle == angle && _lastSize.x == width && _lastSize.y == height &&
-				_lastScale.x == scale.x && _lastScale.y == scale.y && !aForce)
-			{			
-				// Если изменилось положение, то обновляем позицию баундсректа и углов.
-				if (_lastPosition.x != x || _lastPosition.y != y)
-				{
-					var mx:Number = x - _lastPosition.x;
-					var my:Number = y - _lastPosition.y;
-					bounds.x += mx;
-					bounds.y += my;
-
-					for (i = 0; i < 4; i++)
-					{
-						p = vertices[i];
-						p.x += mx;
-						p.y += my;
-					}
-				}
-				
-				saveLastPosition();
-				return;
-			}
-			
-			// Делаем полноценный перерассчет положения углов и баундсректа.
-			vertices[0].set(x + axis.x * scale.x, y + axis.y * scale.y); // top left
-			vertices[1].set(x + width * scale.x + axis.x * scale.x, y + axis.y * scale.y); // top right
-			vertices[2].set(x + width * scale.x + axis.x * scale.x, y + height * scale.y + axis.y * scale.y); // bottom right
-			vertices[3].set(x + axis.x * scale.x, y + height * scale.y + axis.y * scale.y); // bottom left
-			
-			var dx:Number;
-			var dy:Number;
-			var maxX:Number = 0;
-			var maxY:Number = 0;
-			var minX:Number = 10000;
-			var minY:Number = 10000;
-			var ang:Number = -angle * Math.PI / 180; // Angle in radians
-
-			for (i = 0; i < 4; i++)
-			{
-				p = vertices[i];
-				
-				dx = x + (p.x - x) * Math.cos(ang) + (p.y - y) * Math.sin(ang);
-				dy = y - (p.x - x) * Math.sin(ang) + (p.y - y) * Math.cos(ang);
-				
-				maxX = (dx > maxX) ? dx : maxX;
-				maxY = (dy > maxY) ? dy : maxY;
-				minX = (dx < minX) ? dx : minX;
-				minY = (dy < minY) ? dy : minY;
-				p.set(dx, dy);
-			}
-
-			bounds.set(minX, minY, maxX - minX, maxY - minY);
-			saveLastPosition();
-		}
-		
 		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------
-		
-		/**
-		 * @inheritDoc
-		 */
-		override protected function saveLastPosition():void
-		{
-			super.saveLastPosition();
-			_lastSize.set(width, height);
-			_lastScale.set(scale.x, scale.y);
-		}
 		
 		/**
 		 * Отрисовка актера в буффер указанной камеры.
@@ -589,21 +416,23 @@ package ru.antkarlov.anthill
 		 */
 		internal function drawActor(aCamera:AntCamera):void
 		{
+			_numOfVisible++;
+			
 			// Если нет текущего кадра или объект не попадает в камеру.
 			if (_pixels == null || !onScreen(aCamera))
 			{
 				return;
 			}
-			
+
 			_numOnScreen++;
 			var p:AntPoint = getScreenPosition(aCamera);
 			_flashPoint.x = p.x + axis.x;
 			_flashPoint.y = p.y + axis.y;
 			_flashRect.width = _pixels.width;
 			_flashRect.height = _pixels.height;
-			
+
 			// Если не применено никаких трансформаций то выполняем простой рендер через copyPixels().
-			if (angle == 0 && scale.x == 1 && scale.y == 1 && blend == null)
+			if (globalAngle == 0 && scale.x == 1 && scale.y == 1 && blend == null)
 			{
 				aCamera.buffer.copyPixels((_buffer != null) ? _buffer : _pixels, _flashRect, _flashPoint, null, null, true);
 			}
@@ -613,12 +442,12 @@ package ru.antkarlov.anthill
 				_matrix.identity();
 				_matrix.translate(axis.x, axis.y);
 				_matrix.scale(scale.x, scale.y);
-				
-				if (angle != 0)
+
+				if (globalAngle != 0)
 				{
-					_matrix.rotate(Math.PI * 2 * (angle / 360));
+					_matrix.rotate(Math.PI * 2 * (globalAngle / 360));
 				}
-				
+
 				_matrix.translate(_flashPoint.x - axis.x, _flashPoint.y - axis.y);
 				aCamera.buffer.draw((_buffer != null) ? _buffer : _pixels, _matrix, null, blend, null, smoothing);
 			}
@@ -645,7 +474,7 @@ package ru.antkarlov.anthill
 			}
 			
 			calcFrame();
-			updateBounds(true);
+			updateBounds();
 		}
 		
 		/**
@@ -738,6 +567,14 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
+		 * Определяет проигрывается ли анимация.
+		 */
+		public function get isPlaying():Boolean
+		{
+			return _playing;
+		}
+		
+		/**
 		 * Возвращает имя текущей анимации.
 		 */
 		public function get currentAnimation():String
@@ -747,14 +584,6 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Определяет прозрачность.
-		 */
-		public function get alpha():Number
-		{
-			return _alpha;
-		}
-		
-		/**
-		 * @private
 		 */
 		public function set alpha(value:Number):void
 		{
@@ -784,20 +613,17 @@ package ru.antkarlov.anthill
 					}
 				}
 				
-				calcFrame();
+				calcFrame(currentFrame-1);
 			}
+		}
+		
+		public function get alpha():Number
+		{
+			return _alpha;
 		}
 		
 		/**
 		 * Определяет цвет.
-		 */
-		public function get color():uint
-		{
-			return _color;
-		}
-		
-		/**
-		 * @private
 		 */
 		public function set color(value:uint):void
 		{
@@ -810,7 +636,7 @@ package ru.antkarlov.anthill
 					_colorTransform = new ColorTransform(Number(_color >> 16) / 255,
 						Number(_color >> 8&0xFF) / 255,
 						Number(_color & 0xFF) / 255, _alpha);
-						
+
 					if (_buffer == null && _curAnim != null)
 					{
 						_buffer = new BitmapData(_curAnim.width, _curAnim.height, true, 0x00FFFFFF);
@@ -825,11 +651,16 @@ package ru.antkarlov.anthill
 						_buffer = null;
 					}
 				}
-				
-				calcFrame();
+
+				calcFrame(currentFrame-1);
 			}
 		}
 		
+		public function get color():uint
+		{
+			return _color;
+		}
+		
 	}
-	
+
 }
