@@ -424,8 +424,15 @@ package ru.antkarlov.anthill
 				return;
 			}
 			
-			o.current = (o.current > 0) ? -1 : 0;
-			this[o.name] = false;
+			try
+			{
+				o.current = (o.current > 0) ? -1 : 0;
+				this[o.name] = false;
+			}
+			catch(error:Error)
+			{
+				
+			}
 		}
 		
 		//---------------------------------------
