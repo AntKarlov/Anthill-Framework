@@ -44,14 +44,16 @@ package ru.antkarlov.anthill
 		 */
 		public function add(aFunc:Function):void
 		{
+			var i:int = 0;
 			var n:int = listeners.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				if (listeners[i] == null)
 				{
 					listeners[i] = aFunc;
 					return;
 				}
+				i++;
 			}
 			
 			listeners[listeners.length] = aFunc;
@@ -76,10 +78,12 @@ package ru.antkarlov.anthill
 		 */
 		public function clear():void
 		{
+			var i:int = 0;
 			var n:int = listeners.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				listeners[i] = null;
+				i++;
 			}
 			
 			listeners.length = 0;
@@ -90,19 +94,21 @@ package ru.antkarlov.anthill
 		 * 
 		 * @param	aArg	 Массив с аргументами которые необходимо передать слушателям.
 		 */
-		public function send(aArg:Array = null):void
+		public function send(aArgs:Array = null):void
 		{
+			var i:int = 0;
 			var n:int = listeners.length;
 			if (n > 0)
 			{
 				var func:Function;
-				for (var i:int = 0; i < n; i++)
+				while (i < n)
 				{
 					func = listeners[i] as Function;
 					if (func != null)
 					{
-						func.apply(this, aArg);
+						func.apply(this, aArgs);
 					}
+					i++;
 				}
 			}
 		}
