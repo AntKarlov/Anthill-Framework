@@ -1,8 +1,7 @@
 package ru.antkarlov.anthill
 {
-	
 	/**
-	 * Базовый класс для всех визуальных и не визуальных объектов Anthill.
+	 * Базовый класс для сущностей.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -29,41 +28,44 @@ package ru.antkarlov.anthill
 		public var userData:Object;
 		
 		/**
-		 * Определеяет существование объекта. 
-		 * Если объект существует то для него вызываются методы <code>update()</code> и <code>draw()</code>.
+		 * Определеяет существование объекта.
+		 * Если <code>exists=true</code>, то вызываются методы:
+		 * <code>preUpdate()</code>, <code>update()</code>, <code>postUpdate()</code> и <code>draw()</code>.
 		 * @default    true
 		 */
 		public var exists:Boolean;
 		
 		/**
-		 * Определяет активность объекта. 
-		 * Если объект не активен <code>active = false</code>, то для такого объекта не будет вызываться метод <code>update()</code>.
+		 * Определяет активность объекта.
+		 * Если <code>active=false</code>, то не вызываются методы:
+		 * <code>preUpdate()</code>, <code>update()</code>, <code>postUpdate()</code>.
 		 * @default    true
 		 */
 		public var active:Boolean;
 		
 		/**
 		 * Определяет видимость объекта.
-		 * Если объект невидим <code>visible = false</code>, то для такого объекта не будет вызываться метод <code>draw()</code>.
+		 * Если <code>visible=false</code>, то не вызывается метод:
+		 * <code>draw()</code>.
 		 * @default    true
 		 */
 		public var visible:Boolean;
 		
 		/**
-		 * Определяет жизненый цикл объекта. 
-		 * Если объект "мертвый" <code>alive = false</code>, то это значит, что для объекта был вызван метод <code>kill()</code>.
-		 * Для воскрешения "мертвого" объекта следует использовать метод <code>revive()</code>.
+		 * Определяет "живой" объект или нет.
+		 * Если <code>alive=false</code>, значит для объекта был вызван метод <code>kill()</code>.
+		 * Для воскрешения объекта следует вызывать метод <code>revive()</code>.
 		 * @default    true
 		 */
 		public var alive:Boolean;
 		
 		/**
-		 * Указатель на массив камер из <code>AntG.cameras</code>.
+		 * Указатель на массив камер <code>AntG.cameras</code>.
 		 */
 		public var cameras:Array;
 		
 		/**
-		 * Определяет может ли данный объект рисовать свой отладочный образ.
+		 * Определяет следует ли для объекта выполнять отладочную отрисовку.
 		 * @default    true
 		 */
 		public var allowDebugDraw:Boolean;
@@ -108,16 +110,16 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Перекрывайте этот метод чтобы в нем корректно занулять переменные 
-		 * и вызывайте этот метод вручную если необходимо уничтожить объект.
+		 * Используется для уничтожения объекта и освобождения занимаемых им ресурсов. 
+		 * Перекройте этот метод чтобы корректно освобождать используемые ресурсы при уничтожении объекта.
 		 */
-		public function dispose():void
+		public function destroy():void
 		{
-			// ...
+			//
 		}
 		
 		/**
-		 * Вызывается каждый кадр перед методом <code>update()</code>.
+		 * Вызывается каждый кадр перед вызовом метода <code>update()</code>.
 		 */
 		public function preUpdate():void
 		{
@@ -129,37 +131,37 @@ package ru.antkarlov.anthill
 		 */
 		public function update():void
 		{
-			// ...
+			//
 		}
 		
 		/**
-		 * Вызывается каждый кадр сразу после метода <code>update()</code>;
+		 * Вызывается каждый кадр сразу после вызова метода <code>update()</code>;
 		 */
 		public function postUpdate():void
 		{
-			// ...
+			//
 		}
 		
 		/**
-		 * Вызывается каждый кадр после метода <code>postUpdate()</code> для отрисовки объекта.
+		 * Вызывается каждый кадр после вызова метода <code>postUpdate()</code> для отрисовки объекта.
 		 */
 		public function draw():void
 		{
-			// ...
+			//
 		}
 		
 		/**
-		 * Вызывается для рисования отладочной отрисовки.
+		 * Отладочная отрисовка.
 		 * 
-		 * @param	aCamera	 Указатель на камеру в которую необходимо произвести отрисовку.
+		 * @param	aCamera	 Указатель на камеру для которой выполняется отдалочная отрисовка.
 		 */
 		public function debugDraw(aCamera:AntCamera):void
 		{
-			// ...
+			//
 		}
 		
 		/**
-		 * Вызывается когда объект необходимо временно "убить".
+		 * Вызывается когда объект необходимо временно "убить" и освободить для повторного использования.
 		 */
 		public function kill():void
 		{
@@ -168,7 +170,7 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Воскрешает объект после временного "убийства".
+		 * Воскрешает объект после "убийства" для повторного использования.
 		 */
 		public function revive():void
 		{
