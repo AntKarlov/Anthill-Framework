@@ -154,6 +154,14 @@ package ru.antkarlov.anthill.debug
 		//---------------------------------------
 		
 		/**
+		 * @private
+		 */
+		protected function onClose(aButton:AntGlyphButton):void
+		{
+			hide();
+		}
+		
+		/**
 		 * Метод помошник для быстрого создания текстовых меток.
 		 * 
 		 * @param	aX	 Положение метки по X.
@@ -226,7 +234,7 @@ package ru.antkarlov.anthill.debug
 				_btnClose.x = _width - 13;
 				_btnClose.y = 1;
 				addChild(_btnClose);
-				_btnClose.onClick = hide;
+				_btnClose.onClick = onClose;
 			}
 		}
 		
