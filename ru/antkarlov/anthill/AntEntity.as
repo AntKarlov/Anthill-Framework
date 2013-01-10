@@ -1,8 +1,9 @@
 package ru.antkarlov.anthill
 {
+	import ru.antkarlov.anthill.debug.AntDrawer;
+	
 	/**
-	 * Базовый класс для визуальных и перемещаемых объектов, а так же для
-	 * тех объектов с которыми можно работать как с группами.
+	 * Базовый класс для визуальных объектов которые можно вкладывать друг в друга.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -31,149 +32,182 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
-		 * Указатель на родительскую сущность в которую была помещена текущая сущность. 
-		 * Если <code>null</code> то текущая сущность не является вложением.
+		 * Указатель на родителя в которую была помещена сущность. 
+		 * Если <code>null</code> то сущность не добавлена в структуру.
 		 * @default    null
 		 */
 		public var parent:AntEntity;
 		
 		/**
-		 * Массив вложенных сущностей. Если <code>null</code>, значит вложенных сущностей нет.
+		 * Массив дочерних сущностей. Если <code>null</code> то сущность не имеет детей.
 		 * @default    null
 		 */
 		public var children:Array;
 		
 		/**
-		 * Количество вложенных сущностей.
+		 * Количество дочерних сущностей.
 		 * @default    0
 		 */
-		public var length:int;
+		public var numChildren:int;
 		
 		/**
-		 * Положение сущности по X.
+		 * Аналог атрибута <code>tag</code> в <code>AntBasic</code>. 
+		 * Используйте для сортировки сущностей.
+		 * @default    0
+		 */
+		public var z:int;
+		
+		/**
+		 * Локальная позициия по X.
 		 * @default    0
 		 */
 		public var x:Number;
 		
 		/**
-		 * Положение сущности по Y.
+		 * Локальная позиция по Y.
 		 * @default    0
 		 */
 		public var y:Number;
 		
 		/**
-		 * Ширина сущности. Вложенные сущности не влияют на размер сущности родителя.
+		 * Глобальная позиция по X.
+		 * Рассчитывается автоматически относительно родительской сущности.
+		 * @default    0
+		 */
+		public var globalX:Number;
+		
+		/**
+		 * Глобальная позиция по Y.
+		 * Рассчитывается автоматически относительно родительской сущности.
+		 * @default    0
+		 */
+		public var globalY:Number;
+		
+		/**
+		 * Размер по ширине.
 		 * @default    0
 		 */
 		public var width:Number;
 		
 		/**
-		 * Высота сущности. Вложенные сущности не влияют на высоту сущности родителя.
+		 * Размер по высоте.
 		 * @default    0
 		 */
 		public var height:Number;
 		
 		/**
-		 * Осъ сущности вокруг которой она вращается.
-		 * @default    0,0
-		 */
-		public var axis:AntPoint;
-		
-		/**
-		 * Прямоугольник определяющий область занимаемую сущностью.
-		 * При рассчете прямоугольника, вложенные сущности не учитываются. 
-		 * Прямоугольник рассчитывается автоматически перед отрисовкой объекта.
-		 */
-		public var bounds:AntRect;
-		
-		/**
-		 * Масштабирование сущности.
-		 * При масштабировании объекта скорость отрисовки существенно снижается.
-		 * @default    1,1
-		 */
-		public var scale:AntPoint;
-		
-		/**
-		 * Скорость сущности.
-		 * Скорость может рассчитывается автоматически исходя из <code>acceleration</code>, <code>drag</code> и <code>maxVelocity</code>.
-		 * @default    0,0
-		 */
-		public var velocity:AntPoint;
-		
-		/**
-		 * Ускорение сущности. Воздействует каждый кадр на скорость.
-		 * @default    0,0
-		 */
-		public var acceleration:AntPoint;
-		
-		/**
-		 * Замедление сущности. Воздействует каждый кадр на скорость.
-		 * @default    0,0
-		 */
-		public var drag:AntPoint;
-		
-		/**
-		 * Максимально допустимая скорость.
-		 * @default    10000,10000
-		 */
-		public var maxVelocity:AntPoint;
-		
-		/**
-		 * Угол поворота сущности в градусах.
+		 * Локальный угол поворота сущности.
 		 * @default    0
 		 */
 		public var angle:Number;
 		
 		/**
-		 * Скорость вращения.
-		 * Скорость вращения может рассчитывается автоматически исходя из <code>angularAcceleration</code>, <code>angularDrag</code> и <code>maxAngular</code>.
-		 * @default    value
+		 * Глобальный угол поворота сущности.
+		 * Рассчитывается автоматически относительно родительской сущности.
+		 * @default    0
+		 */
+		public var globalAngle:Number;
+		
+		/**
+		 * Осевая точка сущности.
+		 * @default    (0,0)
+		 */
+		public var axis:AntPoint;
+		
+		/**
+		 * Масштаб сущности.
+		 * @default    (1,1)
+		 */
+		public var scale:AntPoint;
+		
+		/**
+		 * Скорость движения сущности.
+		 * Рассчитывается автоматически если <code>moves=true</code> исходя из:
+		 * <code>acceleration</code>, <code>drag</code> и <code>maxVelocity</code>.
+		 * @default    (0,0)
+		 */
+		public var velocity:AntPoint;
+		
+		/**
+		 * Ускорение сущности. 
+		 * Применяется автоматически к скорости если <code>moves=true</code>.
+		 * @default    (0,0)
+		 */
+		public var acceleration:AntPoint;
+		
+		/**
+		 * Замедление сущности.
+		 * Применяется автоматически к скорости если <code>moves=true</code>.
+		 * @default    (0,0)
+		 */
+		public var drag:AntPoint;
+		
+		/**
+		 * Максимально допустимая скорость.
+		 * Применяется автоматически к скорости если <code>moves=true</code>.
+		 * @default    (10000,10000)
+		 */
+		public var maxVelocity:AntPoint;
+		
+		/**
+		 * Скорость вращения сущности.
+		 * Рассчитывается автоматически если <code>moves=true</code> исходя из:
+		 * <code>angularAcceleration</code>, <code>angularDrag</code> и <code>maxAngularVelocity</code>.
+		 * @default    0
 		 */
 		public var angularVelocity:Number;
 		
 		/**
-		 * Ускорение вращения сущности. Воздействует каждый кадр на скорость вращения.
+		 * Ускорение вращения сущности.
+		 * Применяется автоматически к скорости вращения если <code>moves=true</code>.
 		 * @default    0
 		 */
-		public var angularAcceleration:Number = 0;
+		public var angularAcceleration:Number;
 		
 		/**
-		 * Замедление вращения сущности. Воздействует каждый кадр на скорость вращения.
+		 * Замедление вращения сущности.
+		 * Применяется автоматически к скорости вращения если <code>moves=true</code>.
 		 * @default    0
 		 */
 		public var angularDrag:Number;
 		
 		/**
-		 * Максимальная скорость вращения сущности.
-		 * @default    10000
+		 * Максимально допустимая скорость вращения сущности.
+		 * Применяется автоматически к скорости вращения если <code>moves=true</code>.
+		 * @default    0
 		 */
-		public var maxAngular:Number;
+		public var maxAngularVelocity:Number;
 		
 		/**
-		 * Флаг определяющий является ли сущность движемым объектом.
-		 * Если <code>moves = true</code>, то для сущности применяется автоматический рассчет скорости движения и вращения исходя из соотвествующих параметров.
+		 * Флаг определяющий является ли сущность движемым объектом. 
+		 * Используется для активации стандартного алгоритма рассчета скоростей для движения и вращения сущности.
 		 * @default    false
 		 */
 		public var moves:Boolean;
 		
 		/**
-		 * Массив координат вершин определяющих прямоугольник сущности исходя из положения и размеров с учетом угла поворота.
-		 * Вложенные сущности не влияют на размеры прямоугольника сущности. Прямоугольник рассчитывается исходя из положения и размеров.
+		 * Массив вершин определяющих прямоугольник сущности исходя из положения и размеров с учетом угла поворота.
+		 * Вложенные сущности не влияют на размеры прямоугольника сущности.
 		 */
 		public var vertices:Array;
 		
 		/**
-		 * Фактор прокручивания сущности. 
-		 * Используется для расчета положения сущности исходя из положения камеры. 
-		 * Если фактор прокручивания равен x:1, y:1 то скорость прокручивания будет равна скорости движения камеры, то есть 1 к 1.
-		 * @default    1,1
+		 * Прямоугольник определяющий занимаемую область.
+		 * При рассчете прямоугольника, дочерние сущности не учитываются.
+		 */
+		public var bounds:AntRect;
+		
+		/**
+		 * Фактор прокручивания сущности. Используется для расчета положения сущности исходя из положения камеры. 
+		 * Если фактор прокручивания равен (1,1) то скорость прокручивания будет равна скорости движения камеры, то есть 1 к 1.
+		 * @default    (1,1)
 		 */
 		public var scrollFactor:AntPoint;
 		
 		/**
-		 * Объем жизни сущности, используется на усмотрение разработчика. 
-		 * Для нанесения урона используйте метод <code>hurt(aDamage:Number):Boolean</code>.
-		 * @default    1
+		 * Объем жизни сущности. Используйте на свое усмотрение.
+		 * Для нанесения урона можно использовать метод <code>hurt(aDamage:Number):Boolean</code>.
+		 * @default    0
 		 */
 		public var health:Number;
 		
@@ -182,36 +216,40 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
-		 * Определяет имеет ли сущность вложенные объекты.
-		 * @default    false
+		 * Содержит старое значение положения сущности. 
+		 * Используется для оптимизации рассчетов.
 		 */
-		protected var _isGroup:Boolean;
+		protected var _oldPosition:AntPoint;
 		
 		/**
-		 * Содержит последнее значение угла поворота. Используется для оптимизации рассчетов.
-		 * @default    0
+		 * Содержит старое значение размера сущности.
+		 * Используется для оптимизации рассчетов.
 		 */
-		protected var _lastAngle:Number;
+		protected var _oldSize:AntPoint;
 		
 		/**
-		 * Содержит последнее значение положения сущности. Используется для оптимизации рассчетов.
+		 * Содержит старое значение масштабирования.
+		 * Используется для оптимизации рассчетов.
 		 */
-		protected var _lastPosition:AntPoint;
+		protected var _oldScale:AntPoint;
 		
 		/**
-		 * Имя поля по которому производится сортировка.
+		 * Содержит старое значение угла поворота. 
+		 * Используется для оптимизации рассчетов.
+		 */
+		protected var _oldAngle:Number;
+		
+		/**
+		 * Помошник для сортировки вложенных сущностей. 
+		 * Содержит имя атрибута по которому производится сортировка.
 		 */
 		protected var _sortIndex:String;
 		
 		/**
-		 * Порядок сортировки.
+		 * Помошник для сортировки вложенных сущностей.
+		 * Содержит порядок сортировки (по убываюни или по возрастанию).
 		 */
 		protected var _sortOrder:int;
-		
-		/**
-		 * @private
-		 */
-		protected var _isVisual:Boolean;
 		
 		//---------------------------------------
 		// CONSTRUCTOR
@@ -226,166 +264,76 @@ package ru.antkarlov.anthill
 			
 			parent = null;
 			children = null;
-			length = 0;
-			
+			numChildren = 0;
+            
+			z = 0;
 			x = 0;
 			y = 0;
+			globalX = 0;
+			globalY = 0;
 			width = 0;
 			height = 0;
+			angle = 0;
+			globalAngle = 0;
 			axis = new AntPoint();
-			bounds = new AntRect();
 			scale = new AntPoint(1, 1);
+            
 			velocity = new AntPoint();
 			acceleration = new AntPoint();
 			drag = new AntPoint();
 			maxVelocity = new AntPoint(10000, 10000);
-			
-			angle = 0;
+            
 			angularVelocity = 0;
 			angularAcceleration = 0;
 			angularDrag = 0;
-			maxAngular = 10000;
+			maxAngularVelocity = 10000;
+            
 			moves = false;
             
-			scrollFactor = new AntPoint(1, 1);
-			health = 1;
-			
 			vertices = new Array(4);
-			for (var i:int = 0; i < 4; i++)
+			var i:int = 0;
+			while (i < 4)
 			{
 				vertices[i] = new AntPoint();
+				i++;
 			}
 			
-			_isGroup = false;
-			_lastAngle = angle;
-			_lastPosition = new AntPoint(0, 0);
-			
+			bounds = new AntRect();
+			scrollFactor = new AntPoint(1, 1);
+            
+			health = 1;
+
+			_oldPosition = new AntPoint(-1, -1);
+			_oldSize = new AntPoint(-1, -1);
+			_oldScale = new AntPoint(-1, -1);
+			_oldAngle = -1;
 			_sortIndex = null;
 			_sortOrder = ASCENDING;
-			_isVisual = false;
-		}
-		
-		/**
-		 * Устанавливает позицию.
-		 * 
-		 * @param	aX	 Новая позиция по X.
-		 * @param	aY	 Новая позиция по Y.
-		 */
-		public function reset(aX:Number = 0, aY:Number = 0):void
-		{
-			x = aX;
-			y = aY;
-			
-			velocity.set();
-			angularVelocity = 0;
-			
-			if (_isGroup)
-			{
-				var mx:Number;
-				var my:Number;
-
-				if (x != _lastPosition.x || y != _lastPosition.y)
-				{
-					mx = x - _lastPosition.x;
-					my = y - _lastPosition.y;
-				}
-				else
-				{
-					return;
-				}
-
-				var entity:AntEntity;
-				var n:int = children.length;
-				for (var i:int = 0; i < n; i++)
-				{
-					entity = children[i] as AntEntity;
-					if (entity != null && entity.exists)
-					{
-						if (entity.isGroup)
-						{
-							entity.reset(entity.x + mx, entity.y + my);
-						}
-						else
-						{
-							entity.x += mx;
-							entity.y += my;
-						}
-					}
-				}
-			}
-			
-			if (!_isVisual)
-			{
-				saveLastPosition();
-			}
-		}
-		
-		/**
-		 * Устанавливает угол поворота.
-		 * 
-		 * @param	aAngle	 Новый угол поворота в градусах.
-		 */
-		public function resetRotation(aAngle:Number = 0):void
-		{
-			angle = aAngle;
-			
-			if (!_isGroup)
-			{
-				return;
-			}
-			
-			var point:AntPoint = new AntPoint();
-			var diff:Number;
-			if (aAngle != _lastAngle)
-			{
-				diff = aAngle - _lastAngle;
-				
-				var entity:AntEntity;
-				var n:int = children.length;
-				for (var i:int = 0; i < n; i++)
-				{
-					entity = children[i];
-					if (entity != null && entity.exists)
-					{
-						if (entity._isGroup)
-						{
-							entity.resetRotation(aAngle);
-						}
-						else
-						{
-							AntMath.rotateDeg(entity.x, entity.y, x /*+ axis.x*/, y /*+ axis.y*/, diff, point);
-							entity.x = point.x;
-							entity.y = point.y;
-							entity.angle += diff;
-						}
-					}
-				}
-			}
-			
-			saveLastPosition();
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		override public function dispose():void
+		override public function destroy():void
 		{
 			kill();
 			
-			if (_isGroup)
+			if (children != null)
 			{
 				var entity:AntEntity;
-				for (var i:int = 0; i < length; i++)
+				var i:int = 0;
+				while (i < numChildren)
 				{
 					entity = children[i] as AntEntity;
 					if (entity != null)
 					{
-						entity.dispose();
+						entity.destroy();
 					}
+					i++;
 				}
 				
-				children.length = length = 0;
-				children = null;
+				children.length = 0;
+				numChildren = 0;
 				_sortIndex = null;
 			}
 			
@@ -393,6 +341,8 @@ package ru.antkarlov.anthill
 			{
 				parent.remove(this);
 			}
+			
+			super.destroy();
 		}
 		
 		/**
@@ -400,22 +350,24 @@ package ru.antkarlov.anthill
 		 */
 		override public function kill():void
 		{
-			if (_isGroup)
+			if (children != null)
 			{
 				var entity:AntEntity;
-				for (var i:int = 0; i < length; i++)
+				var i:int = 0;
+				while (i < numChildren)
 				{
 					entity = children[i] as AntEntity;
 					if (entity != null && entity.exists)
 					{
 						entity.kill();
 					}
+					i++;
 				}
 			}
 			
 			super.kill();
 		}
-			
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -423,12 +375,15 @@ package ru.antkarlov.anthill
 		{
 			super.update();
 			updateMotion();
-			
-			if (_isGroup)
+
+			if (parent == null)
 			{
-				updateChildren();
-				rotateChildren();
+				globalX = x /*+ axis.x*/;
+				globalY = y /*+ axis.y*/;
+				globalAngle = angle;
 			}
+			
+			updateChildren();
 		}
 		
 		/**
@@ -436,129 +391,209 @@ package ru.antkarlov.anthill
 		 */
 		override public function draw():void
 		{
-			if (_isGroup)
+			/*
+				HINT Самой сущности нет необходимости перерассчитывать boundsRect, поскольку
+				сущность не является визуальным объектом и не имеет размеров. Потомки должны 
+				самостоятельно следить за обновлением boundsRect.
+			*/
+			//updateBounds();
+			
+			drawChildren();
+			super.draw();
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function debugDraw(aCamera:AntCamera):void
+		{
+			if (AntG.debugDrawer == null)
 			{
+				return;
+			}
+			
+			var i:int = 1;
+			var p:AntPoint = new AntPoint();
+			var drawer:AntDrawer = AntG.debugDrawer;
+			if (drawer.showBorders)
+			{
+				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p);
+				drawer.moveTo(p.x, p.y);
+				while (i < 4)
+				{
+					toScreenPosition(vertices[i].x, vertices[i].y, aCamera, p);
+					drawer.lineTo(p.x, p.y, 0xffadff54);
+					i++;
+				}
+				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p);
+				drawer.lineTo(p.x, p.y, 0xffadff54);
+			}
+			
+			if (drawer.showBounds)
+			{
+				toScreenPosition(bounds.x, bounds.y, aCamera, p);
+				drawer.drawRect(p.x, p.y, bounds.width, bounds.height);
+			}
+			
+			if (drawer.showAxis)
+			{
+				toScreenPosition(globalX, globalY, aCamera, p);
+				drawer.drawAxis(p.x, p.y, 0xff70cbff);
+			}
+			
+			// Отрисовка детей.
+			if (children != null)
+			{
+				i = 0;
 				var entity:AntEntity;
-				for (var i:int = 0; i < length; i++)
+				while (i < numChildren)
 				{
 					entity = children[i] as AntEntity;
-					if (entity != null && entity.exists && entity.visible)
+					if (entity != null && entity.exists && 
+						entity.visible && entity.allowDebugDraw)
 					{
-						entity.draw();
+						entity.debugDraw(aCamera);
 					}
+					i++;
 				}
 			}
 		}
 		
 		/**
-		 * Сортировка сущности по указанному параметру.
+		 * Устанавливает (сбрасывает) позицию и угол.
 		 * 
-		 * @param	aIndex	 Имя параметра по которому будет выполнена сортировка.
-		 * @param	aOrder	 Способ сортировки - по возрастанию или убыванию.
+		 * @param	aX	 Новая позиция по X.
+		 * @param	aY	 Новая позиция по Y.
+		 * @param	aAngle	 Новый угол в градусах.
 		 */
-		public function sort(aIndex:String = "y", aOrder:int = ASCENDING):void
+		public function reset(aX:Number = 0, aY:Number = 0, aAngle:Number = 0):void
 		{
-			_sortIndex = aIndex;
-			_sortOrder = aOrder;
-			children.sort(sortHandler);
+			x = aX;
+			y = aY;
+			angle = aAngle;
+			
+			if (parent != null)
+			{
+				globalX = parent.globalX + x /*+ axis.x*/;
+				globalY = parent.globalY + y /*+ axis.y*/;
+				globalAngle = parent.globalAngle + angle;
+			}
+			else
+			{
+				globalX = x /*+ axis.x*/;
+				globalY = y /*+ axis.y*/;
+				globalAngle = angle;
+			}
+			
+			updateChildren();
 		}
 		
 		/**
-		 * Добавляет указанную сущность в текущую сущность.
+		 * Сортировка дочерних сущностей по указанному атрибуту.
+		 * 
+		 * @param	aIndex	 Имя атрибута по которму следует выполнить сортировку.
+		 * @param	aOrder	 Порядок сортировки.
+		 */
+		public function sort(aIndex:String = "y", aOrder:int = ASCENDING):void
+		{
+			if (children != null)
+			{
+				_sortIndex = aIndex;
+				_sortOrder = aOrder;
+				children.sort(sortHandler);
+			}
+		}
+		
+		/**
+		 * Добавляет дочернюю сущность.
 		 * 
 		 * @param	aEntity	 Сущность которую необходимо добавить.
 		 * @return		Возвращает указатель на добавленную сущность.
 		 */
 		public function add(aEntity:AntEntity):AntEntity
 		{
-			// Если до этого момента сущность не имела детей, то переключаем в режим группы.
+			// Если сущность не имела детей.
 			if (children == null)
 			{
 				children = [];
-				length = 0;
-				_isGroup = true;
 			}
 			
-			// Если добавляемый объект уже был ранее добавлен, игнорируем.
-			if (children.indexOf(aEntity) >= 0)
+			// Если сущность уже добавлена.
+			if (children.indexOf(aEntity) > -1)
 			{
 				return aEntity;
 			}
 			
-			// Если добавляемый объект состоит в другой группе, то удаляем его от туда.
+			// Если сущность является дочерним объектом другой сущности.
 			if (aEntity.parent != null)
 			{
 				aEntity.parent.remove(aEntity);
 			}
 			
-			// Указатель на родительский объект (на себя).
+			// Обновляем положение добавляемой сущности и добавляем указатель на родителя (себя).
 			aEntity.parent = this;
-			if (length >= 1)
-			{
-				aEntity.angle += angle;
-				aEntity.x += x;
-				aEntity.y += y;
-			}
+			aEntity.locate(globalX, globalY, globalAngle);
 			
-			// Ищем пустую ячейку в массиве.
+			// Ищем пустую ячейку.
+			var i:int = 0;
 			var n:int = children.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				if (children[i] == null)
 				{
 					children[i] = aEntity;
 					return aEntity;
 				}
+				i++;
 			}
 			
-			// Добавляем в конец массива.
+			// Добавляем в конец массива детей.
 			children[n] = aEntity;
-			length = n + 1;
-			
+			numChildren++;
 			return aEntity;
 		}
 		
 		/**
-		 * Удаляет указанную сущность из текущей.
+		 * Удаляет дочернюю сущность.
 		 * 
 		 * @param	aEntity	 Сущность которую необходимо удалить.
-		 * @param	aSplice	 Если true то ячейка в которой располагалась удаляемая сущность, так же будет удалена.
+		 * @param	aSplice	 Если true то элемент массива так же будет удален.
 		 * @return		Возвращает указатель на удаленную сущность.
 		 */
 		public function remove(aEntity:AntEntity, aSplice:Boolean = false):AntEntity
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
-				return null;
+				return aEntity;
 			}
 			
-			var index:int = children.indexOf(aEntity);
-			if (index < 0 || index >= children.length)
+			var i:int = children.indexOf(aEntity);
+			if (i < 0 || i >= children.length)
 			{
-				return null;
+				return aEntity;
 			}
 			
-			children[index] = null;
+			children[i] = null;
 			aEntity.parent = null;
-				
+			
 			if (aSplice)
 			{
-				children[index].splice(index, 1);
-				length--;
+				children.splice(i, 1);
+				numChildren--;
 			}
 			
 			return aEntity;
 		}
 		
 		/**
-		 * Проверяет добавлена ли указанная сущность в текущую сущность.
+		 * Проверяет является ли указанная сущность ребенком текущей.
 		 * 
 		 * @param	aEntity	 Сущность наличие которой необходимо проверить.
-		 * @return		Возвращает true если указанная сущность уже добавлена в текущую сущность.
+		 * @return		Возвращает true если указанная сущность была ранее добавлена.
 		 */
 		public function contains(aEntity:AntEntity):Boolean
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return false;
 			}
@@ -567,31 +602,28 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Переиспользование сущности из вложенных в текущую сущность.
+		 * Переиспользование дочерних сущностей.
+		 * <p>Возвращает свободную (<code>!exists</code>) дочернюю сущность соотвествующую указанному классу.
+		 * Если свободных сущностей нет, то автоматически будет создан и добавлен новый экземпляр 
+		 * указанного класса. Иначе, если класс не указан, то вернет <code>null</code>.</p>
 		 * 
-		 * <p>Если класс необходимой сущности не указан, то метод вернет первую попавшуюся сущность которая временно не существует
-		 * <code>exist = false</code>, или <code>null</code> если сущностей нет. Если указан класс необходимой сущности, то в случае
-		 * отсуствия временно не существующих сущностей указанного класса, то будет создан новый экземпляр указанного класса и 
-		 * автоматически добавлен в текущую сущность.</p>
-		 * 
-		 * <p>Примечание: Если метод возвращает ранее использованную сущность, то перед использованием необходимо воскресить сущность
-		 * методом <code>revive()</code>. Проверить необходимость вызова метода <code>revive()</code> можно через флаг <code>exists</code>.</p>
+		 * <p>Примечание: Если метод возвращает ранее использованную сущность, то перед её повторным использованием
+		 * следует убедится что она существует (<code>exists</code>) и при необходимости воскресить методом 
+		 * <code>revive()</code>.</p>
 		 * 
 		 * <p>Пример использования:</p>
-		 * 
-		 * <p><code>var myEntity:MyGameObject = layer.recycle(MyGameObject) as MyGameObject;
-		 * if (myEntity.exist == false)
-		 * {
-		 * 	// Ранее использованная сущность.
-		 * 	myEntity.revive();
+		 * <code>
+		 * var newObj:MyGameObject = defGroup.recycle(MyGameObject) as MyGameObject;
+		 * if (!newObj.exists) {
+		 *   объект следует воскресить
+		 *   newObj.revive();
+		 * } else {
+		 *   иначе новый объект
 		 * }
-		 * else
-		 * {
-		 * 	// Новая сущность.
-		 * }</code></p>
+		 * </code>
 		 * 
-		 * @param	aClass	 Класс объекта который необходимо переиспользовать.
-		 * @return		Возвращает более не используемый объект из вложенных, либо новый объект, если свободных не оказалось.
+		 * @param	aClass	 Класс объекта который необходимо переработать.
+		 * @return		Возвращает свободный экземпляр указанного класса или новый если свободных нет.
 		 */
 		public function recycle(aClass:Class = null):AntEntity
 		{
@@ -611,154 +643,172 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Заменяет старую сущность на новую.
+		 * Заменяет указанную сущность на новую.
 		 * 
-		 * @param	oldEntity	 Старая сущность которую необходимо заменить.
-		 * @param	newEntity	 Новая сущность на которую необходимо заменить.
-		 * @return		Возвращает true если замена произведена успешно.
+		 * @param	aOldEntity	 Сущность которую необходимо заменить.
+		 * @param	aNewEntity	 Сущность на которую необходимо заменить.
+		 * @return		Возвращает указатель на новую сущность.
 		 */
-		public function replace(oldEntity:AntEntity, newEntity:AntEntity):Boolean
+		public function replace(aOldEntity:AntEntity, aNewEntity:AntEntity):AntEntity
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
-				return false;
+				return aNewEntity;
 			}
 			
-			var index:int = children.indexOf(oldEntity);
-			if (index < 0 || index >= children.length)
+			var i:int = children.indexOf(aOldEntity);
+			if (i >= 0 && i < children.length)
 			{
-				return false;
+				if (aNewEntity.parent != null && aNewEntity.parent != this)
+				{
+					aNewEntity.parent.remove(aNewEntity);
+					aNewEntity.parent = this;
+				}
+				
+				children[i] = aNewEntity;
+				aNewEntity.locate(globalX, globalY, globalAngle);
+				aOldEntity.parent = null;
 			}
 			
-			children[index] = newEntity;
-			newEntity.parent = this;
-			oldEntity.parent = null;
-			return true;
+			return aNewEntity;
 		}
 		
 		/**
-		 * Меняет местами указанные сущности.
+		 * Меняет указанные сущности местами.
 		 * 
-		 * @param	aEntity	 Первая сущность.
-		 * @param	bEntity	 Вторая сущность.
-		 * @return		Возвращает true если смена мест была произведена успешно.
+		 * @param	aEntityA	 Первая сущность.
+		 * @param	aEntityB	 Вторая сущность.
 		 */
-		public function swap(aEntityA:AntEntity, aEntityB:AntEntity):Boolean
+		public function swap(aEntityA:AntEntity, aEntityB:AntEntity):void
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
-				return false;
+				return;
 			}
 			
-			var indexA:int = children.indexOf(aEntityA);
-			var indexB:int = children.indexOf(aEntityB);
-			if (indexA > -1 && indexB > -1)
+			var iA:int = children.indexOf(aEntityA);
+			var iB:int = children.indexOf(aEntityB);
+			if (iA >= 0 && iA < children.length && iB >= 0 && iB < children.length)
 			{
-				children[indexA] = aEntityB;
-				children[indexB] = aEntityA;
-				return true;
+				children[iA] = aEntityB;
+				children[iB] = aEntityA;
 			}
-			
-			return false;
 		}
 		
 		/**
-		 * Удаляет все вложенные сущности, но не освобождает их.
+		 * Удаляет все вложенные сущности.
+		 * 
+		 * @param	aDestroy	 Флаг определяющий следует ли вызвать метод destroy() перед удалением.
 		 */
-		public function clear():void
+		public function removeAll(aDestroy:Boolean = true):void
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return;
 			}
 			
 			var entity:AntEntity;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				entity = children[i] as AntEntity;
 				if (entity != null)
 				{
+					if (aDestroy)
+					{
+						entity.destroy();
+					}
+					
 					entity.parent = null;
 				}
 				children[i] = null;
+				i++;
 			}
 			
 			children.length = 0;
-			length = 0;
+			numChildren = 0;
 		}
 		
 		/**
-		 * Извлекает первую попавшуюся временно не существующую сущность соотвествующую указанному классу.
+		 * Извлекает первую попавшующся свободную сущность соответствующую указанному классу.
 		 * 
-		 * @param	aClass	 Класс сущнности которую необходимо получить.
-		 * @return		Вернет сущность флаг exist = false, или null если свободных сущностей нет указанного класса нет.
+		 * @param	aClass	 Класс сущности которую необходимо получить.
+		 * @return		Вернет null если свободных сущностей нет.
 		 */
 		public function getAvailable(aClass:Class = null):AntEntity
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return null;
 			}
-			
+
 			var entity:AntEntity;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				entity = children[i] as AntEntity;
 				if (entity != null && !entity.exists && ((aClass == null) || (entity is aClass)))
 				{
 					return entity;
 				}
+				i++;
 			}
-			
+
 			return null;
 		}
 		
 		/**
-		 * Извлекает первую попавшуюся сущность во вложении.
+		 * Извлекает первую попавшуюся существующую сущность
 		 * 
 		 * @param	aClass	 Класс сущности которую необходимо получить.
-		 * @return		Вернет null если во вложении нет сущностей вообще или сущности указанного класса.
+		 * @return		Вернет null если нет существующих сущностей указанного класса (если указан).
 		 */
 		public function getExtant(aClass:Class = null):AntEntity
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return null;
 			}
 			
 			var entity:AntEntity;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				entity = children[i] as AntEntity;
 				if (entity != null && ((aClass == null) || (entity is aClass)))
 				{
 					return entity;
 				}
+				i++;
 			}
 			
 			return null;
 		}
 		
 		/**
-		 * Извлекает первую попавшуюся существующую "живую" сущность во вложении.
+		 * Извлекает первую попавшуюся существующую и "живую" сущность.
 		 * 
-		 * @return		Вернет null если существующих "живых" сущностей в группе нет.
+		 * @param	aClass	 Класс сущности которую необходимо получить.
+		 * @return		Вернет null если нет "живых" сущностей указанного класса (если указан).
 		 */
-		public function getAlive():AntEntity
+		public function getAlive(aClass:Class = null):AntEntity
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return null;
 			}
 			
 			var entity:AntEntity;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				entity = children[i] as AntEntity;
-				if (entity != null && entity.exists && entity.alive)
+				if (entity != null && entity.exists && entity.alive && 
+					((aClass == null) || (entity is aClass)))
 				{
 					return entity;
 				}
+				i++;
 			}
 			
 			return null;
@@ -767,119 +817,164 @@ package ru.antkarlov.anthill
 		/**
 		 * Извлекает первую попавшуюся "мертвую" сущность.
 		 * 
-		 * @return		Вернет null если "мертвых" сущностей в группе нет.
+		 * @param	aClass	 Класс сущности которую необходимо получить.
+		 * @return		Вернет null если нет "мертвых" сущностей указанного класса (если указан).
 		 */
-		public function getDead():AntEntity
+		public function getDead(aClass:Class = null):AntEntity
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return null;
 			}
 			
 			var entity:AntEntity;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				entity = children[i] as AntEntity;
-				if (entity != null && !entity.alive)
+				if (entity != null && !entity.alive && ((aClass == null) || (entity is aClass)))
 				{
 					return entity;
 				}
+				i++;
 			}
 			
 			return null;
 		}
 		
 		/**
-		 * Определяет количество "живых" вложенных сущностей.
+		 * Определяет количество "живых" дочерних сущностей.
 		 * 
 		 * @return		Количество "живых" сущностей.
 		 */
 		public function numLiving():int
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return -1;
 			}
 			
 			var entity:AntEntity;
 			var num:int = 0;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				entity = children[i] as AntEntity;
 				if (entity != null && entity.exists && entity.alive)
 				{
 					num++;
 				}
+				i++;
 			}
 			
 			return num;
 		}
 		
 		/**
-		 * Определяет количество "мертвых" вложенных сущностей.
+		 * Определяет количество "мертвых" дочерних сущностей.
 		 * 
 		 * @return		Количество "мертвых" сущностей.
 		 */
 		public function numDead():int
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return -1;
 			}
 			
 			var entity:AntEntity;
 			var num:int = 0;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				entity = children[i] as AntEntity;
 				if (entity != null && !entity.alive)
 				{
 					num++;
 				}
+				i++;
 			}
 			
 			return num;
 		}
 		
 		/**
-		 * Извлекает случайную вложенную сущность.
+		 * Извлекает случайную дочернюю сущность.
+		 * 
+		 * @param	aClass	 Класс сущности которую необходимо получить.
+		 * @param	aExistsOnly	 Флаг определяющий следует ли учитывать при выборе свободные сущности.
+		 * @return		Возвращает случайную сущность указанного класса (если указан).
 		 */
-		public function getRandom():AntEntity
+		public function getRandom(aClass:Class = null, aExistsOnly:Boolean = true):AntEntity
 		{
-			/*
-				TODO Сделать так чтобы пустые ячейки игнорировались.
-			*/
-			return children[AntMath.randomRangeInt(0, length)] as AntEntity;
+			if (children == null)
+			{
+				return null;
+			}
+			
+			var entity:AntEntity;
+			var exists:Array = [];
+			var i:int = 0;
+			while (i < numChildren)
+			{
+				entity = children[i] as AntEntity;
+				if (entity != null)
+				{
+					if (aExistsOnly && entity.exists && ((aClass == null) || (entity is aClass)))
+					{
+						exists[exists.length] = entity;
+					}
+					else if (!aExistsOnly && ((aClass == null) || (entity is aClass)))
+					{
+						exists[exists.length] = entity;
+					}
+				}
+				i++;
+			}
+			
+			entity = exists[AntMath.randomRangeInt(0, exists.length)] as AntEntity;
+			i = 0;
+			var n:int = exists.length;
+			while (i < n)
+			{
+				exists[i] = null;
+				i++;
+			}
+			
+			exists.length = 0;
+			return entity;
 		}
 		
 		/**
-		 * Извлекает сущность по её тэгу.
+		 * Извлекает дочернюю сущность по её тэгу.
 		 * 
 		 * @param	aTag	 Уникальный идентификатор сущности.
 		 * @return		Возвращает null если сущности с указанным тэгом нет во вложении.
 		 */
 		public function getByTag(aTag:int):AntEntity
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return null;
 			}
 			
 			var entity:AntEntity;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				entity = children[i] as AntEntity;
 				if (entity != null && entity.tag == aTag)
 				{
 					return entity;
 				}
+				i++;
 			}
 			
 			return null;
 		}
 		
 		/**
-		 * Возвращает список сущностей по их тэгу.
+		 * Извлекает массив дочерних сущностей по их тэгу.
 		 * 
 		 * @param	aTag	 Уникальный индентификатор сущности.
 		 * @param	aResult	 Массив в который будет помещен результат.
@@ -887,7 +982,7 @@ package ru.antkarlov.anthill
 		 */
 		public function queryByTag(aTag:int, aResult:Array = null):Array
 		{
-			if (!_isGroup)
+			if (children == null)
 			{
 				return null;
 			}
@@ -898,7 +993,8 @@ package ru.antkarlov.anthill
 			}
 			
 			var entity:AntEntity;
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numChildren)
 			{
 				entity = children[i] as AntEntity;
 				if (entity != null && entity.tag == aTag)
@@ -909,93 +1005,25 @@ package ru.antkarlov.anthill
 			
 			return aResult;
 		}
-				
-		/**
-		 * Вычисляет экранные координаты сущности для указанной камеры. 
-		 * <p>Если камера не указана, то используется камера по умолчанию.</p>
-		 * 
-		 * @param	aCamera	 Камера для которой необходимо получить экранные координаты сущности.
-		 * @param	aResult	 Указатель на точку куда может быть записан результат.
-		 * @return		Экранные координаты сущности или -1,-1 если нет ни одной камеры.
-		 */
-		public function getScreenPosition(aCamera:AntCamera = null, aResult:AntPoint = null):AntPoint
-		{
-			if (aResult == null)
-			{
-				aResult = new AntPoint();
-			}
-			
-			if (aCamera == null)
-			{
-				aCamera = AntG.getDefaultCamera();
-			}
-			
-			aResult.x = x + aCamera.scroll.x * scrollFactor.x;
-			aResult.y = y + aCamera.scroll.y * scrollFactor.y;
-			
-			return aResult;
-		}
 		
 		/**
-		 * Вычисляет экранные координаты указанной точки для указанной камеры. 
-		 * <p>Примечание: Если камера не указана то используется камера по умолчанию.</p>
+		 * Проверяет попадает ли указанные координаты в прямоугольник сущности.
+		 * <p>Примечание: Для невизуальной сущности прямоугольник не рассчитывается. 
+		 * Данный метод корректно работает для визуальных объектов.</p>
 		 * 
-		 * @param	aX	 Координата точки по X.
-		 * @param	aY	 Координата точки по Y.
-		 * @param	aCamera	 Камера для которой необходимо получить экранные координаты.
-		 * @param	aResult	 Указатель на точку куда может быть записан результат.
-		 * @return		Экранные координаты точки или -1,-1 если нет ни одной камеры.
+		 * @param	aX	 Положение точки по X.
+		 * @param	aY	 Положение точки по Y.
+		 * @return		Вернет true если точка находится внутри прямоугольника сущности.
 		 */
-		public function toScreenPosition(aX:Number, aY:Number, aCamera:AntCamera = null, aResult:AntPoint = null):AntPoint
-		{
-			if (aResult == null)
-			{
-				aResult = new AntPoint();
-			}
-			
-			if (aCamera == null)
-			{
-				aCamera = AntG.getDefaultCamera();
-				if (aCamera == null)
-				{
-					return new AntPoint(-1, -1);
-				}
-			}
-			
-			aResult.x = aX + aCamera.scroll.x * scrollFactor.x;
-			aResult.y = aY + aCamera.scroll.y * scrollFactor.y;
-			
-			return aResult;
-		}
-		
-		/**
-		 * Проверяет попадает ли сущность на экран указанной камеры.
-		 * <p>Примечание: Поскольку сама сущность не имеет графического представления, то она не может попадать 
-		 * в экран камеры, поэтому метод сущности всегда возвращает false. Классы потомки имеющие графический 
-		 * контент перекрывают этот метод.</p>
-		 * 
-		 * @return		Всегда возвращает false.
-		 */
-		public function onScreen(aCamera:AntCamera = null):Boolean
-		{
-			return false;
-		}
-		
-		/**
-		 * Проверяет попадает ли указанная точка в прямоугольник заданный вершинами.
-		 * ВНИМАНИЕ
-		 * 
-		 * @return		Возвращает true если точка попадает в прямоугольник кнопки.
-		 */
-		public function intersectsPoint(aPoint:AntPoint):Boolean
+		public function isInside(aX:Number, aY:Number):Boolean
 		{
 			var n:int = vertices.length;
 			var res:Boolean = false;
 			
 			for (var i:int = 0, j:int = n - 1; i < n; j = i++)
 			{
-				if (((vertices[i].y > aPoint.y) != (vertices[j].y > aPoint.y)) && 
-					(aPoint.x < (vertices[j].x - vertices[i].x) * (aPoint.y - vertices[i].y) / (vertices[j].y - vertices[i].y) + vertices[i].x))
+				if (((vertices[i].y > aY) != (vertices[j].y > aY)) && 
+					(aX < (vertices[j].x - vertices[i].x) * (aY - vertices[i].y) / (vertices[j].y - vertices[i].y) + vertices[i].x))
 				{
 					res = !res;
 				}
@@ -1005,14 +1033,84 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
+		 * Проверяет попадает ли указанная точка в прямоугольник сущности.
+		 * 
+		 * @return		Возвращает true если точка попадает в прямоугольник кнопки.
+		 */
+		public function isInsidePoint(aPoint:AntPoint):Boolean
+		{
+			return isInside(aPoint.x, aPoint.y);
+		}
+		
+		/**
+		 * Проверяет попадает ли сущность на экран указанной камеры. 
+		 * Если камера не указана то используется камера по умолчанию.
+		 * <p>Примечание: Для невизуальной сущности проверка будет некорректной
+		 * поскольку bounds не рассчитывается.</p>
+		 * 
+		 * @param	aCamera	 Камера для которой нужно проверить видимость.
+		 * @return		Возвращает true если попадает в экран указанной камеры.
+		 */
+		public function onScreen(aCamera:AntCamera = null):Boolean
+		{
+			if (aCamera == null)
+			{
+				aCamera = AntG.getCamera();
+			}
+			
+			return bounds.intersects(aCamera.scroll.x * -1 * scrollFactor.x, aCamera.scroll.y * -1 * scrollFactor.y,
+				aCamera.width / aCamera.zoom, aCamera.height / aCamera.zoom);
+		}
+		
+		/**
+		 * Вычисляет экранные координаты сущности для указанной камеры.
+		 * Если камера не указана то используется камера по умолчанию.
+		 * 
+		 * @param	aCamera	 Камера для которой необходимо рассчитать экранные координаты.
+		 * @param	aResult	 Указатель на точку куда может быть записан результат.
+		 * @return		Экранные координаты сущности.
+		 */
+		public function getScreenPosition(aCamera:AntCamera = null, aResult:AntPoint = null):AntPoint
+		{
+			return toScreenPosition(globalX, globalY, aCamera, aResult);
+		}
+		
+		/**
+		 * Переводит указанные координаты в экранные.
+		 * Если камера не указана то используется камера по умолчанию.
+		 * 
+		 * @param	aX	 Координата точки по X.
+		 * @param	aY	 Координата точки по Y.
+		 * @param	aCamera	 Камера для которой необходимо рассчитать экранные координаты.
+		 * @param	aResult	 Указатель на точку куда может быть записан результат.
+		 * @return		Экранные координаты сущности.
+		 */
+		protected function toScreenPosition(aX:Number, aY:Number, aCamera:AntCamera = null, aResult:AntPoint = null):AntPoint
+		{
+			if (aResult == null)
+			{
+				aResult = new AntPoint();
+			}
+			
+			if (aCamera == null)
+			{
+				aCamera = AntG.getCamera();
+			}
+			
+			aResult.x = aX + aCamera.scroll.x * scrollFactor.x;
+			aResult.y = aY + aCamera.scroll.y * scrollFactor.y;
+			return aResult;
+		}
+		
+		/**
 		 * Наносит урон.
 		 * 
 		 * @param	damage	 Размер наносимого урона.
 		 * @return		Возвращает true если сущность была убита.
 		 */
-		public function hurt(damage:Number):Boolean
+		public function hurt(aDamage:Number):Boolean
 		{
-			health -= damage;
+			health -= aDamage;
 			if (health <= 0)
 			{
 				kill();
@@ -1022,196 +1120,235 @@ package ru.antkarlov.anthill
 			return false;
 		}
 		
+		/**
+		 * Обновляет положение и размеры прямоугольника определяющего занимаемую область в игровом мире.
+		 */
+		public function updateBounds():void
+		{
+			// Если объект не повернут, но изменилось положение или размер, то выполняем упрощенный прерасчет без учета поворота.
+			if (globalAngle == 0 && (!_oldPosition.equal(globalX, globalY) || 
+				!_oldSize.equal(width, height) || !_oldScale.equalPoint(scale)))
+			{
+				calcBounds();
+			}
+			// Если объект повернут и если изменилось только его положение, то быстро обновляем положение границ.
+			else if (_oldAngle == globalAngle && !_oldPosition.equal(globalX, globalY) && 
+				_oldSize.equal(width, height) && _oldScale.equalPoint(scale))
+			{
+				moveBounds();
+			}
+			// Если предыдущие условия не сработали и что-то изменилось, то выполняем полный перерассчет прямоугольника.
+			else if (_oldAngle != globalAngle || !_oldPosition.equal(globalX, globalY) ||
+				!_oldSize.equal(width, height) || !_oldScale.equalPoint(scale))
+			{
+				rotateBounds();
+			}
+		}
+		
 		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------
-				
+		
 		/**
-		 * Процессинг вложенных сущностей.
+		 * Обработка дочерних сущностей.
 		 */
 		protected function updateChildren():void
 		{
-			if (!_isGroup)
+			if (children != null)
 			{
-				return;
-			}
-			
-			var mx:Number;
-			var my:Number;
-			var moved:Boolean = false;
-			
-			if (x != _lastPosition.x || y != _lastPosition.y)
-			{
-				moved = true;
-				mx = x - _lastPosition.x;
-				my = y - _lastPosition.y;
-			}
-			
-			var entity:AntEntity;
-			for (var i:int = 0; i < length; i++)
-			{
-				entity = children[i] as AntEntity;
-				if (entity != null && entity.exists)
+				var entity:AntEntity;
+				var i:int = 0;
+				while (i < numChildren)
 				{
-					if (moved)
+					entity = children[i] as AntEntity;
+					if (entity != null && entity.exists)
 					{
-						if (entity.isGroup)
+						/*
+							HINT Если сущность двигается и использует updateMotion то после рассчета новой позиции
+							она сама обновит свои глобальные координаты согласно родителю.
+						*/
+						if (!entity.moves)
 						{
-							entity.reset(entity.x + mx, entity.y + my);
+							entity.locate(globalX, globalY, globalAngle);
 						}
-						else
+
+						if (entity.active)
 						{
-							entity.x += mx;
-							entity.y += my;
+							entity.preUpdate();
+							entity.update();
+							entity.postUpdate();
 						}
 					}
-					
-					if (entity.active)
-					{
-						entity.preUpdate();
-						entity.update();
-						entity.postUpdate();
-					}
+					i++;
 				}
 			}
 		}
 		
 		/**
-		 * Вращение вложенных сущностей.
+		 * Отрисовка дочерних сущностей.
 		 */
-		protected function rotateChildren():void
+		protected function drawChildren():void
 		{
-			if (!_isGroup)
+			if (children != null)
 			{
-				return;
-			}
-			
-			if (angle != _lastAngle)
-			{
-				var diff:Number = angle - _lastAngle;
-				var point:AntPoint = new AntPoint();
-				
 				var entity:AntEntity;
-				for (var i:int = 0; i < length; i++)
+				var i:int = 0;
+				while (i < numChildren)
 				{
-					entity = children[i];
-					if (entity != null && entity.exists)
+					entity = children[i] as AntEntity;
+					if (entity != null && entity.exists && entity.visible)
 					{
-						if (entity.isGroup)
-						{
-							entity.resetRotation(angle);
-						}
-						else
-						{
-							AntMath.rotateDeg(entity.x, entity.y, x /*+ axis.x*/, y /*+ axis.y*/, diff, point);
-							entity.x = point.x;
-							entity.y = point.y;
-							entity.angle += diff;
-						}
+						entity.draw();
 					}
+					i++;
 				}
 			}
-			
-			if (!_isVisual)
-			{
-				saveLastPosition();
-			}
 		}
-				
+		
 		/**
-		 * Рассчет скорости движения и вращения сущности исходя из соотвествующих параметров.
+		 * Простой рассчет занимаемого сущностью прямоугольника без учета угла поворота.
+		 */
+		protected function calcBounds():void
+		{
+			vertices[0].set(globalX + axis.x * scale.x, globalY + axis.y * scale.y); // top left
+			vertices[1].set(globalX + width * scale.x + axis.x * scale.x, globalY + axis.y * scale.y); // top right
+			vertices[2].set(globalX + width * scale.x + axis.x * scale.x, globalY + height * scale.y + axis.y * scale.y); // bottom right
+			vertices[3].set(globalX + axis.x * scale.x, globalY + height * scale.y + axis.y * scale.y); // bottom left			
+			var tl:AntPoint = vertices[0];
+			var br:AntPoint = vertices[2];
+			bounds.set(tl.x, tl.y, br.x - tl.x, br.y - tl.y);
+			saveOldPosition();
+		}
+		
+		/**
+		 * Простой перерассчет занимаемого сущностью прямоугольника при условии что угол и размеры сущности не изменились.
+		 * Обновляется только положение.
+		 */
+		protected function moveBounds():void
+		{
+			var mx:Number = globalX - _oldPosition.x;
+			var my:Number = globalY - _oldPosition.y;
+			bounds.x += mx;
+			bounds.y += my;
+			
+			var p:AntPoint;
+			var i:int = 0;
+			while (i < 4)
+			{
+				p = vertices[i];
+				p.x += mx;
+				p.y += my;
+				i++;
+			}
+			
+			saveOldPosition();
+		}
+		
+		/**
+		 * Полный перерассчет занимаемого сущностью прямоугольника с учетом угла, размеров и положения.
+		 */
+		protected function rotateBounds():void
+		{
+			vertices[0].set(globalX + axis.x * scale.x, globalY + axis.y * scale.y); // top left
+			vertices[1].set(globalX + width * scale.x + axis.x * scale.x, globalY + axis.y * scale.y); // top right
+			vertices[2].set(globalX + width * scale.x + axis.x * scale.x, globalY + height * scale.y + axis.y * scale.y); // bottom right
+			vertices[3].set(globalX + axis.x * scale.x, globalY + height * scale.y + axis.y * scale.y); // bottom left
+			
+			var dx:Number;
+			var dy:Number;
+			var p:AntPoint = vertices[0];
+			var maxX:Number = p.x;
+			var maxY:Number = p.y;
+			p = vertices[2];
+			var minX:Number = p.x;
+			var minY:Number = p.y;
+			var rad:Number = -globalAngle * Math.PI / 180; // Radians
+			
+			var i:int = 0;
+			while (i < 4)
+			{
+				p = vertices[i];
+				dx = globalX + (p.x - globalX) * Math.cos(rad) + (p.y - globalY) * Math.sin(rad);
+				dy = globalY - (p.x - globalX) * Math.sin(rad) + (p.y - globalY) * Math.cos(rad);
+				maxX = (dx > maxX) ? dx : maxX;
+				maxY = (dy > maxY) ? dy : maxY;
+				minX = (dx < minX) ? dx : minX;
+				minY = (dy < minY) ? dy : minY;
+				p.x = dx;
+				p.y = dy;
+				i++;
+			}
+			
+			bounds.set(minX, minY, maxX - minX, maxY - minY);
+			saveOldPosition();
+		}
+		
+		/**
+		 * Перерасчитывает глобальное позиционирование сущности согласно родительским координатам и углу.
+		 * 
+		 * @param	aX	 Глобальное положение родителя по X.
+		 * @param	aY	 Глобальное положение родителя по Y.
+		 * @param	aAngle	 Глобальный угол родителя.
+		 */
+		protected function locate(aX:Number, aY:Number, aAngle:Number):void
+		{
+			var rad:Number = aAngle / 180 * Math.PI;
+			var px:Number = x; // + axis.x;
+			var py:Number = y; // + axis.y;
+			var dx:Number = px * Math.cos(rad) - py * Math.sin(rad);
+			var dy:Number = px * Math.sin(rad) + py * Math.cos(rad);
+			
+			globalX = aX + dx;
+			globalY = aY + dy;
+			globalAngle = aAngle + angle;
+		}
+		
+		/**
+		 * Рассчет скорости движения и вращения сущности.
 		 */
 		protected function updateMotion():void
 		{
-			if (!moves)
+			if (moves)
 			{
-				return;
-			}
-			
-			// Рассчет скорости вращения
-			var vc:Number;
-			vc = (calcVelocity(angularVelocity, angularAcceleration, angularDrag, maxAngular) - angularVelocity) * 0.5;
-			
-			angularVelocity += vc;
-			angle += angularVelocity * AntG.elapsed;
-			angle = AntMath.normAngleDeg(angle);
-			angularVelocity += vc;
-			
-			// Рассчет скорости движения по x
-			vc = (calcVelocity(velocity.x, acceleration.x, drag.x, maxVelocity.x) - velocity.x) * 0.5;
-			velocity.x += vc;
-			var dx:Number = velocity.x * AntG.elapsed;
-			velocity.x += vc;
-			
-			// Рассчет скорости движения по y
-			vc = (calcVelocity(velocity.y, acceleration.y, drag.y, maxVelocity.y) - velocity.y) * 0.5;
-			velocity.y += vc;
-			var dy:Number = velocity.y * AntG.elapsed;
-			velocity.y += vc;
-			
-			x += dx;
-			y += dy;
+				// Рассчет скорости вращения
+				var vc:Number;
+				vc = (AntMath.calcVelocity(angularVelocity, angularAcceleration, angularDrag, maxAngularVelocity) - angularVelocity) * 0.5;
+
+				angularVelocity += vc;
+				angle = AntMath.normAngleDeg(angle + angularVelocity * AntG.elapsed);
+				angularVelocity += vc;
+
+				// Рассчет скорости движения по x
+				vc = (AntMath.calcVelocity(velocity.x, acceleration.x, drag.x, maxVelocity.x) - velocity.x) * 0.5;
+				velocity.x += vc;
+				var dx:Number = velocity.x * AntG.elapsed;
+				velocity.x += vc;
+
+				// Рассчет скорости движения по y
+				vc = (AntMath.calcVelocity(velocity.y, acceleration.y, drag.y, maxVelocity.y) - velocity.y) * 0.5;
+				velocity.y += vc;
+				var dy:Number = velocity.y * AntG.elapsed;
+				velocity.y += vc;
+
+				x += dx;
+				y += dy;
+				
+				if (parent != null)
+				{
+					locate(parent.globalX, parent.globalY, parent.globalAngle);
+				}
+			}		
 		}
 		
 		/**
-		 * Рассчет скорости.
-		 * 
-		 * @param	aVelocity	 Текущая скорость.
-		 * @param	aAcceleration	 Ускорение.
-		 * @param	aDrag	 Замедление.
-		 * @param	aMax	 Максимально допустимая скорость.
-		 * @return		Возвращает новую скорость на основе входящих параметров.
+		 * Сохраняет предыдущие значения положения и угла для оптимизации рассчетов.
 		 */
-		protected function calcVelocity(aVelocity:Number, aAcceleration:Number = 0, 
-			aDrag:Number = 0, aMax:Number = 10000):Number
+		protected function saveOldPosition():void
 		{
-			/*
-				TODO Перенести этот метод в класс AntMath?
-			*/
-			if (aAcceleration != 0)
-			{
-				aVelocity += aAcceleration * AntG.elapsed;
-			}
-			else if (aDrag != 0)
-			{
-				var dv:Number = aDrag * AntG.elapsed;
-				if (aVelocity - dv > 0)
-				{
-					aVelocity -= dv;
-				}
-				else if (aVelocity + dv < 0)
-				{
-					aVelocity += dv;
-				}
-				else
-				{
-					aVelocity = 0;
-				}
-			}
-			
-			if (aVelocity != 0 && aMax != 10000)
-			{
-				if (aVelocity > aMax)
-				{
-					aVelocity = aMax;
-				}
-				else if (aVelocity < -aMax)
-				{
-					aVelocity = -aMax;
-				}
-			}
-			
-			return aVelocity;
-		}
-		
-		/**
-		 * Сохраняет текущий угол и положение сущности для оптимизации перерасчетов.
-		 */
-		protected function saveLastPosition():void
-		{
-			_lastAngle = angle;
-			_lastPosition.x = x;
-			_lastPosition.y = y;
+			_oldPosition.set(globalX, globalY);
+			_oldSize.set(width, height);
+			_oldScale.set(scale.x, scale.y);
+			_oldAngle = globalAngle;
 		}
 		
 		/**
@@ -1234,28 +1371,28 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		// GETTER / SETTERS
 		//---------------------------------------
-		
+
 		/**
-		 * Определяет имеет ли сущность вложения.
+		 * Определяет имеются ли в сущности дочерние сущности.
 		 */
 		public function get isGroup():Boolean
 		{
-			return _isGroup;
+			return (children != null) ? true : false;
 		}
 		
 		/**
-		 * Определяет возможность прокрутки сущности.
+		 * Определяет реагирует ли сущность на позиционирование камеры.
 		 */
-		public function set scrolled(value:Boolean):void
+		public function set isScrolled(value:Boolean):void
 		{
 			scrollFactor.x = scrollFactor.y = (value) ? 1 : 0;
 		}
 		
-		public function get scrolled():Boolean
+		public function get isScrolled():Boolean
 		{
 			return (scrollFactor.x == 0 && scrollFactor.y == 0) ? false : true;
 		}
-
+		
 	}
 
 }
