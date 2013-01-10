@@ -79,7 +79,7 @@ package ru.antkarlov.anthill
 		 * @param	aRect	 Указатель на другой прямоугольник куда произвести клонирование.
 		 * @return		Возвращает указатель на новый экземпляр класса прямоугольника с идентичными значениями.
 		 */
-		public function clone(aRect:AntRect = null):AntRect
+		public function copy(aRect:AntRect = null):AntRect
 		{
 			if (aRect == null)
 			{
@@ -96,7 +96,7 @@ package ru.antkarlov.anthill
 		 * @param	aRect	 Прямоугольник значения которого необходимо скопировать.
 		 * @return		Возвращает указатель на себя.
 		 */
-		public function copy(aRect:AntRect):AntRect
+		public function copyFrom(aRect:AntRect):AntRect
 		{
 			set(aRect.x, aRect.y, aRect.width, aRect.height);
 			return this;
