@@ -35,7 +35,7 @@ package ru.antkarlov.anthill
 		public var name:String;
 		
 		/**
-		 * Массив битмапов анимации.
+		 * Массив кадров.
 		 */
 		public var frames:Array;
 		
@@ -143,7 +143,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Уничтожает анимацию.
 		 */
-		public function dispose():void
+		public function destroy():void
 		{
 			var bmpd:BitmapData;
 			var n:int = frames.length;
@@ -221,7 +221,7 @@ package ru.antkarlov.anthill
 		protected function childNextFrame(aClip:MovieClip):void
 		{
 			var childClip:MovieClip;
-			var n:int = aClip.numChildren;
+			var n:int = aClip.length;
 			for (var i:int = 0; i < n; i++)
 			{
 				childClip = aClip.getChildAt(i) as MovieClip;
