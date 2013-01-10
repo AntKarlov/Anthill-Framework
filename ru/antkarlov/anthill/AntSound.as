@@ -172,7 +172,7 @@ package ru.antkarlov.anthill
 		/**
 		 * @inheritDoc
 		 */
-		override public function dispose():void
+		override public function destroy():void
 		{
 			kill();
 			
@@ -187,7 +187,7 @@ package ru.antkarlov.anthill
 			_sound = null;
 			_soundTransform = null;
 			
-			super.dispose();
+			super.destroy();
 		}
 		
 		/**
@@ -363,19 +363,21 @@ package ru.antkarlov.anthill
 			}
 			
 			// Рассчет громкости и панирования для каждого из слушателей.
-			for (var i:int = 0; i < n; i++)
+			var i:int = 0;
+			while (i < n)
 			{
 				listener = listeners[i] as AntEntity;
 				if (listener != null && listener.exists)
 				{
-					radial = AntMath.distance(_source.x, _source.y, listener.x, listener.y) / parent.radius;
+					radial = AntMath.distance(_source.globalX, _source.globalY, listener.globalX, listener.globalY) / parent.radius;
 					radial = AntMath.trimToRange(radial, 0, 1);
 					_ratingVolume.add(1 - radial);
 					
-					pan = (_source.x - listener.x) / parent.radius;
+					pan = (_source.globalX - listener.globalX) / parent.radius;
 					pan = AntMath.trimToRange(pan, -1, 1);
 					_ratingPan.add(pan);
 				}
+				i++;
 			}
 			
 			// Реальная текущая громкость.
@@ -389,11 +391,16 @@ package ru.antkarlov.anthill
 		 */
 		protected function soundForCenter():void
 		{
+			if (cameras == null)
+			{
+				cameras = AntG.cameras;
+			}
+			
 			var radial:Number;
 			var pan:Number;
 			var position:AntPoint = new AntPoint();
 			var camera:AntCamera;
-			var n:int = AntG.cameras.length;
+			var n:int = cameras.length;
 			
 			if (_ratingVolume.length() != n)
 			{
@@ -401,9 +408,10 @@ package ru.antkarlov.anthill
 				_ratingPan = new AntRating(n);
 			}
 			
-			for (var i:int = 0; i < n; i++)
+			var i:int = 0;
+			while (i < n)
 			{
-				camera = AntG.cameras[i] as AntCamera;
+				camera = cameras[i] as AntCamera;
 				if (camera != null)
 				{
 					_source.getScreenPosition(camera, position);
@@ -415,6 +423,7 @@ package ru.antkarlov.anthill
 					pan = AntMath.trimToRange(pan, -1, 1);
 					_ratingPan.add(pan);
 				}
+				i++;
 			}
 			
 			_volumeAdjust = _ratingVolume.average() * updateFade();
