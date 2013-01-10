@@ -8,6 +8,7 @@ package ru.antkarlov.anthill.debug
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.events.MouseEvent;
+	import flash.ui.Mouse;
 	
 	import ru.antkarlov.anthill.*;
 	
@@ -54,16 +55,12 @@ package ru.antkarlov.anthill.debug
 		protected var _isConsoleVisible:Boolean = true;
 		protected var _isPerfomanceVisible:Boolean = true;
 		protected var _isMonitorVisible:Boolean = true;
+		protected var _isDebugDraw:Boolean = false;
 		
 		private var _tfTitle:TextField;
-		private var _btnClose:AntGlyphButton;
-		private var _btnConsole:AntGlyphButton;
-		private var _btnPerfomance:AntGlyphButton;
-		private var _btnMonitor:AntGlyphButton;
-		private var _btnDebugDraw:AntGlyphButton;
-		private var _btnMute:AntGlyphButton;
-		
 		private var _currentPosition:int;
+		private var _sysPosition:int;
+		private var _addedButtons:Array;
 		
 		//---------------------------------------
 		// CONSTRUCTOR
@@ -81,28 +78,19 @@ package ru.antkarlov.anthill.debug
 			monitor = new AntMonitor(this, 10, 224);
 			
 			_currentPosition = AntG.width;
+			_addedButtons = null;
 			
-			_btnClose = new AntGlyphButton(AntGlyphButton.CLOSE);
-			addButton(_btnClose, hide);
-			
+			makeButton(AntGlyphButton.CLOSE, onCloseClick, true);
+			addSeparator();			
+			makeButton(AntGlyphButton.MONITOR, onMonitorClick, true);
+			makeButton(AntGlyphButton.PERFOMANCE, onPerfomanceClick, true);
+			makeButton(AntGlyphButton.CONSOLE, onConsoleClick, true);
+			addSeparator();
+			makeButton(AntGlyphButton.DEBUGDRAW_OFF, onDebugDrawClick, true);
+			makeButton(AntGlyphButton.SOUND_ON, onMuteClick, true);
 			addSeparator();
 			
-			_btnMonitor = new AntGlyphButton(AntGlyphButton.MONITOR);
-			addButton(_btnMonitor, onMonitor);
-			
-			_btnPerfomance = new AntGlyphButton(AntGlyphButton.PERFOMANCE);
-			addButton(_btnPerfomance, onPerfomance);
-			
-			_btnConsole = new AntGlyphButton(AntGlyphButton.CONSOLE);
-			addButton(_btnConsole, onConsole);
-			
-			addSeparator();
-			
-			_btnDebugDraw = new AntGlyphButton(AntGlyphButton.DEBUGDRAW_OFF);
-			addButton(_btnDebugDraw, onDebugDraw);
-			
-			_btnMute = new AntGlyphButton(AntGlyphButton.SOUND_ON);
-			addButton(_btnMute, onMute);
+			_sysPosition = _currentPosition;
 			
 			_tfTitle = new TextField();
 			_tfTitle.x = 2;
@@ -155,6 +143,16 @@ package ru.antkarlov.anthill.debug
 			
 			if (!visible)
 			{
+				if (!AntG.useSystemCursor)
+				{
+					flash.ui.Mouse.show();
+				}
+				
+				if (AntG.mouse.cursor != null)
+				{
+					AntG.mouse.hide();
+				}
+				
 				AntG.stage.addChild(this);
 				visible = true;
 				
@@ -182,6 +180,16 @@ package ru.antkarlov.anthill.debug
 		{
 			if (visible)
 			{
+				if (!AntG.useSystemCursor)
+				{
+					flash.ui.Mouse.hide();
+				}
+				
+				if (AntG.mouse.cursor != null)
+				{
+					AntG.mouse.show();
+				}
+				
 				AntG.stage.removeChild(this);
 				visible = false;
 				
@@ -197,89 +205,150 @@ package ru.antkarlov.anthill.debug
 			}
 		}
 		
+		/**
+		 * Создает и добавляет новую кнопку в окно отлдачика.
+		 * 
+		 * @param	aButtonKind	 Вид кнопки.
+		 * @param	aOnClick	 Указатель на метод обработчик клика по кнопке.
+		 * @return		Возвращает указатель на созданную и добавленную кнопку.
+		 */
+		public function makeButton(aButtonKind:uint, aOnClick:Function, aSystem:Boolean = false):AntGlyphButton
+		{
+			return addButton(new AntGlyphButton(aButtonKind), aOnClick, aSystem);
+		}
+		
+		/**
+		 * Добавляет нопку в окно отладчика.
+		 * 
+		 * @param	aButton	 Указатель на добавляемую кнопку.
+		 * @param	aOnClick	 Указатель на метод обработчик клика по кнопке.
+		 * @default    Возвращает указатель на добавленную кнопку.
+		 */
+		public function addButton(aButton:AntGlyphButton, aOnClick:Function, aSystem:Boolean = false):AntGlyphButton
+		{
+			if (_addedButtons == null && !aSystem)
+			{
+				_addedButtons = [];
+			}
+			
+			_currentPosition -= 14;
+			if (aSystem)
+			{
+				_sysPosition = _currentPosition;
+			}
+			
+			aButton.x = _currentPosition;
+			aButton.y = 1;
+			aButton.onClick = aOnClick;
+			addChild(aButton);
+			
+			if (!aSystem)
+			{
+				_addedButtons[_addedButtons.length] = aButton;
+			}
+			
+			return aButton;
+		}
+		
+		/**
+		 * Добавляет разделитель между кнопками.
+		 */
+		public function addSeparator():void
+		{
+			_currentPosition -= 5;
+		}
+		
+		/**
+		 * Удаляет все добавленные кнопки.
+		 */
+		public function removeAllButtons():void
+		{
+			if (_addedButtons != null)
+			{
+				var i:int = 0;
+				var n:int = _addedButtons.length;
+				var btn:AntGlyphButton;
+				while (i < n)
+				{
+					btn = _addedButtons[i] as AntGlyphButton;
+					if (btn != null)
+					{
+						if (contains(btn))
+						{
+							removeChild(btn);
+						}
+						
+						btn.destroy();
+						_addedButtons[i] = null;
+					}
+					i++;
+				}
+				
+				_addedButtons = null;
+				_currentPosition = _sysPosition;
+			}
+		}
+		
 		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------
 		
 		/**
-		 * @private
+		 * Обработчик клика по кнопке скрыть (закрыть).
 		 */
-		protected function onMute():void
+		protected function onCloseClick(aButton:AntGlyphButton):void
 		{
-			AntG.sounds.mute = !AntG.sounds.mute;
-			if (AntG.sounds.mute)
-			{
-				_btnMute.kind = AntGlyphButton.SOUND_OFF;
-			}
-			else
-			{
-				_btnMute.kind = AntGlyphButton.SOUND_ON;
-			}
+			hide();
 		}
 		
 		/**
-		 * @private
+		 * Обработчик клика по кнопке вкл/выкл звуки.
 		 */
-		protected function onDebugDraw():void
+		protected function onMuteClick(aButton:AntGlyphButton):void
+		{
+			AntG.sounds.mute = !AntG.sounds.mute;
+			aButton.kind = (AntG.sounds.mute) ? AntGlyphButton.SOUND_OFF : AntGlyphButton.SOUND_ON;
+		}
+		
+		/**
+		 * Обработчик клика по кнопке вкл/выкл отладочную отрисовку.
+		 */
+		protected function onDebugDrawClick(aButton:AntGlyphButton):void
 		{
 			if (AntG.debugDrawer != null)
 			{
 				AntG.debugDrawer = null;
-				_btnDebugDraw.kind = AntGlyphButton.DEBUGDRAW_OFF;
+				aButton.kind = AntGlyphButton.DEBUGDRAW_OFF;
 			}
 			else
 			{
 				AntG.debugDrawer = new AntDrawer();
-				_btnDebugDraw.kind = AntGlyphButton.DEBUGDRAW_ON;
+				aButton.kind = AntGlyphButton.DEBUGDRAW_ON;
 			}
 		}
 		
 		/**
-		 * Обработка клика по кнопке консоли в тулбаре отладчика.
+		 * Обработчик клика по кнопке показать/скрыть консоль.
 		 */
-		protected function onConsole():void
+		protected function onConsoleClick(aButton:AntGlyphButton):void
 		{
 			(console.visible) ? console.hide() : console.show();
 		}
 		
 		/**
-		 * Обработка клика по кнопке монитора производительности в тулбаре отладчика.
+		 * Обработчик клика по кнопке показать/скрыть окно производительности.
 		 */
-		protected function onPerfomance():void
+		protected function onPerfomanceClick(aButton:AntGlyphButton):void
 		{
 			(perfomance.visible) ? perfomance.hide() : perfomance.show();
 		}
 		
 		/**
-		 * Обработка клика по кнопке монитора пользовательских данных в тулбаре отладчика.
+		 * Обработчик клика по кнопке показать/скрыть монитор.
 		 */
-		protected function onMonitor():void
+		protected function onMonitorClick(aButton:AntGlyphButton):void
 		{
 			(monitor.visible) ? monitor.hide() : monitor.show();
-		}
-		
-		//---------------------------------------
-		// PROTECTED METHODS
-		//---------------------------------------
-		
-		/**
-		 * @private
-		 */
-		protected function addButton(aButton:AntGlyphButton, aOnClick:Function):void
-		{
-			_currentPosition -= 14;
-			aButton.x = _currentPosition;
-			aButton.y = 1;
-			aButton.onClick = aOnClick;
-			addChild(aButton);
-		}
-		
-		/**
-		 * @private
-		 */
-		protected function addSeparator():void
-		{
-			_currentPosition -= 4;
 		}
 		
 		/**
