@@ -57,7 +57,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Количество звуков в менеджере. Может отличаться от реального количества звуков.
 		 */
-		public var length:int;
+		public var numSounds:int;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -91,7 +91,7 @@ package ru.antkarlov.anthill
 			baseURL = "";
 			
 			sounds = [];
-			length = 0;
+			numSounds = 0;
 			
 			_classes = new AntStorage();
 			_streams = new AntStorage();
@@ -100,7 +100,7 @@ package ru.antkarlov.anthill
 		/**
 		 * @private
 		 */
-		public function dispose():void
+		public function destroy():void
 		{
 			clear();
 			
@@ -212,13 +212,15 @@ package ru.antkarlov.anthill
 		 */
 		public function add(aSound:AntSound):AntSound
 		{
-			for (var i:int = 0; i < length; i++)
+			var i:int = 0;
+			while (i < numSounds)
 			{
 				if (sounds[i] == null)
 				{
 					sounds[i] = aSound;
 					return aSound;
 				}
+				i++;
 			}
 			
 			if (aSound.parent != null && aSound.parent != this)
@@ -228,8 +230,8 @@ package ru.antkarlov.anthill
 			
 			aSound.parent = this;
 			
-			sounds[length] = aSound;
-			length++;
+			sounds[numSounds] = aSound;
+			numSounds++;
 			return aSound;
 		}
 		
@@ -242,19 +244,19 @@ package ru.antkarlov.anthill
 		 */
 		public function remove(aSound:AntSound, aSplice:Boolean = false):AntSound
 		{
-			var index:int = sounds.indexOf(aSound);
-			if (index < 0 || index >= length)
+			var i:int = sounds.indexOf(aSound);
+			if (i < 0 || i >= sounds.length)
 			{
 				return null;
 			}
 			
-			sounds[index] = null;
+			sounds[i] = null;
 			aSound.parent = null;
 			
 			if (aSplice)
 			{
-				sounds.splice(index, 1);
-				length--;
+				sounds.splice(i, 1);
+				numSounds--;
 			}
 			
 			return aSound;
@@ -284,7 +286,6 @@ package ru.antkarlov.anthill
 			var sound:AntSound = recycle(aName);
 			sound.revive();
 			sound.play(aSource, 0, aRepeats);
-			
 			return sound;
 		}
 		
@@ -297,8 +298,9 @@ package ru.antkarlov.anthill
 		 */
 		public function stop(aName:String, aSource:AntEntity = null):void
 		{
+			var i:int = 0;
 			var sound:AntSound;
-			for (var i:int = 0; i < length; i++)
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null && sound.exists && sound.name == aName)
@@ -312,6 +314,7 @@ package ru.antkarlov.anthill
 						sound.kill();
 					}
 				}
+				i++;
 			}
 		}
 		
@@ -323,8 +326,9 @@ package ru.antkarlov.anthill
 		 */
 		public function stopAll(aSource:AntEntity = null):void
 		{
+			var i:int = 0;
 			var sound:AntSound;
-			for (var i:int = 0; i < length; i++)
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null && sound.exists)
@@ -338,6 +342,7 @@ package ru.antkarlov.anthill
 						sound.kill();
 					}
 				}
+				i++;
 			}
 		}
 		
@@ -346,28 +351,31 @@ package ru.antkarlov.anthill
 		 */
 		public function clear():void
 		{
+			var i:int = 0;
 			var n:int = listeners.length;
-			for (var j:int = 0; j < n; j++)
+			while (i < n)
 			{
-				listeners[j] = null;
+				listeners[i] = null;
+				i++;
 			}
-			
 			listeners.length = 0;
 			
 			var sound:AntSound;
-			for (var i:int = 0; i < length; i++)
+			i = 0;
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null)
 				{
 					sound.parent = null;
-					sound.dispose();
+					sound.destroy();
 				}
 				sounds[i] = null;
+				i++;
 			}
 			
 			sounds.length = 0;
-			length = 0;
+			numSounds = 0;
 		}
 		
 		/**
@@ -379,8 +387,9 @@ package ru.antkarlov.anthill
 		 */
 		public function isPlaying(aName:String, aSource:AntEntity = null):Boolean
 		{
+			var i:int = 0;
 			var sound:AntSound;
-			for (var i:int = 0; i < length; i++)
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null && sound.exists && sound.name == aName)
@@ -394,6 +403,7 @@ package ru.antkarlov.anthill
 						return true;
 					}
 				}
+				i++;
 			}
 			
 			return false;
@@ -407,14 +417,16 @@ package ru.antkarlov.anthill
 		 */
 		public function getAvailable(aName:String):AntSound
 		{
+			var i:int = 0;
 			var sound:AntSound;
-			for (var i:int = 0; i < length; i++)
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null && !sound.exists && sound.name == aName)
 				{
 					return sound;
 				}
+				i++;
 			}
 			
 			return null;
@@ -443,14 +455,16 @@ package ru.antkarlov.anthill
 		 */
 		public function pause():void
 		{
+			var i:int = 0;
 			var sound:AntSound;
-			for (var i:int = 0; i < length; i++)
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null && sound.exists)
 				{
 					sound.pause();
 				}
+				i++;
 			}
 		}
 		
@@ -459,14 +473,16 @@ package ru.antkarlov.anthill
 		 */
 		public function resume():void
 		{
+			var i:int = 0;
 			var sound:AntSound;
-			for (var i:int = 0; i < length; i++)
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null && sound.exists)
 				{
 					sound.resume();
 				}
+				i++;
 			}
 		}
 		
@@ -475,14 +491,16 @@ package ru.antkarlov.anthill
 		 */
 		public function update():void
 		{
+			var i:int = 0;
 			var sound:AntSound;
-			for (var i:int = 0; i < length; i++)
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null && sound.exists)
 				{
 					sound.update();
 				}
+				i++;
 			}
 		}
 		
@@ -494,15 +512,16 @@ package ru.antkarlov.anthill
 		public function numDead():int
 		{
 			var num:int = 0;
+			var i:int = 0;
 			var sound:AntSound;
-			var n:int = sounds.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null && !sound.alive)
 				{
 					num++;
 				}
+				i++;
 			}
 			
 			return num;
@@ -515,16 +534,17 @@ package ru.antkarlov.anthill
 		 */
 		public function numLiving():int
 		{
+			var i:int = 0;
 			var num:int = 0;
 			var sound:AntSound;
-			var n:int = sounds.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < numSounds)
 			{
 				sound = sounds[i] as AntSound;
 				if (sound != null && sound.alive)
 				{
 					num++;
 				}
+				i++;
 			}
 			
 			return num;
