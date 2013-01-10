@@ -1,6 +1,8 @@
 package ru.antkarlov.anthill
 {
 	import flash.events.MouseEvent;
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
 	
 	/**
 	 * Класс обработчик событий мыши.
@@ -11,7 +13,7 @@ package ru.antkarlov.anthill
 	 * @author Антон Карлов
 	 * @since  20.05.2011
 	 */
-	public class AntMouse extends Object
+	public class AntMouse extends AntPoint
 	{
 		//---------------------------------------
 		// PUBLIC VARIABLES
@@ -19,13 +21,39 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Указатель на объект в который был произведен последний клик мышкой.
+		 * @default    null
 		 */
 		public var target:Object;
 		
 		/**
 		 * Значение глубины колеса при прокрутке.
+		 * @default    0
 		 */
 		public var wheelDelta:int;
+		
+		/**
+		 * Позиция курсора мыши на экране по X.
+		 * @default    0
+		 */
+		public var screenX:int;
+		
+		/**
+		 * Позиция курсора мыши на экране по Y.
+		 * @default    0
+		 */
+		public var screenY:int;
+		
+		/**
+		 * Графическое представление курсора мышки.
+		 * @default    null
+		 */
+		public var cursor:AntActor;
+		
+		/**
+		 * Имя анимации курсора мышки по умолчанию.
+		 * @default    null
+		 */
+		public var defCursorAnim:String;
 		
 		/**
 		 * Событие выполняющиеся при нажатии кнопки мыши.
@@ -40,6 +68,11 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
+		
+		/**
+		 * @private
+		 */
+		protected var _cursorOffset:AntPoint;
 		
 		/**
 		 * Помошник для хранения текущих координат мыши.
@@ -82,10 +115,15 @@ package ru.antkarlov.anthill
 		{
 			super();
 			
+			_cursorOffset = new AntPoint();
 			_globalScreenPos = new AntPoint();
 			
 			target = null;
 			wheelDelta = 0;
+			screenX = 0;
+			screenY = 0;
+			cursor = null;
+			defCursorAnim = null;
 			eventDown = new AntEvent();
 			eventUp = new AntEvent();
 		}
@@ -93,6 +131,71 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		// PUBLIC METHODS
 		//---------------------------------------
+		
+		/**
+		 * @private
+		 */
+		public function destroy():void
+		{
+			//
+		}
+		
+		/**
+		 * @private
+		 */
+		public function makeCursor(aAnimName:String, aOffsetX:int = 0, aOffsetY:int = 0):void
+		{
+			var switchAnim:Boolean = false;
+			if (cursor == null)
+			{
+				cursor = new AntActor();
+				switchAnim = true;
+				defCursorAnim = aAnimName;
+			}
+			
+			cursor.addAnimationFromCache(aAnimName, null, switchAnim);
+			_cursorOffset.set(aOffsetX, aOffsetY);
+		}
+		
+		/**
+		 * @private
+		 */
+		public function show():void
+		{
+			if (cursor != null)
+			{
+				cursor.revive();
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public function hide():void
+		{
+			if (cursor != null)
+			{
+				cursor.kill();
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public function changeCursor(aAnimName:String = null):void
+		{
+			if (aAnimName == null)
+			{
+				if (cursor != null && defCursorAnim != null)
+				{
+					cursor.switchAnimation(defCursorAnim);
+				}
+			}
+			else if (cursor != null)
+			{
+				cursor.switchAnimation(aAnimName);
+			}
+		}
 		
 		/**
 		 * Возвращает координаты мыши на экране.
@@ -105,7 +208,7 @@ package ru.antkarlov.anthill
 		{
 			if (aCamera == null)
 			{
-				aCamera = AntG.camera;
+				aCamera = AntG.getCamera();
 			}
 			
 			if (aResult == null)
@@ -151,6 +254,8 @@ package ru.antkarlov.anthill
 			_globalScreenPos.x = aX;
 			_globalScreenPos.y = aY;
 			
+			updateCursor();
+			
 			if (_last == -1 && _current == -1)
 			{
 				_current = 0;
@@ -173,6 +278,37 @@ package ru.antkarlov.anthill
 			}
 			
 			_lastWheel = _currentWheel;
+		}
+		
+		/**
+		 * Отрисовка курсора мышки.
+		 */
+		public function draw():void
+		{
+			var gX:Number = 0;
+			var gY:Number = 0;
+			
+			if (cursor != null && cursor.exists && cursor.visible)
+			{
+				var cam:AntCamera;
+				var i:int = 0;
+				var n:int = AntG.cameras.length;
+				while (i < n)
+				{
+					cam = AntG.cameras[i] as AntCamera;
+					if (cam != null)
+					{
+						gX = cursor.globalX;
+						gY = cursor.globalY;
+						cursor.globalX -= cam.x;
+						cursor.globalY -= cam.y;
+						cursor.drawActor(cam);
+						cursor.globalX = gX;
+						cursor.globalY = gY;
+					}
+					i++;
+				}
+			}
 		}
 
 		/**
@@ -241,9 +377,28 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
+		 * @private
+		 */
+		protected function updateCursor():void
+		{
+			if (cursor != null && cursor.exists && cursor.active)
+			{
+				cursor.update();
+				cursor.globalX = _globalScreenPos.x + _cursorOffset.x;
+				cursor.globalY = _globalScreenPos.y + _cursorOffset.y;
+			}
+			
+			var camera:AntCamera = AntG.camera;
+			screenX = (_globalScreenPos.x - camera.x) / camera.zoom;
+			screenY = (_globalScreenPos.y - camera.y) / camera.zoom;
+			x = screenX + camera.scroll.x;
+			y = screenY + camera.scroll.y;
+		}
+		
+		/**
 		 * Обработчик события нажатия кнопки мыши.
 		 */
-		public function mouseDownHandler(event:MouseEvent):void
+		internal function mouseDownHandler(event:MouseEvent):void
 		{
 			target = event.target;
 			_current = (_current > 0) ? 1 : 2;
@@ -253,7 +408,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Обработчик соыбтия отпускания кнопки мыши.
 		 */
-		public function mouseUpHandler(event:MouseEvent):void
+		internal function mouseUpHandler(event:MouseEvent):void
 		{
 			_current = (_current > 0) ? -1 : 0;
 			eventUp.send();
@@ -262,7 +417,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Обработчик события выхода мышки за пределы сцены.
 		 */
-		public function mouseOutHandler(event:MouseEvent):void
+		internal function mouseOutHandler(event:MouseEvent):void
 		{
 			/*
 				TODO 
@@ -272,7 +427,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Обработчик события возвращаения мышки в пределы сцены.
 		 */
-		public function mouseOverHandler(event:MouseEvent):void
+		internal function mouseOverHandler(event:MouseEvent):void
 		{
 			/*
 				TODO 
@@ -282,7 +437,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Обработчик события вращения колеса мышки.
 		 */
-		public function mouseWheelHandler(event:MouseEvent):void
+		internal function mouseWheelHandler(event:MouseEvent):void
 		{
 			wheelDelta = event.delta;
 			if (wheelDelta > 0)
