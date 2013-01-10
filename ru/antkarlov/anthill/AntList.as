@@ -46,12 +46,12 @@ package ru.antkarlov.anthill
 		/**
 		 * Уничтожает элемент списка и последующие связанные с ним.
 		 */
-		public function dispose():void
+		public function destroy():void
 		{
 			data = null;
 			if (next != null)
 			{
-				next.dispose();
+				next.destroy();
 			}
 			
 			next = null;
