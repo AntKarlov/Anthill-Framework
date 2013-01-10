@@ -467,6 +467,28 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
+		 * Определяет наибольшее число из указанного массива.
+		 * 
+		 * @param	aArray	 Массив значений.
+		 * @return		Возвращает наибольшее число из массива.
+		 */
+		public static function maxFrom(aArray:Array):Number
+		{
+			return Math.max.apply(null, aArray);
+		}
+		
+		/**
+		 * Определяет наименьшее число из указанного массива.
+		 * 
+		 * @param	aArray	 Массив значений.
+		 * @return		Возвращает наименьшее число из массива.
+		 */
+		public static function minFrom(aArray:Array):Number
+		{
+			return Math.min.apply(null, aArray);
+		}
+		
+		/**
 		 * Извлекает целочисленное значение красного цвета из шестнадцатиричного значения цвета.
 		 * 
 		 * @param	aColor	 Шестнадцатиричное значение цвета.
@@ -510,6 +532,54 @@ package ru.antkarlov.anthill
 		public static function combineRGB(aRed:uint, aGreen:uint, aBlue:uint):uint
 		{
 			return ((aRed << 16) | (aGreen << 8) | aBlue);
+		}
+		
+		/**
+		 * Рассчет скорости.
+		 * 
+		 * @param	aVelocity	 Текущая скорость.
+		 * @param	aAcceleration	 Ускорение.
+		 * @param	aDrag	 Замедление.
+		 * @param	aMax	 Максимально допустимая скорость.
+		 * @return		Возвращает новую скорость на основе входящих параметров.
+		 */
+		public static function calcVelocity(aVelocity:Number, aAcceleration:Number = 0, 
+			aDrag:Number = 0, aMax:Number = 10000):Number
+		{
+			if (aAcceleration != 0)
+			{
+				aVelocity += aAcceleration * AntG.elapsed;
+			}
+			else if (aDrag != 0)
+			{
+				var dv:Number = aDrag * AntG.elapsed;
+				if (aVelocity - dv > 0)
+				{
+					aVelocity -= dv;
+				}
+				else if (aVelocity + dv < 0)
+				{
+					aVelocity += dv;
+				}
+				else
+				{
+					aVelocity = 0;
+				}
+			}
+			
+			if (aVelocity != 0 && aMax != 10000)
+			{
+				if (aVelocity > aMax)
+				{
+					aVelocity = aMax;
+				}
+				else if (aVelocity < -aMax)
+				{
+					aVelocity = -aMax;
+				}
+			}
+			
+			return aVelocity;
 		}
 		
 	}
