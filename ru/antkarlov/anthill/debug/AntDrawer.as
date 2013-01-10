@@ -32,6 +32,9 @@ package ru.antkarlov.anthill.debug
 		 * Флаг определяющий необходимость рисования занимаемую сущностью область.
 		 */
 		public var showBounds:Boolean;
+		public var showGrid:Boolean;
+		
+		public var buffer:BitmapData;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -41,11 +44,6 @@ package ru.antkarlov.anthill.debug
 		 * Точка помошник определяющая откуда будет нарисована линия.
 		 */
 		protected var _lineFrom:AntPoint;
-		
-		/**
-		 * Указатель на буффер текущей камеры.
-		 */
-		protected var _buffer:BitmapData;
 		
 		//---------------------------------------
 		// CONSTRUCTOR
@@ -58,28 +56,20 @@ package ru.antkarlov.anthill.debug
 		{
 			super();
 			
-			_buffer = null;
 			showAxis = true;
 			showBorders = true;
 			showBounds = true;
+			showGrid = true;
 			
 			_lineFrom = new AntPoint();
 		}
 		
 		/**
-		 * Устанавливает камеру в буффер которой будет производится отрисовка.
-		 * 
-		 * @param	aCamera	 Указатель на камеру в котору необходимо производить отрисовку.
+		 * @private
 		 */
-		public function setCamera(aCamera:AntCamera = null):void
+		public function destroy():void
 		{
-			if (aCamera == null)
-			{
-				_buffer = null;
-				return;
-			}
-			
-			_buffer = aCamera.buffer;
+			buffer = null;
 		}
 		
 		/**
@@ -101,7 +91,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aColor	 Цвет линии.
 		 */
 		public function lineTo(aX:int, aY:int, aColor:uint = 0xffff00ff):void
-		{
+		{			
 			drawLine(_lineFrom.x, _lineFrom.y, aX, aY, aColor);
 			_lineFrom.set(aX, aY);
 		}
@@ -115,12 +105,10 @@ package ru.antkarlov.anthill.debug
 		 */
 		public function drawPoint(aX:Number, aY:Number, aColor:uint = 0xffff00ff):void
 		{
-			if (_buffer == null)
+			if (buffer != null)
 			{
-				return;
+				buffer.setPixel(aX, aY, aColor);
 			}
-			
-			_buffer.setPixel(aX, aY, aColor);
 		}
 		
 		/**
@@ -139,7 +127,7 @@ package ru.antkarlov.anthill.debug
 		 */
 		public function drawLine(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0xffff00ff):void
 		{
-			if (_buffer == null)
+			if (buffer == null)
 			{
 				return;
 			}
@@ -161,21 +149,20 @@ package ru.antkarlov.anthill.debug
 			}
 
 			var inc:int = longLen < 0 ? -1 : 1;
-
 			var multDiff:Number = longLen == 0 ? shortLen : shortLen / longLen;
 
 			if (yLonger)
 			{
 				for (var i:int = 0; i != longLen; i += inc)
 				{
-					_buffer.setPixel(aX1 + i * multDiff, aY1 + i, aColor);
+					buffer.setPixel(aX1 + i * multDiff, aY1 + i, aColor);
 				}
 			}
 			else
 			{
 				for (i = 0; i != longLen; i += inc)
 				{
-					_buffer.setPixel(aX1 + i, aY1 + i * multDiff, aColor);
+					buffer.setPixel(aX1 + i, aY1 + i * multDiff, aColor);
 				}
 			}
 		}
@@ -208,6 +195,11 @@ package ru.antkarlov.anthill.debug
 		 */
 		public function drawCircle(aX:int, aY:int, aRadius:int, aColor:uint = 0xffff00ff):void
 		{
+			if (buffer == null)
+			{
+				return;
+			}
+			
 			var dx:int = 0;
 			var dy:int = aRadius;
 			var delta:int = 2 - 2 * aRadius;
@@ -236,17 +228,12 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * @private
 		 */
-		private function plotCircle(aX:int, aY:int, cX:int, cY:int, aColor:uint):void
+		protected function plotCircle(aX:int, aY:int, cX:int, cY:int, aColor:uint):void
 		{
-			if (_buffer == null)
-			{
-				return;
-			}
-			
-			_buffer.setPixel(cX + aX, cY + aY, aColor);
-			_buffer.setPixel(cX + aX, cY - aY, aColor);
-			_buffer.setPixel(cX - aX, cY + aY, aColor);
-			_buffer.setPixel(cX - aX, cY - aY, aColor);
+			buffer.setPixel(cX + aX, cY + aY, aColor);
+			buffer.setPixel(cX + aX, cY - aY, aColor);
+			buffer.setPixel(cX - aX, cY + aY, aColor);
+			buffer.setPixel(cX - aX, cY - aY, aColor);
 		}
 		
 		/**
