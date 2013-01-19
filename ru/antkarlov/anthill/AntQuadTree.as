@@ -262,7 +262,7 @@ package ru.antkarlov.anthill
 			}
 			
 			var drawer:AntDrawer = AntG.debugDrawer;
-			drawer.drawRect(x + aCamera.scroll.x, y + aCamera.scroll.y, width, height, 0xFFa6a6a6);
+			drawer.drawRect(x + aCamera.scroll.x, y + aCamera.scroll.y, width, height, AntColor.GRAY);
 			
 			if (northWest != null)
 			{
