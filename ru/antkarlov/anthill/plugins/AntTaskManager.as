@@ -22,10 +22,12 @@ package ru.antkarlov.anthill.plugins
 		
 		/**
 		 * Событие которое генерируется при завершении всех задач в менеджере задач.
+		 * В качестве аргумента при вызове подписавшихся методов передается указатель 
+		 * на экземпляр класса AntTaskManager.
 		 * Пример использования: 
 		 * <code>
 		 * taskManager.eventComplete.add(onComplete);
-		 * function onComplete():void {
+		 * function onComplete(aTaskManager:AntTaskManager):void {
 		 *   trace("All tasks completed!");
 		 * }
 		 * </code>
@@ -38,6 +40,7 @@ package ru.antkarlov.anthill.plugins
 		
 		/**
 		 * Список всех активных задач.
+		 * @default    null
 		 */
 		protected var _task:AntList;
 		
