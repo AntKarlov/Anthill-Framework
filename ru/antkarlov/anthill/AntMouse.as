@@ -149,6 +149,7 @@ package ru.antkarlov.anthill
 			if (cursor == null)
 			{
 				cursor = new AntActor();
+				cursor.isScrolled = false;
 				switchAnim = true;
 				defCursorAnim = aAnimName;
 			}
@@ -285,8 +286,8 @@ package ru.antkarlov.anthill
 		 */
 		public function draw():void
 		{
-			var gX:Number = 0;
-			var gY:Number = 0;
+			//var gX:Number = 0;
+			//var gY:Number = 0;
 			
 			if (cursor != null && cursor.exists && cursor.visible)
 			{
@@ -298,13 +299,13 @@ package ru.antkarlov.anthill
 					cam = AntG.cameras[i] as AntCamera;
 					if (cam != null)
 					{
-						gX = cursor.globalX;
+						/*gX = cursor.globalX;
 						gY = cursor.globalY;
-						cursor.globalX -= cam.x;
-						cursor.globalY -= cam.y;
+						cursor.globalX -= cam.scroll.x;
+						cursor.globalY -= cam.scroll.y;*/
 						cursor.drawActor(cam);
-						cursor.globalX = gX;
-						cursor.globalY = gY;
+						/*cursor.globalX = gX;
+						cursor.globalY = gY;*/
 					}
 					i++;
 				}
