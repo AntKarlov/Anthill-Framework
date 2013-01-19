@@ -421,25 +421,11 @@ package ru.antkarlov.anthill.debug
 						{
 							if (!paramA)
 							{
-								try
-								{
-									_registry[key]();
-								}
-								catch (e:Error)
-								{
-									log("ERROR: Arguments needed.", ERROR);
-								}
+								_registry[key]();
 							}
 							else
 							{
-								try
-								{
-									_registry[key](paramA.split(","));
-								}
-								catch (e:Error)
-								{
-									log("ERROR: Command \"" + key + "\" don't supported arguments.", ERROR);
-								}
+								_registry[key](paramA.split(","));
 							}
 						}
 						else
