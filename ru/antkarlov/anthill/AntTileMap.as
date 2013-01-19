@@ -280,6 +280,20 @@ package ru.antkarlov.anthill
 				_internalTileSet = null;
 			}
 			
+			_externalTileSet = null;
+			super.destroy();
+			tiles = null;
+		}
+		
+		//---------------------------------------
+		// PUBLIC METHODS
+		//---------------------------------------
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function kill():void
+		{
 			var i:int = 0;
 			var n:int = tiles.length;
 			while (i < n)
@@ -287,15 +301,9 @@ package ru.antkarlov.anthill
 				tiles[i] = null;
 				i++;
 			}
-			tiles = null;
 			
-			_externalTileSet = null;
-			super.destroy();
+			super.kill();
 		}
-		
-		//---------------------------------------
-		// PUBLIC METHODS
-		//---------------------------------------
 		
 		/**
 		 * Добавляет клип в очередь для разрезания на плитки и растеризации.
@@ -638,8 +646,7 @@ package ru.antkarlov.anthill
 						tile.revive();
 					}
 
-					tile.x = point.x * _tileWidth;
-					tile.y = point.y * _tileHeight;
+					tile.reset(point.x * _tileWidth, point.y * _tileHeight);
 					tiles[aIndex] = tile;
 					return tile;
 				}
@@ -794,7 +801,7 @@ package ru.antkarlov.anthill
 					p1.x = globalX + aCamera.scroll.x * scrollFactor.x - tileAxisOffset.x;
 					p2.x = globalX + _tileWidth * _numCols + aCamera.scroll.x * scrollFactor.x - tileAxisOffset.x;
 					p1.y = p2.y = globalY + _tileHeight * i + aCamera.scroll.y * scrollFactor.y - tileAxisOffset.y;
-					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, 0x5E5E5E);
+					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, AntColor.GRAY);
 				}
 				
 				for (i = 0; i < _numCols + 1; i++)
@@ -802,7 +809,7 @@ package ru.antkarlov.anthill
 					p1.x = p2.x = globalX + _tileWidth * i + aCamera.scroll.x * scrollFactor.x - tileAxisOffset.x;
 					p1.y = globalY + aCamera.scroll.y * scrollFactor.y - tileAxisOffset.y;
 					p2.y = globalY + _tileHeight * _numRows + aCamera.scroll.y * scrollFactor.y - tileAxisOffset.y;
-					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, 0x5E5E5E);
+					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, AntColor.GRAY);
 				}
 			}
 			
