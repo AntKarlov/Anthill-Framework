@@ -31,6 +31,18 @@ package ru.antkarlov.anthill
 		public static const OVER:uint = 2;
 		public static const DOWN:uint = 3;
 		
+		/**
+		 * Определяет имя анимации пользовательского курсора при наведении на кнопку по умолчанию.
+		 * @default    null
+		 */
+		public static var defOverCursorAnim:String;
+		
+		/**
+		 * Определяет имя анимации пользовательского курсора при нажатии на кнопку по умолчанию.
+		 * @default    null
+		 */
+		public static var defDownCursorAnim:String;
+		
 		//---------------------------------------
 		// PUBLIC VARIABLES
 		//---------------------------------------
@@ -96,9 +108,15 @@ package ru.antkarlov.anthill
 		public var labelOffset:AntPoint;
 		
 		/**
-		 * @private
+		 * Определяет имя анимации пользовательского курсора при наведении на кнопку.
+		 * @default    null
 		 */
 		public var overCursorAnim:String;
+		
+		/**
+		 * Определяет имя анимации пользовательского курсора при нажатии на кнопку.
+		 * @default    null
+		 */
 		public var downCursorAnim:String;
 		
 		//---------------------------------------
@@ -254,6 +272,9 @@ package ru.antkarlov.anthill
 			
 			label = null;
 			labelOffset = new AntPoint(0, 1);
+			
+			overCursorAnim = defOverCursorAnim;
+			downCursorAnim = defDownCursorAnim;
 		}
 		
 		/**
@@ -524,7 +545,10 @@ package ru.antkarlov.anthill
 			if (o != _over)
 			{
 				eventOut.send([ this ]);
-				AntG.mouse.changeCursor();
+				if (!_down)
+				{
+					AntG.mouse.changeCursor();
+				}
 			}
 		}
 		
@@ -553,12 +577,12 @@ package ru.antkarlov.anthill
 			{
 				_selected = !_selected;
 			}
-			_down = _selected;
+			_down = false;
 			
 			if (_over)
 			{
-				eventClick.send([ this ]);
 				AntG.mouse.changeCursor(overCursorAnim);
+				eventClick.send([ this ]);
 			}
 			else
 			{
@@ -715,6 +739,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Определяет текст для текстовой метки у кнопки.
 		 */
+		public function get text():String { return (label != null) ? label.text : ""; }
 		public function set text(value:String):void
 		{
 			if (label != null)
@@ -724,14 +749,10 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public function get text():String
-		{
-			return label.text;
-		}
-		
 		/**
 		 * Определяет состояние выбранности кнопки. Работает только если для кнопки установлен режим чекбокса <code>toggle = true;</code>
 		 */
+		public function get selected():Boolean { return _selected; }
 		public function set selected(value:Boolean):void
 		{
 			if (!_toggle)
@@ -743,22 +764,13 @@ package ru.antkarlov.anthill
 			updateVisualStatus();
 		}
 		
-		public function get selected():Boolean
-		{
-			return _selected;
-		}
-		
 		/**
 		 * Определяет режим чекбокса для кнопки.
 		 */
+		public function get toggle():Boolean { return _toggle; }
 		public function set toggle(value:Boolean):void
 		{
 			_toggle = value;
-		}
-		
-		public function get toggle():Boolean
-		{
-			return _toggle;
 		}
 		
 		/**
@@ -772,6 +784,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Определяет текущую прозрачность.
 		 */
+		public function get alpha():Number { return _alpha; }
 		public function set alpha(value:Number):void
 		{
 			value = (value > 1) ? 1 : (value < 0) ? 0 : value;
@@ -781,9 +794,9 @@ package ru.antkarlov.anthill
 				_alpha = value;
 				if (_alpha != 1 || _color != 0x00FFFFFF)
 				{
-					_colorTransform = new ColorTransform(Number(_color >> 16) / 255,
-						Number(_color >> 8&0xFF) / 255,
-						Number(_color & 0xFF) / 255, _alpha);
+					_colorTransform = new ColorTransform((_color >> 16) * 0.00392,
+						(_color >> 8 & 0xFF) * 0.00392, 
+						(_color & 0xFF) * 0.00392, _alpha);
 						
 					if (_buffer == null && _curAnim != null)
 					{
@@ -804,14 +817,10 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public function get alpha():Number
-		{
-			return _alpha;
-		}
-		
 		/**
 		 * Определяет текущий цвет.
 		 */
+		public function get color():uint { return _color; }
 		public function set color(value:uint):void
 		{
 			value &= 0x00FFFFFF;
@@ -820,9 +829,9 @@ package ru.antkarlov.anthill
 				_color = value;
 				if (_alpha != 1 || _color != 0x00FFFFFF)
 				{
-					_colorTransform = new ColorTransform(Number(_color >> 16) / 255,
-						Number(_color >> 8&0xFF) / 255,
-						Number(_color & 0xFF) / 255, _alpha);
+					_colorTransform = new ColorTransform((_color >> 16) * 0.00392,
+						(_color >> 8 & 0xFF) * 0.00392, 
+						(_color & 0xFF) * 0.00392, _alpha);
 						
 					if (_buffer == null && _curAnim != null)
 					{
@@ -841,11 +850,6 @@ package ru.antkarlov.anthill
 				
 				calcFrame(status - 1);
 			}
-		}
-		
-		public function get color():uint
-		{
-			return _color;
 		}
 
 	}
