@@ -59,8 +59,8 @@ package ru.antkarlov.anthill
 			// Стандартная полоса загрузки.
 			graphics.clear();
 			
-			var sw:int = 640;//stage.stageWidth;
-			var sh:int = 480; //stage.stageHeight;
+			var sw:int = stage.stageWidth;
+			var sh:int = stage.stageHeight;
 			graphics.lineStyle(1, 0x000000);
 			graphics.moveTo(sw * 0.5 - 50, sh * 0.5 + 5);
 			graphics.lineTo(sw * 0.5 + 50, sh * 0.5 + 5);
@@ -134,12 +134,15 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Реализация элементарного сайтлока. Пример использования:
-		 * <p><code>if (atHome([ "local", "mygreatsite.com" ])) {<br>
-		 * 	// ура! можно играть<br>
-		 * } else {<br>
-		 * 	// нельзя играть<br>
-		 * }</code></p>
+		 * Реализация элементарного сайтлока. 
+		 * Пример использования:
+		 * <code>
+		 * if (atHome([ "local", "mygreatsite.com" ])) {
+		 *   // Можно играть.
+		 * } else { 
+		 *   // Нельзя играть
+		 * }
+		 * </code>
 		 * 
 		 * @param	aHomes	 Список доменов на которых флешке разрешено находится.
 		 * @return		Возвращает true если флешка находится на одном из разрешенных доменов.
