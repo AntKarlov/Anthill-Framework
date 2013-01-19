@@ -80,14 +80,14 @@ package ru.antkarlov.anthill.debug
 			_currentPosition = AntG.width;
 			_addedButtons = null;
 			
-			makeButton(AntGlyphButton.CLOSE, onCloseClick, true);
+			makeButton(AntSysButton.CLOSE, onCloseClick, true);
 			addSeparator();			
-			makeButton(AntGlyphButton.MONITOR, onMonitorClick, true);
-			makeButton(AntGlyphButton.PERFOMANCE, onPerfomanceClick, true);
-			makeButton(AntGlyphButton.CONSOLE, onConsoleClick, true);
+			makeButton(AntSysButton.MONITOR, onMonitorClick, true);
+			makeButton(AntSysButton.PERFOMANCE, onPerfomanceClick, true);
+			makeButton(AntSysButton.CONSOLE, onConsoleClick, true);
 			addSeparator();
-			makeButton(AntGlyphButton.DEBUGDRAW_OFF, onDebugDrawClick, true);
-			makeButton(AntGlyphButton.SOUND_ON, onMuteClick, true);
+			makeButton(AntSysButton.DEBUGDRAW_OFF, onDebugDrawClick, true);
+			makeButton(AntSysButton.SOUND_ON, onMuteClick, true);
 			addSeparator();
 			
 			_sysPosition = _currentPosition;
@@ -146,11 +146,11 @@ package ru.antkarlov.anthill.debug
 				if (!AntG.useSystemCursor)
 				{
 					flash.ui.Mouse.show();
-				}
-				
-				if (AntG.mouse.cursor != null)
-				{
-					AntG.mouse.hide();
+					
+					if (AntG.mouse.cursor != null)
+					{
+						AntG.mouse.hide();
+					}
 				}
 				
 				AntG.stage.addChild(this);
@@ -183,11 +183,11 @@ package ru.antkarlov.anthill.debug
 				if (!AntG.useSystemCursor)
 				{
 					flash.ui.Mouse.hide();
-				}
-				
-				if (AntG.mouse.cursor != null)
-				{
-					AntG.mouse.show();
+					
+					if (AntG.mouse.cursor != null)
+					{
+						AntG.mouse.show();
+					}
 				}
 				
 				AntG.stage.removeChild(this);
@@ -212,9 +212,9 @@ package ru.antkarlov.anthill.debug
 		 * @param	aOnClick	 Указатель на метод обработчик клика по кнопке.
 		 * @return		Возвращает указатель на созданную и добавленную кнопку.
 		 */
-		public function makeButton(aButtonKind:uint, aOnClick:Function, aSystem:Boolean = false):AntGlyphButton
+		public function makeButton(aButtonKind:uint, aOnClick:Function, aSystem:Boolean = false):AntSysButton
 		{
-			return addButton(new AntGlyphButton(aButtonKind), aOnClick, aSystem);
+			return addButton(new AntSysButton(aButtonKind), aOnClick, aSystem);
 		}
 		
 		/**
@@ -224,7 +224,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aOnClick	 Указатель на метод обработчик клика по кнопке.
 		 * @default    Возвращает указатель на добавленную кнопку.
 		 */
-		public function addButton(aButton:AntGlyphButton, aOnClick:Function, aSystem:Boolean = false):AntGlyphButton
+		public function addButton(aButton:AntSysButton, aOnClick:Function, aSystem:Boolean = false):AntSysButton
 		{
 			if (_addedButtons == null && !aSystem)
 			{
@@ -267,10 +267,10 @@ package ru.antkarlov.anthill.debug
 			{
 				var i:int = 0;
 				var n:int = _addedButtons.length;
-				var btn:AntGlyphButton;
+				var btn:AntSysButton;
 				while (i < n)
 				{
-					btn = _addedButtons[i] as AntGlyphButton;
+					btn = _addedButtons[i] as AntSysButton;
 					if (btn != null)
 					{
 						if (contains(btn))
@@ -296,7 +296,7 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * Обработчик клика по кнопке скрыть (закрыть).
 		 */
-		protected function onCloseClick(aButton:AntGlyphButton):void
+		protected function onCloseClick(aButton:AntSysButton):void
 		{
 			hide();
 		}
@@ -304,33 +304,33 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * Обработчик клика по кнопке вкл/выкл звуки.
 		 */
-		protected function onMuteClick(aButton:AntGlyphButton):void
+		protected function onMuteClick(aButton:AntSysButton):void
 		{
 			AntG.sounds.mute = !AntG.sounds.mute;
-			aButton.kind = (AntG.sounds.mute) ? AntGlyphButton.SOUND_OFF : AntGlyphButton.SOUND_ON;
+			aButton.kind = (AntG.sounds.mute) ? AntSysButton.SOUND_OFF : AntSysButton.SOUND_ON;
 		}
 		
 		/**
 		 * Обработчик клика по кнопке вкл/выкл отладочную отрисовку.
 		 */
-		protected function onDebugDrawClick(aButton:AntGlyphButton):void
+		protected function onDebugDrawClick(aButton:AntSysButton):void
 		{
 			if (AntG.debugDrawer != null)
 			{
 				AntG.debugDrawer = null;
-				aButton.kind = AntGlyphButton.DEBUGDRAW_OFF;
+				aButton.kind = AntSysButton.DEBUGDRAW_OFF;
 			}
 			else
 			{
 				AntG.debugDrawer = new AntDrawer();
-				aButton.kind = AntGlyphButton.DEBUGDRAW_ON;
+				aButton.kind = AntSysButton.DEBUGDRAW_ON;
 			}
 		}
 		
 		/**
 		 * Обработчик клика по кнопке показать/скрыть консоль.
 		 */
-		protected function onConsoleClick(aButton:AntGlyphButton):void
+		protected function onConsoleClick(aButton:AntSysButton):void
 		{
 			(console.visible) ? console.hide() : console.show();
 		}
@@ -338,7 +338,7 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * Обработчик клика по кнопке показать/скрыть окно производительности.
 		 */
-		protected function onPerfomanceClick(aButton:AntGlyphButton):void
+		protected function onPerfomanceClick(aButton:AntSysButton):void
 		{
 			(perfomance.visible) ? perfomance.hide() : perfomance.show();
 		}
@@ -346,7 +346,7 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * Обработчик клика по кнопке показать/скрыть монитор.
 		 */
-		protected function onMonitorClick(aButton:AntGlyphButton):void
+		protected function onMonitorClick(aButton:AntSysButton):void
 		{
 			(monitor.visible) ? monitor.hide() : monitor.show();
 		}
