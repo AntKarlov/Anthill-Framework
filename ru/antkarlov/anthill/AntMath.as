@@ -1,7 +1,7 @@
 package ru.antkarlov.anthill
 {	
 	/**
-	 * Статический класс с полезными математическими и утилитными методами.
+	 * Утилитный класс с полезными математическими методами.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -230,15 +230,9 @@ package ru.antkarlov.anthill
 			aResultPoint:AntPoint = null):Boolean
 		{
 			var isCollided:Boolean = false;
-			
-			var d:Number = (aLine2b.y - aLine2a.y) * (aLine1b.x - aLine1a.x) - 
-				(aLine2b.x - aLine2a.x) * (aLine1b.y - aLine1a.y);
-				
-			var na:Number = (aLine2b.x - aLine2a.x) * (aLine1a.y - aLine2a.y) -
-				(aLine2b.y - aLine2a.y) * (aLine1a.x - aLine2a.x);
-				
-			var nb:Number = (aLine1b.x - aLine1a.x) * (aLine1a.y - aLine2a.y) -
-				(aLine1b.y - aLine1a.y) * (aLine1a.x - aLine2a.x);
+			var d:Number = (aLine2b.y - aLine2a.y) * (aLine1b.x - aLine1a.x) - (aLine2b.x - aLine2a.x) * (aLine1b.y - aLine1a.y);
+			var na:Number = (aLine2b.x - aLine2a.x) * (aLine1a.y - aLine2a.y) -	(aLine2b.y - aLine2a.y) * (aLine1a.x - aLine2a.x);
+			var nb:Number = (aLine1b.x - aLine1a.x) * (aLine1a.y - aLine2a.y) -	(aLine1b.y - aLine1a.y) * (aLine1a.x - aLine2a.x);
 				
 			if (d == 0)
 			{
@@ -294,20 +288,6 @@ package ru.antkarlov.anthill
 			var dy:Number = y2 - y1;
 			var angle:Number = Math.atan2(dy, dx);
 			return (norm) ? normAngle(angle) : angle;
-			
-			/*if (norm)
-			{
-				if (angle < 0)
-				{
-					angle = Math.PI * 2 + angle;	
-				}
-				else if (angle >= Math.PI * 2)
-				{
-					angle = angle - Math.PI * 2;
-				}
-			}
-			
-			return angle;*/
 		}
 		
 		/**
@@ -326,20 +306,6 @@ package ru.antkarlov.anthill
 			var dy:Number = y2 - y1;
 			var angle:Number = Math.atan2(dy, dx) / Math.PI * 180;
 			return (norm) ? normAngleDeg(angle) : angle;
-			
-			/*if (norm)
-			{
-				if (angle < 0)
-				{
-					angle = 360 + angle;
-				}
-				else if (angle >= 360)
-				{
-					angle = angle - 360;
-				}
-			}
-			
-			return angle;*/
 		}
 		
 		/**
@@ -486,52 +452,6 @@ package ru.antkarlov.anthill
 		public static function minFrom(aArray:Array):Number
 		{
 			return Math.min.apply(null, aArray);
-		}
-		
-		/**
-		 * Извлекает целочисленное значение красного цвета из шестнадцатиричного значения цвета.
-		 * 
-		 * @param	aColor	 Шестнадцатиричное значение цвета.
-		 * @return		Значение красного цвета от 0 до 255.
-		 */
-		public static function extractRed(aColor:uint):uint
-		{
-			return ((aColor >> 16) & 0xFF);
-		}
-		
-		/**
-		 * Извлекает целочисленное значение зеленого цвета из шестнадцатиричного значения цвета.
-		 * 
-		 * @param	aColor	 Шестнадцатиричное значение цвета.
-		 * @return		Значение зеленого цвета от 0 до 255.
-		 */
-		public static function extractGreen(aColor:uint):uint
-		{
-			return ((aColor >> 8) & 0xFF);
-		}
-		
-		/**
-		 * Извлекает целочисленное значение синего цвета из шестнадцатиричного значения цвета.
-		 * 
-		 * @param	aColor	 Шестнадцатиричное значение цвета.
-		 * @return		Значение синего цвета от 0 до 255.
-		 */
-		public static function extractBlue(aColor:uint):uint
-		{
-			return (aColor & 0xFF);
-		}
-		
-		/**
-		 * Комбинирует целочисленные значения цвета в шестнадцатиричный формат.
-		 * 
-		 * @param	aRed	 Значение красного цвета от 0 до 255.
-		 * @param	aGreen	 Значение зеленого цвета от 0 до 255.
-		 * @param	aBlue	 Значение синего цвета от 0 до 255.
-		 * @return		Возвращает шестнадцатиричное значение цвета.
-		 */
-		public static function combineRGB(aRed:uint, aGreen:uint, aBlue:uint):uint
-		{
-			return ((aRed << 16) | (aGreen << 8) | aBlue);
 		}
 		
 		/**
