@@ -90,7 +90,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aY	 Координата Y.
 		 * @param	aColor	 Цвет линии.
 		 */
-		public function lineTo(aX:int, aY:int, aColor:uint = 0xffff00ff):void
+		public function lineTo(aX:int, aY:int, aColor:uint = 0):void
 		{			
 			drawLine(_lineFrom.x, _lineFrom.y, aX, aY, aColor);
 			_lineFrom.set(aX, aY);
@@ -103,7 +103,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aY	 Координата Y.
 		 * @param	aColor	 Цвет точки.
 		 */
-		public function drawPoint(aX:Number, aY:Number, aColor:uint = 0xffff00ff):void
+		public function drawPoint(aX:Number, aY:Number, aColor:uint = 0):void
 		{
 			if (buffer != null)
 			{
@@ -125,7 +125,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aY2	 Координата Y точки B.
 		 * @param	aColor	 Цвет линии.
 		 */
-		public function drawLine(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0xffff00ff):void
+		public function drawLine(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0):void
 		{
 			if (buffer == null)
 			{
@@ -176,7 +176,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aHeight	 Высота прямоугольника.
 		 * @param	aColor	 Цвет прямоугольника.
 		 */
-		public function drawRect(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0xffff00ff):void
+		public function drawRect(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0):void
 		{
 			moveTo(aX, aY);
 			lineTo(aX + aWidth, aY, aColor);
@@ -193,7 +193,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aRadius	 Радиус круга.
 		 * @param	aColor	 Цвет круга.
 		 */
-		public function drawCircle(aX:int, aY:int, aRadius:int, aColor:uint = 0xffff00ff):void
+		public function drawCircle(aX:int, aY:int, aRadius:int, aColor:uint = 0):void
 		{
 			if (buffer == null)
 			{
@@ -242,7 +242,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aX	 Положение оси по X.
 		 * @param	aY	 Положение оси по Y.
 		 */
-		public function drawAxis(aX:int, aY:int, aColor:uint = 0xffff00ff):void
+		public function drawAxis(aX:int, aY:int, aColor:uint = 0):void
 		{
 			drawLine(aX, aY - 2, aX, aY + 3, aColor);
 			drawLine(aX - 2, aY, aX + 3, aY, aColor);
