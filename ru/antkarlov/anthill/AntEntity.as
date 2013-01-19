@@ -422,23 +422,23 @@ package ru.antkarlov.anthill
 				while (i < 4)
 				{
 					toScreenPosition(vertices[i].x, vertices[i].y, aCamera, p);
-					drawer.lineTo(p.x, p.y, 0xffadff54);
+					drawer.lineTo(p.x, p.y, AntColor.LIME);
 					i++;
 				}
 				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p);
-				drawer.lineTo(p.x, p.y, 0xffadff54);
+				drawer.lineTo(p.x, p.y, AntColor.LIME);
 			}
 			
 			if (drawer.showBounds)
 			{
 				toScreenPosition(bounds.x, bounds.y, aCamera, p);
-				drawer.drawRect(p.x, p.y, bounds.width, bounds.height);
+				drawer.drawRect(p.x, p.y, bounds.width, bounds.height, AntColor.FUCHSIA);
 			}
 			
 			if (drawer.showAxis)
 			{
 				toScreenPosition(globalX, globalY, aCamera, p);
-				drawer.drawAxis(p.x, p.y, 0xff70cbff);
+				drawer.drawAxis(p.x, p.y, AntColor.AQUA);
 			}
 			
 			// Отрисовка детей.
@@ -486,6 +486,7 @@ package ru.antkarlov.anthill
 			}
 			
 			updateChildren();
+			updateBounds();
 		}
 		
 		/**
@@ -1383,14 +1384,10 @@ package ru.antkarlov.anthill
 		/**
 		 * Определяет реагирует ли сущность на позиционирование камеры.
 		 */
+		public function get isScrolled():Boolean { return (scrollFactor.x == 0 && scrollFactor.y == 0) ? false : true; }
 		public function set isScrolled(value:Boolean):void
 		{
 			scrollFactor.x = scrollFactor.y = (value) ? 1 : 0;
-		}
-		
-		public function get isScrolled():Boolean
-		{
-			return (scrollFactor.x == 0 && scrollFactor.y == 0) ? false : true;
 		}
 		
 	}
