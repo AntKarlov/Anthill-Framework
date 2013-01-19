@@ -466,6 +466,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Определяет используется в игре системный курсор или нет.
 		 */
+		public static function get useSystemCursor():Boolean { return (_anthill != null) ? _anthill._useSystemCursor : true; }
 		public static function set useSystemCursor(value:Boolean):void
 		{
 			if (_anthill != null)
@@ -481,25 +482,16 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public static function get useSystemCursor():Boolean
-		{
-			return (_anthill != null) ? _anthill._useSystemCursor : true;
-		}
-		
 		/**
 		 * Определяет частоту кадров.
 		 */
+		public static function get frameRate():uint { return (stage != null) ? stage.frameRate : 0; }
 		public static function set frameRate(value:uint):void
 		{
 			if (stage != null)
 			{
 				stage.frameRate = value;
 			}
-		}
-		
-		public static function get frameRate():uint
-		{
-			return (stage != null) ? stage.frameRate : 0;
 		}
 		
 		/**
