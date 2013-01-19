@@ -77,7 +77,7 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * Кнопка закрытия окна.
 		 */
-		protected var _btnClose:AntGlyphButton;
+		protected var _btnClose:AntSysButton;
 		
 		/**
 		 * Формат текста.
@@ -156,7 +156,7 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * @private
 		 */
-		protected function onClose(aButton:AntGlyphButton):void
+		protected function onClose(aButton:AntSysButton):void
 		{
 			hide();
 		}
@@ -230,7 +230,7 @@ package ru.antkarlov.anthill.debug
 			
 			if (_btnClose == null)
 			{
-				_btnClose = new AntGlyphButton();
+				_btnClose = new AntSysButton();
 				_btnClose.x = _width - 13;
 				_btnClose.y = 1;
 				addChild(_btnClose);
