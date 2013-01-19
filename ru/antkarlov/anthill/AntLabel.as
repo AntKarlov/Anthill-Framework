@@ -321,72 +321,6 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
-		 * @inheritDoc
-		 */
-		/*override public function updateBounds():void
-		{
-			// Ничего не изменилось.
-			if (_oldAngle == globalAngle && _oldPosition.x == globalX && _oldPosition.y == globalY)
-			{
-				return;
-			}
-			
-			var p:AntPoint;
-			var i:int = 0;
-			
-			if (_oldAngle == globalAngle && (_oldPosition.x != globalX || _oldPosition.y != globalY))
-			{
-				var mx:Number = globalX - _oldPosition.x;
-				var my:Number = globalY - _oldPosition.y;
-				bounds.x += mx;
-				bounds.y += my;
-				
-				while (i < 4)
-				{
-					p = vertices[i];
-					p.x += mx;
-					p.y += my;
-					i++;
-				}
-				
-				saveOldPosition();
-				return;
-			}
-			
-			// Делаем полноценный перерассчет положения углов и баундсректа.
-			vertices[0].set(globalX - axis.x * scale.x, globalY - axis.y * scale.y); // top left
-			vertices[1].set(globalX + width * scale.x - axis.x * scale.x, globalY - axis.y * scale.y); // top right
-			vertices[2].set(globalX + width * scale.x - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom right
-			vertices[3].set(globalX - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom left
-			
-			var dx:Number;
-			var dy:Number;
-			var maxX:Number = vertices[0].x;
-			var maxY:Number = vertices[0].y;
-			var minX:Number = vertices[2].x;
-			var minY:Number = vertices[2].y;
-			var rad:Number = -globalAngle * Math.PI / 180; // Radians
-			
-			i = 0;
-			while (i < 4)
-			{
-				p = vertices[i];
-				dx = globalX + (p.x - globalX) * Math.cos(rad) + (p.y - globalY) * Math.sin(rad);
-				dy = globalY - (p.x - globalX) * Math.sin(rad) + (p.y - globalY) * Math.cos(rad);
-				maxX = (dx > maxX) ? dx : maxX;
-				maxY = (dy > maxY) ? dy : maxY;
-				minX = (dx < minX) ? dx : minX;
-				minY = (dy < minY) ? dy : minY;
-				p.x = dx;
-				p.y = dy;
-				i++;
-			}
-			
-			bounds.set(minX, minY, maxX - minX, maxY - minY);
-			saveOldPosition();
-		}*/
-		
-		/**
 		 * @private
 		 */
 		override protected function calcBounds():void
@@ -537,6 +471,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Определяет толщину начертания текста.
 		 */
+		public function get bold():Boolean { return _textFormat.bold; }
 		public function set bold(value:Boolean):void
 		{
 			if (_textFormat.bold != value)
@@ -547,14 +482,10 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public function get bold():Boolean
-		{
-			return _textFormat.bold;
-		}
-		
 		/**
 		 * Определяет текст для текстовой метки.
 		 */
+		public function get text():String { return _textField.text; }
 		public function set text(value:String):void
 		{
 			if (_textField.text != value)
@@ -566,15 +497,11 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public function get text():String
-		{
-			return _textField.text;
-		}
-		
 		/**
 		 * Определяет изменяется ли текстовое поле автоматически исходя из количества текста.
 		 * Выравнивание текста не работает при авто изменении размера поля.
 		 */
+		public function get autoSize():Boolean { return _autoSize; }
 		public function set autoSize(value:Boolean):void
 		{
 			if (_autoSize != value)
@@ -586,14 +513,10 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public function get autoSize():Boolean
-		{
-			return _autoSize;
-		}
-		
 		/**
 		 * Определяет возможен ли перенос строк.
 		 */
+		public function get wordWrap():Boolean { return _textField.wordWrap; }
 		public function set wordWrap(value:Boolean):void
 		{
 			if (_textField.wordWrap != value)
@@ -604,14 +527,10 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public function get wordWrap():Boolean
-		{
-			return _textField.wordWrap;
-		}
-		
 		/**
 		 * Определяет выравнивание текста.
 		 */
+		public function get align():String { return _align; }
 		public function set align(value:String):void
 		{
 			_align = value;
@@ -627,14 +546,10 @@ package ru.antkarlov.anthill
 			resetHelpers();
 		}
 		
-		public function get align():String
-		{
-			return _align;
-		}
-		
 		/**
 		 * Определяет текущую прозрачность кэшированного битмапа текстовой метки.
 		 */
+		public function get alpha():Number { return _alpha; }
 		public function set alpha(value:Number):void
 		{
 			value = (value > 1) ? 1 : (value < 0) ? 0 : value;
@@ -644,9 +559,9 @@ package ru.antkarlov.anthill
 				_alpha = value;
 				if (_alpha != 1 || _color != 0x00FFFFFF)
 				{
-					_colorTransform = new ColorTransform(Number(_color >> 16) / 255,
-						Number(_color >> 8&0xFF) / 255,
-						Number(_color & 0xFF) / 255, _alpha);
+					_colorTransform = new ColorTransform((_color >> 16) * 0.00392,
+						(_color >> 8 & 0xFF) * 0.00392, 
+						(_color & 0xFF) * 0.00392, _alpha);
 				}
 				else
 				{
@@ -657,14 +572,12 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public function get alpha():Number
-		{
-			return _alpha;
-		}
+		
 		
 		/**
 		 * Определяет текущий цвет кэшированного битмапа текстовой метки.
 		 */
+		public function get color():uint { return _color; }
 		public function set color(value:uint):void
 		{
 			value &= 0x00FFFFFF;
@@ -673,9 +586,9 @@ package ru.antkarlov.anthill
 				_color = value;
 				if (_alpha != 1 || _color != 0x00FFFFFF)
 				{
-					_colorTransform = new ColorTransform(Number(_color >> 16) / 255,
-						Number(_color >> 8&0xFF) / 255,
-						Number(_color & 0xFF) / 255, _alpha);
+					_colorTransform = new ColorTransform((_color >> 16) * 0.00392,
+						(_color >> 8 & 0xFF) * 0.00392, 
+						(_color & 0xFF) * 0.00392, _alpha);
 				}
 				else
 				{
@@ -686,10 +599,6 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public function get color():uint
-		{
-			return _color;
-		}
 		
 		/**
 		 * Возвращает количество символов в тексте.
