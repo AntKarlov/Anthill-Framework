@@ -569,22 +569,17 @@ package ru.antkarlov.anthill
 		/**
 		 * Определяет проигрывается ли анимация.
 		 */
-		public function get isPlaying():Boolean
-		{
-			return _playing;
-		}
+		public function get isPlaying():Boolean { return _playing; }
 		
 		/**
 		 * Возвращает имя текущей анимации.
 		 */
-		public function get currentAnimation():String
-		{
-			return _curAnimName;
-		}
+		public function get currentAnimation():String { return _curAnimName; }
 		
 		/**
 		 * Определяет прозрачность.
 		 */
+		public function get alpha():Number { return _alpha; }
 		public function set alpha(value:Number):void
 		{
 			value = (value > 1) ? 1 : (value < 0) ? 0 : value;
@@ -594,9 +589,9 @@ package ru.antkarlov.anthill
 				_alpha = value;
 				if (_alpha != 1 || _color != 0x00FFFFFF)
 				{
-					_colorTransform = new ColorTransform(Number(_color >> 16) / 255,
-						Number(_color >> 8&0xFF) / 255,
-						Number(_color & 0xFF) / 255, _alpha);
+					_colorTransform = new ColorTransform((_color >> 16) * 0.00392,
+						(_color >> 8 & 0xFF) * 0.00392, 
+						(_color & 0xFF) * 0.00392, _alpha);
 						
 					if (_buffer == null && _curAnim != null)
 					{
@@ -617,14 +612,10 @@ package ru.antkarlov.anthill
 			}
 		}
 		
-		public function get alpha():Number
-		{
-			return _alpha;
-		}
-		
 		/**
 		 * Определяет цвет.
 		 */
+		public function get color():uint { return _color; }
 		public function set color(value:uint):void
 		{
 			value &= 0x00FFFFFF;
@@ -633,10 +624,10 @@ package ru.antkarlov.anthill
 				_color = value;
 				if (_alpha != 1 || _color != 0x00FFFFFF)
 				{
-					_colorTransform = new ColorTransform(Number(_color >> 16) / 255,
-						Number(_color >> 8&0xFF) / 255,
-						Number(_color & 0xFF) / 255, _alpha);
-
+					_colorTransform = new ColorTransform((_color >> 16) * 0.00392,
+						(_color >> 8 & 0xFF) * 0.00392, 
+						(_color & 0xFF) * 0.00392, _alpha);
+						
 					if (_buffer == null && _curAnim != null)
 					{
 						_buffer = new BitmapData(_curAnim.width, _curAnim.height, true, 0x00FFFFFF);
@@ -654,11 +645,6 @@ package ru.antkarlov.anthill
 
 				calcFrame(currentFrame-1);
 			}
-		}
-		
-		public function get color():uint
-		{
-			return _color;
 		}
 		
 	}
