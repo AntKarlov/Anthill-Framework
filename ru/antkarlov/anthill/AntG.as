@@ -39,7 +39,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Версия обслуживания.
 		 */
-		public static const LIB_MAINTENANCE:uint = 0;
+		public static const LIB_MAINTENANCE:uint = 2;
 		
 		//---------------------------------------
 		// PUBLIC VARIABLES
