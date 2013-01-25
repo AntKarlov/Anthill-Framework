@@ -101,7 +101,8 @@ package ru.antkarlov.anthill
 			var mtx:Matrix = new Matrix();
 			var scratchBitmapData:BitmapData = null;
 			
-			for (var i:int = 1; i <= totalFrames; i++)
+			var i:int = 1;
+			while (i <= totalFrames)
 			{
 				aClip.gotoAndStop(i);
 				childNextFrame(aClip);
@@ -137,6 +138,7 @@ package ru.antkarlov.anthill
 				height = (height < trimBounds.height) ? trimBounds.height : height;
 
                 scratchBitmapData.dispose();
+				i++;
 			}
 		}
 		
@@ -146,8 +148,9 @@ package ru.antkarlov.anthill
 		public function destroy():void
 		{
 			var bmpd:BitmapData;
+			var i:int = 0;
 			var n:int = frames.length;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				bmpd = frames[i] as BitmapData;
 				if (bmpd != null)
@@ -156,6 +159,7 @@ package ru.antkarlov.anthill
 				}
 				
 				frames[i] = null;
+				i++;
 			}
 			
 			frames.length = 0;
@@ -181,9 +185,10 @@ package ru.antkarlov.anthill
 			var rect:Rectangle = new Rectangle();
 			var origBmp:BitmapData;
 			var newBmp:BitmapData;
+			var i:int = 0;
 			var n:int = aFrames.length;
 			var frame:int;
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
 				frame = aFrames[i];
 				
@@ -204,6 +209,7 @@ package ru.antkarlov.anthill
 				
 				newAnim.offsetX = offsetX[frame];
 				newAnim.offsetY = offsetY[frame];
+				i++;
 			}
 			
 			return newAnim;
@@ -221,8 +227,9 @@ package ru.antkarlov.anthill
 		protected function childNextFrame(aClip:MovieClip):void
 		{
 			var childClip:MovieClip;
-			var n:int = aClip.length;
-			for (var i:int = 0; i < n; i++)
+			var i:int = 0;
+			var n:int = aClip.numChildren;
+			while (i < n)
 			{
 				childClip = aClip.getChildAt(i) as MovieClip;
 				if (childClip != null)
@@ -230,6 +237,7 @@ package ru.antkarlov.anthill
 					childNextFrame(childClip);
 					childClip.nextFrame();
 				}
+				i++;
 			}
 		}
 
