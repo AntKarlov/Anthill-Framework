@@ -17,13 +17,13 @@ package ru.antkarlov.anthill
 	{
 		//Flex v4.x SDK
 		// Обычное подключение шрифта.
-		//[Embed(source="resources/iFlash706.ttf",fontFamily="system",embedAsCFF="false")] protected var junk:String;
+		[Embed(source="resources/iFlash706.ttf",fontFamily="system",embedAsCFF="false")] protected var junk:String;
 		
 		//Flex v3.x SDK
 		// Подключение шрифта с кирилицой.
 		//[Embed(source="resources/iFlash706.ttf",fontFamily="system")] protected var junk:String;
-		[Embed(source= "resources/iFlash706.ttf",fontFamily="system",mimeType="application/x-font",
-			unicodeRange="U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E,U+0400-U+04CE,U+2000-U+206F,U+20A0-U+20CF,U+2100-U+2183")] protected var junk:String;
+		//[Embed(source= "resources/iFlash706.ttf",fontFamily="system",mimeType="application/x-font",
+		//	unicodeRange="U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E,U+0400-U+04CE,U+2000-U+206F,U+20A0-U+20CF,U+2100-U+2183")] protected var junk:String;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
