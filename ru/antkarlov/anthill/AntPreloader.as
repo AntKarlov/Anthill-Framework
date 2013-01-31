@@ -81,7 +81,7 @@ package ru.antkarlov.anthill
 		{
 			graphics.clear();
 			stage.removeEventListener(Event.ENTER_FRAME, enterFrameHandler);
-			//nextFrame();
+			nextFrame();
 			initialize();
 		}
 		
