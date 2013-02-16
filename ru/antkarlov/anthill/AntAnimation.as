@@ -7,8 +7,15 @@ package ru.antkarlov.anthill
 	import flash.geom.Point;
 	
 	/**
-	 * Используется для растеризации и хранения растровых последовательностей.
+	 * Данный класс используется для растеризации векторных клипов и для последующего их хранения в памяти.
+	 * 
+	 * <p>Воспроизведением и отрисовкой анимаций занимается класс <code>AntActor</code>. Так же в данном классе
+	 * реализован кэш анимаций который позволяет хранить уникальные экземпляры анимаций для многократного одновременного
+	 * использования.</p>
+	 * 
 	 * <p>Класс реализован на основе класса от Scmorr (http://flashgameblogs.ru/blog/actionscript/667.html).</p>
+	 * 
+	 * @see	AntActor Класс для воспроизведения и рендера анимаций.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -87,11 +94,36 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
-		 * Создает анимацию из указанного клипа.
+		 * Уничтожает анимацию.
+		 */
+		public function destroy():void
+		{
+			var bmpd:BitmapData;
+			var i:int = 0;
+			var n:int = frames.length;
+			while (i < n)
+			{
+				bmpd = frames[i] as BitmapData;
+				if (bmpd != null)
+				{
+					bmpd.dispose();
+				}
+				
+				frames[i] = null;
+				i++;
+			}
+			
+			frames.length = 0;
+			offsetY.length = 0;
+			offsetY.length = 0;
+		}
+		
+		/**
+		 * Создает растровую анимацию из указанного клипа.
 		 * 
 		 * @param	aClip	 Клип из которого необходимо создать растровую анимацию.
 		 */
-		public function makeAnimation(aClip:MovieClip):void
+		public function makeFromMovieClip(aClip:MovieClip):void
 		{
 			totalFrames = aClip.totalFrames;
 			
@@ -143,28 +175,69 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Уничтожает анимацию.
+		 * Создает анимацию из изображения.
+		 * 
+		 * @param	aGraphic	 Класс растрового изображения.
+		 * @param	aFrameWidth	 Размер кадра по ширине.
+		 * @param	aFrameHeight	 Размер кадра по высоте.
+		 * @param	aOriginX	 Смещение кадров относительно центра координат по X.
+		 * @param	aOriginY	 Смещение кадров относительно центра координат по Y.
+		 * @param	aFlip	 Определяет необходимость зеркального отражения кадров по горизонтали.
 		 */
-		public function destroy():void
+		public function makeFromGraphic(aGraphic:Class, aFrameWidth:int = 0, aFrameHeight:int = 0,
+		 	aOriginX:int = 0, aOriginY:int = 0, aFlip:Boolean = false):void
 		{
-			var bmpd:BitmapData;
-			var i:int = 0;
-			var n:int = frames.length;
-			while (i < n)
+			var pixels:BitmapData = (new aGraphic).bitmapData;
+			if (aFlip)
 			{
-				bmpd = frames[i] as BitmapData;
-				if (bmpd != null)
-				{
-					bmpd.dispose();
-				}
-				
-				frames[i] = null;
-				i++;
+				var newPixels:BitmapData = new BitmapData(pixels.width, pixels.height, true, 0x00000000);
+				var mtx:Matrix = new Matrix();
+				mtx.scale(-1, 1);
+				mtx.translate(newPixels.width, 0);
+				newPixels.draw(pixels, mtx);
+				pixels = newPixels;
 			}
 			
-			frames.length = 0;
-			offsetY.length = 0;
-			offsetY.length = 0;
+			if (aFrameWidth > 0 || aFrameHeight > 0)
+			{
+				aFrameWidth = (aFrameWidth <= 0) ? pixels.width : aFrameWidth;
+				aFrameHeight = (aFrameHeight <= 0) ? pixels.height : aFrameHeight;
+				
+				var numFramesX:int = AntMath.floor(pixels.width / aFrameWidth);
+				var numFramesY:int = AntMath.floor(pixels.height / aFrameHeight);
+				var rect:Rectangle = new Rectangle();
+				rect.x = rect.y = 0;
+				rect.width = aFrameWidth;
+				rect.height = aFrameHeight;
+							
+				var n:int = frames.length = numFramesX * numFramesY;
+				var i:int = 0;
+				while (i < n)
+				{
+					rect.y = AntMath.floor(i / numFramesX);
+					rect.x = i - rect.y * numFramesX;
+					rect.x *= aFrameWidth;
+					rect.y *= aFrameHeight;
+					
+					var bmpData:BitmapData = new BitmapData(aFrameWidth, aFrameHeight, true, 0x00000000);
+					bmpData.copyPixels(pixels, rect, DEST_POINT);
+					
+					(aFlip) ? frames[n-i-1] = bmpData : frames[i] = bmpData;
+					/*frames[frames.length] = bmpData;*/
+	                offsetX[offsetX.length] = aOriginX;
+	                offsetY[offsetY.length] = aOriginY;
+					
+					i++;
+				}
+			}
+			else
+			{
+				frames[frames.length] = pixels;
+				offsetX[offsetX.length] = aOriginX;
+                offsetY[offsetY.length] = aOriginY;
+			}
+			
+			totalFrames = frames.length;
 		}
 		
 		/**
@@ -238,6 +311,56 @@ package ru.antkarlov.anthill
 					childClip.nextFrame();
 				}
 				i++;
+			}
+		}
+		
+		//---------------------------------------
+		// ANIMATION CACHE
+		//---------------------------------------
+		
+		/**
+		 * Кэш анимаций.
+		 */
+		protected static var _animationCache:AntStorage = new AntStorage();
+		
+		/**
+		 * Помещает анимацию в кэш.
+		 * 
+		 * @param	aAnim	 Анимация которую необходимо поместить в кэш.
+		 * @param	aKey	 Имя под которой анимация будет доступна в кэше. Если имя не указана, то будет использовано имя из анимации.
+		 */
+		public static function toCache(aAnim:AntAnimation, aKey:String = null):AntAnimation
+		{
+			_animationCache.set((aKey == null) ? aAnim.name : aKey, aAnim);
+			return aAnim;
+		}
+		
+		/**
+		 * Извлекает анимацию из кэша.
+		 * 
+		 * @param	aKey	 Имя анимации которую необходимо извлечь из кэша.
+		 */
+		public static function fromCache(aKey:String):AntAnimation
+		{
+			if (!_animationCache.containsKey(aKey))
+			{
+				throw new Error("Missing animation \"" + aKey + "\".");
+			}
+
+			return _animationCache.get(aKey) as AntAnimation;
+		}
+		
+		/**
+		 * Удаляет анимацию из кэша анимаций.
+		 * 
+		 * @param	aKey	 Имя анимации которую необходимо удалить.
+		 */
+		public static function removeFromCache(aKey:String):void
+		{
+			if (_animationCache.containsKey(aKey))
+			{
+				(_animationCache.get(aKey) as AntAnimation).destroy();
+				_animationCache.remove(aKey);
 			}
 		}
 
