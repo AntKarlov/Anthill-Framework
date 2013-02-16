@@ -291,11 +291,11 @@ package ru.antkarlov.anthill
 		/**
 		 * @inheritDoc
 		 */
-		override public function draw():void
+		override public function draw(aCamera:AntCamera):void
 		{
 			updateBounds();
 			
-			if (cameras == null)
+			/*if (cameras == null)
 			{
 				cameras = AntG.cameras;
 			}
@@ -311,9 +311,10 @@ package ru.antkarlov.anthill
 					drawText(cam);
 				}
 				i++;
-			}
+			}*/
 			
-			super.draw();
+			drawText(aCamera);
+			super.draw(aCamera);
 		}
 		
 		//---------------------------------------
@@ -325,10 +326,10 @@ package ru.antkarlov.anthill
 		 */
 		override protected function calcBounds():void
 		{
-			vertices[0].set(globalX - axis.x * scale.x, globalY - axis.y * scale.y); // top left
-			vertices[1].set(globalX + width * scale.x - axis.x * scale.x, globalY - axis.y * scale.y); // top right
-			vertices[2].set(globalX + width * scale.x - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom right
-			vertices[3].set(globalX - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom left
+			vertices[0].set(globalX - origin.x * scaleX, globalY - origin.y * scaleY); // top left
+			vertices[1].set(globalX + width * scaleX - origin.x * scaleX, globalY - origin.y * scaleY); // top right
+			vertices[2].set(globalX + width * scaleX - origin.x * scaleX, globalY + height * scaleY - origin.y * scaleY); // bottom right
+			vertices[3].set(globalX - origin.x * scaleX, globalY + height * scaleY - origin.y * scaleY); // bottom left
 			var tl:AntPoint = vertices[0];
 			var br:AntPoint = vertices[2];
 			bounds.set(tl.x, tl.y, br.x - tl.x, br.y - tl.y);
@@ -340,10 +341,10 @@ package ru.antkarlov.anthill
 		 */
 		override protected function rotateBounds():void
 		{
-			vertices[0].set(globalX - axis.x * scale.x, globalY - axis.y * scale.y); // top left
-			vertices[1].set(globalX + width * scale.x - axis.x * scale.x, globalY - axis.y * scale.y); // top right
-			vertices[2].set(globalX + width * scale.x - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom right
-			vertices[3].set(globalX - axis.x * scale.x, globalY + height * scale.y - axis.y * scale.y); // bottom left
+			vertices[0].set(globalX - origin.x * scaleX, globalY - origin.y * scaleY); // top left
+			vertices[1].set(globalX + width * scaleX - origin.x * scaleX, globalY - origin.y * scaleY); // top right
+			vertices[2].set(globalX + width * scaleX - origin.x * scaleX, globalY + height * scaleY - origin.y * scaleY); // bottom right
+			vertices[3].set(globalX - origin.x * scaleX, globalY + height * scaleY - origin.y * scaleY); // bottom left
 			
 			var dx:Number;
 			var dy:Number;
@@ -381,20 +382,26 @@ package ru.antkarlov.anthill
 		 */
 		protected function drawText(aCamera:AntCamera):void
 		{
-			_numOfVisible++;
+			NUM_OF_VISIBLE++;
 			
 			if (_buffer == null || !onScreen(aCamera))
 			{
 				return;
 			}
 			
-			_numOnScreen++;
+			NUM_ON_SCREEN++;
 			var p:AntPoint = getScreenPosition(aCamera);
-			_flashPoint.x = p.x - axis.x;
-			_flashPoint.y = p.y - axis.y;
+			if (aCamera._isMasked)
+			{
+				p.x -= aCamera._maskOffset.x;
+				p.y -= aCamera._maskOffset.y;
+			}
+			
+			_flashPoint.x = p.x - origin.x;
+			_flashPoint.y = p.y - origin.y;
 			
 			// Если не применено никаких трансформаций то выполняем простой рендер через copyPixels().
-			if (globalAngle == 0 && scale.x == 1 && scale.y == 1 && blend == null)
+			if (globalAngle == 0 && scaleX == 1 && scaleY == 1 && blend == null)
 			{
 				aCamera.buffer.copyPixels(_buffer, _flashRect, _flashPoint, null, null, true);
 			}
@@ -402,15 +409,15 @@ package ru.antkarlov.anthill
 			// Если объект имеет какие-либо трансформации, используем более сложный рендер через draw().
 			{
 				_matrix.identity();
-				_matrix.translate(-axis.x, -axis.y);
-				_matrix.scale(scale.x, scale.y);
+				_matrix.translate(-origin.x, -origin.y);
+				_matrix.scale(scaleX, scaleY);
 				
 				if (globalAngle != 0)
 				{
 					_matrix.rotate(Math.PI * 2 * (globalAngle / 360));
 				}
 				
-				_matrix.translate(_flashPoint.x + axis.x, _flashPoint.y + axis.y);
+				_matrix.translate(_flashPoint.x + origin.x, _flashPoint.y + origin.y);
 				aCamera.buffer.draw(_buffer, _matrix, null, blend, null, smoothing);
 			}
 		}
