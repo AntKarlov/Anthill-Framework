@@ -17,13 +17,21 @@ package ru.antkarlov.anthill
 	{
 		//Flex v4.x SDK
 		// Обычное подключение шрифта.
-		[Embed(source="resources/iFlash706.ttf",fontFamily="system",embedAsCFF="false")] protected var junk:String;
+		//[Embed(source="resources/iFlash706.ttf",fontFamily="system",embedAsCFF="false")] protected var junk:String;
+		
+		// Обычное подключение шрифта с кирилицой.
+		[Embed(source= "resources/iFlash706.ttf",fontFamily="system",embedAsCFF="false",
+			unicodeRange="U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E,U+0400-U+04CE,U+2000-U+206F,U+20A0-U+20CF,U+2100-U+2183")] protected var junk:String;
+		//*/
 		
 		//Flex v3.x SDK
-		// Подключение шрифта с кирилицой.
+		// Подключение шрифта.
 		//[Embed(source="resources/iFlash706.ttf",fontFamily="system")] protected var junk:String;
-		//[Embed(source= "resources/iFlash706.ttf",fontFamily="system",mimeType="application/x-font",
-		//	unicodeRange="U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E,U+0400-U+04CE,U+2000-U+206F,U+20A0-U+20CF,U+2100-U+2183")] protected var junk:String;
+		
+		// Подключение шрифта с кирилицой.
+		/*[Embed(source= "resources/iFlash706.ttf",fontFamily="system",mimeType="application/x-font",
+			unicodeRange="U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E,U+0400-U+04CE,U+2000-U+206F,U+20A0-U+20CF,U+2100-U+2183")] protected var junk:String;
+		//*/
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -33,6 +41,7 @@ package ru.antkarlov.anthill
 		 * Указатель на текущее игровое состояние.
 		 */
 		public var state:AntState;
+		public var cameras:Array;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -88,7 +97,8 @@ package ru.antkarlov.anthill
 		/**
 		 * @constructor
 		 */
-		public function Anthill(aInitialState:Class = null, aFrameRate:uint = 35, aUseSystemCursor:Boolean = true)
+		public function Anthill(aInitialState:Class = null, aFrameRate:uint = 35, 
+			aUseSystemCursor:Boolean = true)
 		{
 			super();
 			
@@ -205,32 +215,15 @@ package ru.antkarlov.anthill
 			AntG.elapsed = (_elapsed > AntG.maxElapsed) ? AntG.maxElapsed : _elapsed;
 			AntG.elapsed *= AntG.timeScale;
 			
-			// Процессинг содержимого игры.
-			AntG.updateInput();
-			AntG.updateSounds();
-			//if (_paused)
-			//{
-				/*
-					TODO 
-				*/
-			//}
-			//else
-			//{
-				AntBasic._numOfActive = 0;
-				state.preUpdate();
-				state.update();
-				state.postUpdate();
-			//}
+			// Процессинг.
+			update();
 			
 			// Расчет времени ушедшего на процессинг.
 			var updTime:uint = getTimer();
 			_perfomance.ratingUpdate.add(updTime - curTime);
 			
 			// Рендер графического контента.
-			AntBasic._numOfVisible = 0;
-			AntBasic._numOnScreen = 0;
-			AntG.updateCameras();
-			state.draw();
+			render();
 			
 			// Рассчет времени ушедшего на рендер.
 			var rndTime:uint = getTimer();
@@ -241,6 +234,64 @@ package ru.antkarlov.anthill
 			// Рассчет времени ушедшего на плагины.
 			_perfomance.ratingPlugins.add(getTimer() - rndTime);
 			AntG.debugger.update();
+		}
+		
+		/**
+		 * Выполняет процессинг содержимого игры.
+		 */
+		protected function update():void
+		{
+			AntG.updateInput();
+			AntG.updateSounds();
+
+			AntBasic.NUM_OF_ACTIVE = 0;
+			if (state != null)
+			{
+				state.preUpdate();
+				state.update();
+				state.postUpdate();
+			}
+		}
+		
+		/**
+		 * Выполняет рендеринг содержимого игры.
+		 */
+		protected function render():void
+		{
+			AntBasic.NUM_OF_VISIBLE = 0;
+			AntBasic.NUM_ON_SCREEN = 0;
+			
+			if (cameras == null)
+			{
+				cameras = AntG.cameras;
+			}
+			
+			var debugDraw:Boolean = (AntG.debugDrawer != null);
+			var i:int = 0;
+			var n:int = cameras.length;
+			var camera:AntCamera;
+			while (i < n)
+			{
+				camera = cameras[i++] as AntCamera;
+				if (camera != null && camera.exists)
+				{
+					camera.update();
+					camera.beginDraw();
+					if (state != null && state.defGroup.exists && state.defGroup.visible)
+					{
+						state.defGroup.draw(camera);
+						if (debugDraw)
+						{
+							AntG.debugDrawer.buffer = camera.buffer;
+							state.defGroup.debugDraw(camera);
+							AntG.debugDrawer.buffer = null;
+						}
+					}
+					camera.endDraw();
+				}
+			}
+			
+			AntG.mouse.draw();
 		}
 
 	}
