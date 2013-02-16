@@ -11,6 +11,7 @@ package ru.antkarlov.anthill.debug
 	import flash.utils.getTimer;
 	
 	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.utils.AntRating;
 	
 	/**
 	 * Отладочный класс собирающий и демонстрирующий статистику производительности игры.
@@ -22,7 +23,7 @@ package ru.antkarlov.anthill.debug
 	 * @author Anton Karlov
 	 * @since  22.11.2011
 	 */
-	public class AntPerfomance extends AntPopup
+	public class AntPerfomance extends AntWindow
 	{
 		//---------------------------------------
 		// PUBLIC VARIABLES
