@@ -2,6 +2,7 @@ package ru.antkarlov.anthill
 {
 	import ru.antkarlov.anthill.*;
 	import ru.antkarlov.anthill.debug.AntDrawer;
+	import ru.antkarlov.anthill.utils.AntColor;
 	
 	import flash.geom.Rectangle;
 	import flash.display.BitmapData;
@@ -122,7 +123,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Очередь клипов для растеризации.
 		 */
-		protected var _queue:Array;
+		protected var _queue:Vector.<Object>;
 		
 		/**
 		 * Индекс текущего клипа для растеризации.
@@ -237,7 +238,7 @@ package ru.antkarlov.anthill
 			_numRows = 8;
 			_numCols = 8;
 			
-			_queue = [];
+			_queue = new <Object>[];
 			_clip = null;
 			_tileIndex = 0;
 			_tilesTotal = 0;
@@ -312,15 +313,18 @@ package ru.antkarlov.anthill
 		 * будет произведена растеризация. Например, есть два клипа размером 640x640 пикселей, которые необходимо разрезать на тайлы размером 64 пикселя
 		 * и объеденить все это в одной тайловой карте.</p>
 		 * 
-		 * <p><code>var tileMap:AntTileMap = new AntTileMap();<br>
-		 * tileMap.setMapSize(20, 10);<br>
-		 * tileMap.setTileSize(64, 64);<br>
+		 * <p>Пример использования:</p>
+		 * 
+		 * <listing>
+		 * var tileMap:AntTileMap = new AntTileMap();
+		 * tileMap.setMapSize(20, 10);
+		 * tileMap.setTileSize(64, 64);
 		 * // Содержимое первого клипа будет размещено в: по высоте с 0 по 10 тайлы; и по ширине с 0 по 10 тайлы.<br>
-		 * tileMap.addClip(MyLevelA_mc, 0, 0, 10, 10);<br>
+		 * tileMap.addClip(MyLevelA_mc, 0, 0, 10, 10);
 		 * // Содержимое второго клипа размещено в: по высоте с 0 по 10 тайлы; и по ширине с 10 по 20 тайлы.<br>
-		 * tileMap.addClip(MyLevelB_mc, 10, 0, 20, 10);<br>
-		 * tileMap.cacheClips();<br>
-		 * </code></p>
+		 * tileMap.addClip(MyLevelB_mc, 10, 0, 20, 10);
+		 * tileMap.cacheClips();
+		 * </listing>
 		 * 
 		 * @param	aClipClass	 Класс клипа содержимое которого будет растеризировано и разрезано на тайлы.
 		 * @param	aLeft	 Задает левую границу с которой начнется запись тайлов.
@@ -332,7 +336,7 @@ package ru.antkarlov.anthill
 		{
 			var areaLower:AntPoint = (aLeft < 0 && aTop < 0) ? new AntPoint(0, 0) : new AntPoint(aLeft, aTop);
 			var areaUpper:AntPoint = (aRight < 0 && aBottom < 0) ? new AntPoint(_numCols, _numRows) : new AntPoint(aRight, aBottom);		
-			_queue[_queue.length] = { clipClass:aClipClass, areaLower:areaLower, areaUpper:areaUpper };
+			_queue.push({ clipClass:aClipClass, areaLower:areaLower, areaUpper:areaUpper });
 		}
 		
 		/**
@@ -492,7 +496,7 @@ package ru.antkarlov.anthill
 		 */
 		public function setTileSetFromCache(aKey:String):void
 		{
-			setTileSet(AntG.cache.getAnimation(aKey));
+			setTileSet(AntAnimation.fromCache(aKey));
 		}
 		
 		/**
@@ -644,6 +648,11 @@ package ru.antkarlov.anthill
 					if (!tile.exists)
 					{
 						tile.revive();
+						var ind:int = tiles.indexOf(tile);
+						if (ind >= 0 && ind < tiles.length)
+						{
+							tiles[ind] = null;
+						}
 					}
 
 					tile.reset(point.x * _tileWidth, point.y * _tileHeight);
@@ -700,10 +709,8 @@ package ru.antkarlov.anthill
 					}
 					
 					tile.active = false;
-					tile.x = point.x * _tileWidth;
-					tile.y = point.y * _tileHeight;
+					tile.reset(point.x * _tileWidth, point.y * _tileHeight);
 					tiles[aIndex] = tile;
-					add(tile);
 					return tile;
 				}
 				
@@ -773,15 +780,15 @@ package ru.antkarlov.anthill
 		/**
 		 * @inheritDoc
 		 */
-		override public function draw():void
+		override public function draw(aCamera:AntCamera):void
 		{
 			if (drawQuickly)
 			{
-				drawQuick();
+				drawQuick(aCamera);
 			}
 			else
 			{
-				super.draw();
+				super.draw(aCamera);
 			}
 		}
 		
@@ -824,57 +831,38 @@ package ru.antkarlov.anthill
 		 * Быстрая отрисовка только тех тайлов которые попадают в поле видимости камер.
 		 * Другие тайлы полностью игнорируются.
 		 */
-		protected function drawQuick():void
+		protected function drawQuick(aCamera:AntCamera):void
 		{
-			if (cameras == null)
-			{
-				cameras = AntG.cameras;
-			}
+			var dx:Number = aCamera.scroll.x * -1 * scrollFactor.x;
+			var dy:Number = aCamera.scroll.y * -1 * scrollFactor.y;
 			
-			var camera:AntCamera;
-			var n:int = cameras.length;
-			var dx:Number; 
-			var dy:Number; 
-			var numX:int;
-			var numY:int;
-			var total:int;
-			var index:int;
+			getCoordinates(getIndexByPosition(dx, dy), _topLeft);
+			getCoordinates(getIndexByPosition(dx + aCamera.width, dy + aCamera.height), _bottomRight);
+								
+			_bottomRight.increment(1);
+			var numX:int = _bottomRight.x - _topLeft.x;
+			var numY:int = _bottomRight.y - _topLeft.y;
+			var total:int = numX * numY;
+			
+			_curPoint.copyFrom(_topLeft);
+			var i:int = 0;
 			var tile:AntActor;
-			
-			for (var i:int = 0; i < n; i++)
+			while (i < total)
 			{
-				camera = cameras[i] as AntCamera;
-				if (camera != null)
+				tile = tiles[getIndex(_curPoint.x, _curPoint.y)] as AntActor;
+				if (tile != null && tile.exists && tile.visible)
 				{
-					dx = camera.scroll.x * -1 * scrollFactor.x;
-					dy = camera.scroll.y * -1 * scrollFactor.y;
-					
-					getCoordinates(getIndexByPosition(dx, dy), _topLeft);
-					getCoordinates(getIndexByPosition(dx + camera.width, dy + camera.height), _bottomRight);
-										
-					_bottomRight.increment(1);
-					numX = _bottomRight.x - _topLeft.x;
-					numY = _bottomRight.y - _topLeft.y;
-					total = numX * numY;
-					
-					_curPoint.copyFrom(_topLeft);
-					for (var j:int = 0; j < total; j++)
-					{
-						tile = tiles[getIndex(_curPoint.x, _curPoint.y)] as AntActor;
-						if (tile != null && tile.exists && tile.visible)
-						{
-							tile.updateBounds();
-							tile.drawActor(camera);
-						}
-						
-						_curPoint.x++;
-						if (_curPoint.x >= _bottomRight.x)
-						{
-							_curPoint.x = _topLeft.x;
-							_curPoint.y++;
-						}
-					}
+					tile.updateBounds();
+					tile.drawActor(aCamera);
 				}
+				
+				_curPoint.x++;
+				if (_curPoint.x >= _bottomRight.x)
+				{
+					_curPoint.x = _topLeft.x;
+					_curPoint.y++;
+				}
+				i++;
 			}
 		}
 		
@@ -1043,12 +1031,12 @@ package ru.antkarlov.anthill
 		protected function numTilesForCaching():int
 		{
 			var sum:int = 0;
+			var i:int = 0;
 			var n:int = _queue.length;
 			var o:Object;
-			
-			for (var i:int = 0; i < n; i++)
+			while (i < n)
 			{
-				o = _queue[i];
+				o = _queue[i++];
 				if (o != null)
 				{
 					sum += (o.areaUpper.x - o.areaLower.x) * (o.areaUpper.y - o.areaLower.y);
