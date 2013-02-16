@@ -18,7 +18,7 @@ package ru.antkarlov.anthill
 	 * @author Anton Karlov
 	 * @since  29.08.2012
 	 */
-	public class AntCamera extends Sprite
+	public class AntCamera extends AntBasic
 	{
 		//---------------------------------------
 		// CLASS CONSTANTS
@@ -42,6 +42,11 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		// PUBLIC VARIABLES
 		//---------------------------------------
+		
+		public var x:Number;
+		public var y:Number;
+		public var width:int;
+		public var height:int;
 		
 		/**
 		 * Флаг определяющий следует ли выполнять заливку цветом в буфер камеры перед рендером объектов.
@@ -138,12 +143,16 @@ package ru.antkarlov.anthill
 		/**
 		 * Битмап для вывода буффера камеры на экран стандартными средствами Flash.
 		 */
-		protected var _bitmap:Bitmap;
+		protected var _flashBitmap:Bitmap;
+		internal var _flashSprite:Sprite;
 		
 		/**
 		 * Помошник для рассчета новой позиции камеры.
 		 */
 		protected var _newPos:AntPoint;
+		
+		internal var _isMasked:Boolean;
+		internal var _maskOffset:AntPoint;
 		
 		//---------------------------------------
 		// CONSTRUCTOR
@@ -152,26 +161,38 @@ package ru.antkarlov.anthill
 		/**
 		 * @constructor
 		 */
-		public function AntCamera(aWidth:int, aHeight:int, aZoom:int = 1)
+		public function AntCamera(aX:Number, aY:Number, aWidth:int, aHeight:int, aZoom:int = 1)
 		{
 			super();
 			
+			x = aX;
+			y = aY;
+			width = aWidth;
+			height = aHeight;
 			fillBackground = false;
 			backgroundColor = 0xFF000000;
 			scroll = new AntPoint();
 			zoom = aZoom;
 			bounds = null;
 			
-			_bitmap = new Bitmap(new BitmapData(aWidth, aHeight, true, backgroundColor));
-			_bitmap.scaleX = _bitmap.scaleY = zoom;
-			addChild(_bitmap);
+			buffer = new BitmapData(width, height, true, backgroundColor); 
+			_flashBitmap = new Bitmap(buffer);
+			_flashBitmap.scaleX = _flashBitmap.scaleY = zoom;
+			_flashBitmap.x = -width * 0.5;
+			_flashBitmap.y = -height * 0.5;
 			
-			buffer = _bitmap.bitmapData;
-			buffer.lock();
+			screenCenter = new AntPoint(width * 0.5 * zoom, height * 0.5 * zoom);
+			
+			_flashSprite = new Sprite();
+			_flashSprite.x = x + screenCenter.x;
+			_flashSprite.y = y + screenCenter.y;
+			_flashSprite.addChild(_flashBitmap);
+			
+			//buffer = _flashBitmap.bitmapData;
+			//buffer.lock();
 			
 			_flashRect = new Rectangle(0, 0, aWidth, aHeight);
 			_newPos = new AntPoint();
-			screenCenter = new AntPoint(aWidth * 0.5, aHeight * 0.5);
 			
 			target = null;
 			followStyle = STYLE_FREELY;
@@ -180,29 +201,33 @@ package ru.antkarlov.anthill
 			positionPropertyX = "globalX";
 			positionPropertyY = "globalY";
 			approximatePosition = false;
+			
+			_isMasked = false;
+			_maskOffset = new AntPoint();
 		}
 		
 		/**
 		 * Уничтожает экземпляр камеры и осовобождает память.
 		 */
-		public function destroy():void
+		override public function destroy():void
 		{
 			AntG.removeCamera(this);
 			
-			buffer.unlock();
+			//buffer.unlock();
 			buffer.dispose();
 			buffer = null;
 			
-			if (contains(_bitmap))
+			if (_flashSprite.contains(_flashBitmap))
 			{
-				removeChild(_bitmap);
+				_flashSprite.removeChild(_flashBitmap);
 			}
-			_bitmap = null;
+			_flashBitmap = null;
 			
-			if (parent != null)
+			if (_flashSprite.parent != null)
 			{
-				parent.removeChild(this);
+				_flashSprite.parent.removeChild(_flashSprite);
 			}
+			_flashSprite = null;
 		}
 		
 		//---------------------------------------
@@ -264,7 +289,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Обработка действий камеры.
 		 */
-		public function update():void
+		override public function update():void
 		{
 			if (target != null)
 			{
@@ -314,7 +339,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Отрисовка буфера камеры на экран.
 		 */
-		public function draw():void
+		/*public function draw():void
 		{
 			buffer.unlock();
 			buffer.lock();
@@ -322,6 +347,56 @@ package ru.antkarlov.anthill
 			if (fillBackground)
 			{
 				buffer.fillRect(_flashRect, backgroundColor);
+			}
+		}*/
+		
+		/**
+		 * @private
+		 */
+		public function beginDraw():void
+		{
+			buffer.lock();
+			if (fillBackground)
+			{
+				buffer.fillRect(_flashRect, backgroundColor);
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public function endDraw():void
+		{
+			buffer.unlock();
+		}
+		
+		/**
+		 * Определяет начало отрисовки сущности использующей маску.
+		 * 
+		 * @param	aMask	 Указатель на маску которая будет временно применена к камере.
+		 */
+		internal function beginDrawMask(aMask:AntMask):void
+		{
+			if (!_isMasked)
+			{
+				buffer = aMask.buffer;
+				_maskOffset.set(aMask.globalX, aMask.globalY);
+				_isMasked = true;
+			}
+		}
+		
+		/**
+		 * Определяет окончание отрисовки сущности использующей маску.
+		 * 
+		 * @param	aMask	 Указатель на маску которая ранее была применена к камере.
+		 */
+		internal function endDrawMask(aMask:AntMask):void
+		{
+			if (_isMasked)
+			{
+				buffer = _flashBitmap.bitmapData;
+				aMask.drawTo(buffer);
+				_isMasked = false;
 			}
 		}
 		
