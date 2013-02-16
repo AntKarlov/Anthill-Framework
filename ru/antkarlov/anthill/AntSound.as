@@ -5,6 +5,8 @@ package ru.antkarlov.anthill
 	import flash.media.SoundChannel;
 	import flash.events.Event;
 	
+	import ru.antkarlov.anthill.utils.AntRating;
+	
 	/**
 	 * Сущность звука.
 	 * 
