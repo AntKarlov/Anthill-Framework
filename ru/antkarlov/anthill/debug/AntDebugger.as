@@ -103,7 +103,7 @@ package ru.antkarlov.anthill.debug
 			_tfTitle.selectable = false;
 			_tfTitle.antiAliasType = AntiAliasType.NORMAL;
 			_tfTitle.gridFitType = GridFitType.PIXEL;
-			_tfTitle.defaultTextFormat = new TextFormat(AntPopup.FONT_NAME, AntPopup.FONT_SIZE, 0xffffff);
+			_tfTitle.defaultTextFormat = new TextFormat(AntWindow.FONT_NAME, AntWindow.FONT_SIZE, 0xffffff);
 			_tfTitle.text = AntG.LIB_NAME + " " + AntG.LIB_MAJOR_VERSION.toString() + "." + AntG.LIB_MINOR_VERSION + "." + AntG.LIB_MAINTENANCE;
 			addChild(_tfTitle);
 			
