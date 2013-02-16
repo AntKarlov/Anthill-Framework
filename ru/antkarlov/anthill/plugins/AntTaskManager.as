@@ -1,12 +1,18 @@
 package ru.antkarlov.anthill.plugins
 {
 	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.utils.AntList;
 	
 	/**
 	 * Менеджер задач используется для выполнения задач (вызова указанных методов) в заданном порядке.
-	 * Позволяет легко и быстро программировать последовательность каких-либо действий, например появление кнопок в игровых меню.
-	 * <p>Менеджер задач запускается автоматически при добавлении хотябы одной задачи и останавливается когда все задачи выполнены.</p>
-	 * <p>Примечание: Идея взята у <a href="http://xitri.com/2010/10/27/ai-creation-tool-casual-connect-kiev-2010.html">Xitri.com</a></p>
+	 * 
+	 * <p>Позволяет легко и быстро программировать последовательность каких-либо действий, например появление 
+	 * кнопок в игровых меню.<p>
+	 * 
+	 * <p>Менеджер задач запускается автоматически при добавлении хотябы одной задачи и останавливается когда 
+	 * все задачи выполнены.</p>
+	 * 
+	 * <p>Позаимствовано у <a href="http://xitri.com/2010/10/27/ai-creation-tool-casual-connect-kiev-2010.html">Xitri.com</a></p>
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -22,15 +28,20 @@ package ru.antkarlov.anthill.plugins
 		
 		/**
 		 * Событие которое генерируется при завершении всех задач в менеджере задач.
-		 * В качестве аргумента при вызове подписавшихся методов передается указатель 
-		 * на экземпляр класса AntTaskManager.
-		 * Пример использования: 
-		 * <code>
+		 * 
+		 * <p>В качестве аргумента при вызове подписавшихся методов передается указатель 
+		 * на экземпляр класса <code>AntTaskManager</code>.</p>
+		 * 
+		 * <p>Пример использования:</p>
+		 * 
+		 * <listing>
 		 * taskManager.eventComplete.add(onComplete);
-		 * function onComplete(aTaskManager:AntTaskManager):void {
+		 * 
+		 * function onComplete(aTaskManager:AntTaskManager):void
+		 * {
 		 *   trace("All tasks completed!");
 		 * }
-		 * </code>
+		 * </listing>
 		 */
 		public var eventComplete:AntEvent;
 		
@@ -239,6 +250,11 @@ package ru.antkarlov.anthill.plugins
 		}
 
 		public function postUpdate():void
+		{
+			//
+		}
+		
+		public function draw(aCamera:AntCamera):void
 		{
 			//
 		}
