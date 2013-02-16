@@ -34,12 +34,12 @@ package ru.antkarlov.anthill
 		/**
 		 * Версия второстепенного релиза.
 		 */
-		public static const LIB_MINOR_VERSION:uint = 2;
+		public static const LIB_MINOR_VERSION:uint = 3;
 		
 		/**
 		 * Версия обслуживания.
 		 */
-		public static const LIB_MAINTENANCE:uint = 2;
+		public static const LIB_MAINTENANCE:uint = 0;
 		
 		//---------------------------------------
 		// PUBLIC VARIABLES
@@ -129,12 +129,7 @@ package ru.antkarlov.anthill
 		 * Указатель на класс для работы со звуками.
 		 */
 		public static var sounds:AntSoundManager;
-		
-		/**
-		 * Указатель на класс коллекцию растровых анимаций.
-		 */
-		public static var cache:AntCache;
-		
+				
 		/**
 		 * Указатель на отладчик.
 		 */
@@ -244,7 +239,6 @@ package ru.antkarlov.anthill
 			mouse = new AntMouse();
 			keys = new AntKeyboard();
 			sounds = new AntSoundManager();
-			cache = new AntCache();
 			
 			debugger = new AntDebugger();
 			debugDrawer = null;
@@ -316,26 +310,6 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Обработка камер.
-		 */
-		public static function updateCameras():void
-		{
-			var i:int = 0;
-			var n:int = cameras.length;
-			var cam:AntCamera;
-			while (i < n)
-			{
-				cam = cameras[i] as AntCamera;
-				if (cam != null)
-				{
-					cam.update();
-					cam.draw();
-				}
-				i++;
-			}
-		}
-		
-		/**
 		 * Добавляет плагин в список для обработки.
 		 * 
 		 * @param	aPlugin	 Плагин который необходимо добавить.
@@ -400,6 +374,16 @@ package ru.antkarlov.anthill
 				return aCamera;
 			}
 			
+			if (_anthill.state == null)
+			{
+				throw new Error("Before adding the Camera need to initialize game state.");
+			}
+			
+			if (!_anthill.state.contains(aCamera._flashSprite))
+			{
+				_anthill.state.addChild(aCamera._flashSprite);
+			}
+			
 			var i:int = 0;
 			var n:int = cameras.length;
 			while (i < n)
@@ -431,6 +415,11 @@ package ru.antkarlov.anthill
 			if (i < 0 || i >= cameras.length)
 			{
 				return aCamera;
+			}
+			
+			if (_anthill.state != null && _anthill.state.contains(aCamera._flashSprite))
+			{
+				_anthill.state.removeChild(aCamera._flashSprite);
 			}
 			
 			cameras[i] = null;
@@ -530,7 +519,7 @@ package ru.antkarlov.anthill
 		 */
 		public static function get numOfActive():int
 		{
-			return AntBasic._numOfActive;
+			return AntBasic.NUM_OF_ACTIVE;
 		}
 		
 		/**
@@ -538,7 +527,7 @@ package ru.antkarlov.anthill
 		 */
 		public static function get numOfVisible():int
 		{
-			return AntBasic._numOfVisible;
+			return AntBasic.NUM_OF_VISIBLE;
 		}
 
 		/**
@@ -547,7 +536,7 @@ package ru.antkarlov.anthill
 		 */
 		public static function get numOnScreen():int
 		{
-			return AntBasic._numOnScreen;
+			return AntBasic.NUM_ON_SCREEN;
 		}
 		
 	}
