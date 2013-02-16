@@ -286,9 +286,6 @@ package ru.antkarlov.anthill
 		 */
 		public function draw():void
 		{
-			//var gX:Number = 0;
-			//var gY:Number = 0;
-			
 			if (cursor != null && cursor.exists && cursor.visible)
 			{
 				var cam:AntCamera;
@@ -296,18 +293,11 @@ package ru.antkarlov.anthill
 				var n:int = AntG.cameras.length;
 				while (i < n)
 				{
-					cam = AntG.cameras[i] as AntCamera;
+					cam = AntG.cameras[i++] as AntCamera;
 					if (cam != null)
 					{
-						/*gX = cursor.globalX;
-						gY = cursor.globalY;
-						cursor.globalX -= cam.scroll.x;
-						cursor.globalY -= cam.scroll.y;*/
 						cursor.drawActor(cam);
-						/*cursor.globalX = gX;
-						cursor.globalY = gY;*/
 					}
-					i++;
 				}
 			}
 		}
