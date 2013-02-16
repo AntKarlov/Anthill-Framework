@@ -33,6 +33,7 @@ package ru.antkarlov.anthill
 		 */
 		public var remove:Function;
 		
+		
 		//---------------------------------------
 		// CONSTRUCTOR
 		//---------------------------------------
@@ -99,39 +100,6 @@ package ru.antkarlov.anthill
 		public function postUpdate():void
 		{
 			//
-		}
-		
-		/**
-		 * Вызывается каждый кадр после метода <code>postUpdate()</code> для отрисовки визуальных объектов.
-		 */
-		public function draw():void
-		{
-			defGroup.draw();
-			debugDraw();
-			AntG.mouse.draw();
-		}
-		
-		/**
-		 * Вызывается каждый кадр после метода <code>draw()</code> для отладочной отрисовки визуальных объектов.
-		 */
-		public function debugDraw():void
-		{
-			if (AntG.debugDrawer != null)
-			{
-				var i:int = 0;
-				var n:int = AntG.cameras.length;
-				var camera:AntCamera;
-				while (i < n)
-				{
-					camera = AntG.cameras[i] as AntCamera;
-					if (camera != null)
-					{
-						AntG.debugDrawer.buffer = camera.buffer;
-						defGroup.debugDraw(camera);
-					}
-					i++;
-				}
-			}
 		}
 
 	}
