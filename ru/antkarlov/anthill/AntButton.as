@@ -300,8 +300,8 @@ package ru.antkarlov.anthill
 			{
 				btn.label = aLabel;
 				btn.add(aLabel);
-				aLabel.x = btn.width * 0.5 - aLabel.width * 0.5 + btn.axis.x;
-				aLabel.y = btn.height * 0.5 - aLabel.height * 0.5 + btn.axis.y;
+				aLabel.x = btn.width * 0.5 - aLabel.width * 0.5 + btn.origin.x;
+				aLabel.y = btn.height * 0.5 - aLabel.height * 0.5 + btn.origin.y;
 			}
 			
 			if (!aIsScrolled)
@@ -359,11 +359,11 @@ package ru.antkarlov.anthill
 		/**
 		 * @inheritDoc
 		 */
-		override public function draw():void
+		override public function draw(aCamera:AntCamera):void
 		{
 			updateBounds();
 			
-			if (cameras == null)
+			/*if (cameras == null)
 			{
 				cameras = AntG.cameras;
 			}
@@ -379,9 +379,10 @@ package ru.antkarlov.anthill
 					drawButton(cam);
 				}
 				i++;
-			}
+			}*/
 			
-			super.draw();
+			drawButton(aCamera);
+			super.draw(aCamera);
 		}
 		
 		/**
@@ -416,7 +417,7 @@ package ru.antkarlov.anthill
 		 */
 		public function addAnimationFromCache(aKey:String, aName:String = null, aSwitch:Boolean = true):void
 		{
-			addAnimation(AntG.cache.getAnimation(aKey), aName, aSwitch);
+			addAnimation(AntAnimation.fromCache(aKey), aName, aSwitch);
 		}
 		
 		/**
@@ -456,8 +457,8 @@ package ru.antkarlov.anthill
 		{
 			if (label != null)
 			{
-				label.x = width * 0.5 - label.width * 0.5 + axis.x;
-				label.y = height * 0.5 - label.height * 0.5 + axis.y;
+				label.x = width * 0.5 - label.width * 0.5 + origin.x;
+				label.y = height * 0.5 - label.height * 0.5 + origin.y;
 
 				if (_down)
 				{
@@ -486,7 +487,7 @@ package ru.antkarlov.anthill
 				if (cam != null)
 				{
 					(isScrolled) ? AntG.mouse.getWorldPosition(cam, _point) : AntG.mouse.getScreenPosition(cam, _point);
-					if (isInsidePoint(_point))
+					if (hitTestPoint(_point))
 					{
 						onMouseOver();
 						if (AntG.mouse.isPressed())
@@ -577,9 +578,10 @@ package ru.antkarlov.anthill
 			{
 				_selected = !_selected;
 			}
+			var o:Boolean = _down;
 			_down = false;
 			
-			if (_over)
+			if (_over && o)
 			{
 				AntG.mouse.changeCursor(overCursorAnim);
 				eventClick.send([ this ]);
@@ -619,7 +621,7 @@ package ru.antkarlov.anthill
 		 */
 		protected function drawButton(aCamera:AntCamera):void
 		{
-			_numOfVisible++;
+			NUM_OF_VISIBLE++;
 			
 			// Если нет текущего кадра или объект не попадает в камеру.
 			if (_pixels == null || !onScreen(aCamera))
@@ -627,15 +629,21 @@ package ru.antkarlov.anthill
 				return;
 			}
 			
-			_numOnScreen++;
+			NUM_ON_SCREEN++;
 			var p:AntPoint = getScreenPosition(aCamera);
-			_flashPoint.x = p.x + axis.x;
-			_flashPoint.y = p.y + axis.y;
+			if (aCamera._isMasked)
+			{
+				p.x -= aCamera._maskOffset.x;
+				p.y -= aCamera._maskOffset.y;
+			}
+			
+			_flashPoint.x = p.x + origin.x;
+			_flashPoint.y = p.y + origin.y;
 			_flashRect.width = _pixels.width;
 			_flashRect.height = _pixels.height;
 			
 			// Если не применено никаких трансформаций то выполняем простой рендер через copyPixels().
-			if (globalAngle == 0 && scale.x == 1 && scale.y == 1 && blend == null)
+			if (globalAngle == 0 && scaleX == 1 && scaleY == 1 && blend == null)
 			{
 				aCamera.buffer.copyPixels((_buffer != null) ? _buffer : _pixels, _flashRect, _flashPoint, null, null, true);
 			}
@@ -643,15 +651,15 @@ package ru.antkarlov.anthill
 			// Если объект имеет какие-либо трансформации, используем более сложный рендер через draw().
 			{
 				_matrix.identity();
-				_matrix.translate(axis.x, axis.y);
-				_matrix.scale(scale.x, scale.y);
+				_matrix.translate(origin.x, origin.y);
+				_matrix.scale(scaleX, scaleY);
 				
 				if (globalAngle != 0)
 				{
 					_matrix.rotate(Math.PI * 2 * (globalAngle / 360));
 				}
 				
-				_matrix.translate(_flashPoint.x - axis.x, _flashPoint.y - axis.y);
+				_matrix.translate(_flashPoint.x - origin.x, _flashPoint.y - origin.y);
 				aCamera.buffer.draw((_buffer != null) ? _buffer : _pixels, _matrix, null, blend, null, smoothing);
 			}
 		}
@@ -685,7 +693,7 @@ package ru.antkarlov.anthill
 		 */
 		protected function calcFrame(aFrame:int = 0):void
 		{
-			axis.set(_curAnim.offsetX[aFrame], _curAnim.offsetY[aFrame]);
+			origin.set(_curAnim.offsetX[aFrame], _curAnim.offsetY[aFrame]);
 		
 			if (_buffer != null)
 			{
