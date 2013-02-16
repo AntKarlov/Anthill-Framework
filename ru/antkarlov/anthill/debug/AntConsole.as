@@ -26,7 +26,7 @@ package ru.antkarlov.anthill.debug
 	 * @author Anton Karlov
 	 * @since  22.11.2011
 	 */
-	public class AntConsole extends AntPopup
+	public class AntConsole extends AntWindow
 	{
 		//---------------------------------------
 		// CLASS CONSTANTS
