@@ -74,19 +74,19 @@ package ru.antkarlov.anthill
 		 * Используется для автоматического подсчета активных объектов. 
 		 * Доступ к значению осуществляется через <code>AntG.numOfActive</code>.
 		 */
-		static internal var _numOfActive:int = 0;
+		static internal var NUM_OF_ACTIVE:int = 0;
 		
 		/**
 		 * Используется для автоматического подсчета видимых объектов. 
 		 * Доступ к значению осуществляется через <code>AntG.numOfVisible</code>.
 		 */
-		static internal var _numOfVisible:int = 0;
+		static internal var NUM_OF_VISIBLE:int = 0;
 		
 		/**
 		 * Используется для автоматического подсчета количества объектов видимых камерами.
 		 * Доступ к значению осуществляется через <code>AntG.numOnScreen</code>.
 		 */
-		static internal var _numOnScreen:int = 0;
+		static internal var NUM_ON_SCREEN:int = 0;
 		
 		//---------------------------------------
 		// CONSTRUCTOR
@@ -123,7 +123,7 @@ package ru.antkarlov.anthill
 		 */
 		public function preUpdate():void
 		{
-			_numOfActive++;
+			NUM_OF_ACTIVE++;
 		}
 		
 		/**
@@ -145,7 +145,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Вызывается каждый кадр после вызова метода <code>postUpdate()</code> для отрисовки объекта.
 		 */
-		public function draw():void
+		public function draw(aCamera:AntCamera):void
 		{
 			//
 		}
