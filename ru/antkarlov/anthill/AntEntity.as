@@ -1,6 +1,8 @@
 package ru.antkarlov.anthill
 {
 	import ru.antkarlov.anthill.debug.AntDrawer;
+	import ru.antkarlov.anthill.utils.AntColor;
+	import flash.display.BitmapData;
 	
 	/**
 	 * Базовый класс для визуальных объектов которые можно вкладывать друг в друга.
@@ -112,13 +114,19 @@ package ru.antkarlov.anthill
 		 * Осевая точка сущности.
 		 * @default    (0,0)
 		 */
-		public var axis:AntPoint;
+		public var origin:AntPoint;
 		
 		/**
-		 * Масштаб сущности.
-		 * @default    (1,1)
+		 * Масштаб сущности по горизонтали.
+		 * @default    1
 		 */
-		public var scale:AntPoint;
+		public var scaleX:Number;
+		
+		/**
+		 * Масштаб сущности по вертикали.
+		 * @default    1
+		 */
+		public var scaleY:Number;
 		
 		/**
 		 * Скорость движения сущности.
@@ -189,7 +197,7 @@ package ru.antkarlov.anthill
 		 * Массив вершин определяющих прямоугольник сущности исходя из положения и размеров с учетом угла поворота.
 		 * Вложенные сущности не влияют на размеры прямоугольника сущности.
 		 */
-		public var vertices:Array;
+		public var vertices:Vector.<AntPoint>;
 		
 		/**
 		 * Прямоугольник определяющий занимаемую область.
@@ -210,6 +218,11 @@ package ru.antkarlov.anthill
 		 * @default    0
 		 */
 		public var health:Number;
+		
+		/**
+		 * @private
+		 */
+		public var mask:AntMask;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -275,8 +288,9 @@ package ru.antkarlov.anthill
 			height = 0;
 			angle = 0;
 			globalAngle = 0;
-			axis = new AntPoint();
-			scale = new AntPoint(1, 1);
+			origin = new AntPoint();
+			scaleX = 1;
+			scaleY = 1;
             
 			velocity = new AntPoint();
 			acceleration = new AntPoint();
@@ -290,12 +304,11 @@ package ru.antkarlov.anthill
             
 			moves = false;
             
-			vertices = new Array(4);
+			vertices = new Vector.<AntPoint>(4, true);
 			var i:int = 0;
 			while (i < 4)
 			{
-				vertices[i] = new AntPoint();
-				i++;
+				vertices[i++] = new AntPoint();
 			}
 			
 			bounds = new AntRect();
@@ -324,12 +337,11 @@ package ru.antkarlov.anthill
 				var i:int = 0;
 				while (i < numChildren)
 				{
-					entity = children[i] as AntEntity;
+					entity = children[i++] as AntEntity;
 					if (entity != null)
 					{
 						entity.destroy();
 					}
-					i++;
 				}
 				
 				children.length = 0;
@@ -356,12 +368,11 @@ package ru.antkarlov.anthill
 				var i:int = 0;
 				while (i < numChildren)
 				{
-					entity = children[i] as AntEntity;
+					entity = children[i++] as AntEntity;
 					if (entity != null && entity.exists)
 					{
 						entity.kill();
 					}
-					i++;
 				}
 			}
 			
@@ -383,23 +394,39 @@ package ru.antkarlov.anthill
 				globalAngle = angle;
 			}
 			
+			if (mask != null)
+			{
+				mask.update();
+			}
+			
 			updateChildren();
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		override public function draw():void
+		override public function draw(aCamera:AntCamera):void
 		{
 			/*
-				HINT Самой сущности нет необходимости перерассчитывать boundsRect, поскольку
+				Примечание: Самой сущности нет необходимости перерассчитывать boundsRect, поскольку
 				сущность не является визуальным объектом и не имеет размеров. Потомки должны 
 				самостоятельно следить за обновлением boundsRect.
 			*/
 			//updateBounds();
 			
-			drawChildren();
-			super.draw();
+			if (mask != null)
+			{
+				mask.updatePosition(this, aCamera);
+				aCamera.beginDrawMask(mask);
+				drawChildren(aCamera);
+				aCamera.endDrawMask(mask);
+			}
+			else
+			{
+				drawChildren(aCamera);
+			}
+			
+			super.draw(aCamera);
 		}
 		
 		/**
@@ -448,13 +475,12 @@ package ru.antkarlov.anthill
 				var entity:AntEntity;
 				while (i < numChildren)
 				{
-					entity = children[i] as AntEntity;
+					entity = children[i++] as AntEntity;
 					if (entity != null && entity.exists && 
 						entity.visible && entity.allowDebugDraw)
 					{
 						entity.debugDraw(aCamera);
 					}
-					i++;
 				}
 			}
 		}
@@ -604,6 +630,7 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Переиспользование дочерних сущностей.
+		 * 
 		 * <p>Возвращает свободную (<code>!exists</code>) дочернюю сущность соотвествующую указанному классу.
 		 * Если свободных сущностей нет, то автоматически будет создан и добавлен новый экземпляр 
 		 * указанного класса. Иначе, если класс не указан, то вернет <code>null</code>.</p>
@@ -613,15 +640,16 @@ package ru.antkarlov.anthill
 		 * <code>revive()</code>.</p>
 		 * 
 		 * <p>Пример использования:</p>
-		 * <code>
+		 * 
+		 * <listing>
 		 * var newObj:MyGameObject = defGroup.recycle(MyGameObject) as MyGameObject;
 		 * if (!newObj.exists) {
-		 *   объект следует воскресить
+		 *   --Объект следует воскресить.
 		 *   newObj.revive();
 		 * } else {
-		 *   иначе новый объект
+		 *   --Иначе новый объект.
 		 * }
-		 * </code>
+		 * </listing>
 		 * 
 		 * @param	aClass	 Класс объекта который необходимо переработать.
 		 * @return		Возвращает свободный экземпляр указанного класса или новый если свободных нет.
@@ -712,7 +740,7 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null)
 				{
 					if (aDestroy)
@@ -723,7 +751,6 @@ package ru.antkarlov.anthill
 					entity.parent = null;
 				}
 				children[i] = null;
-				i++;
 			}
 			
 			children.length = 0;
@@ -747,12 +774,11 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null && !entity.exists && ((aClass == null) || (entity is aClass)))
 				{
 					return entity;
 				}
-				i++;
 			}
 
 			return null;
@@ -775,12 +801,11 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null && ((aClass == null) || (entity is aClass)))
 				{
 					return entity;
 				}
-				i++;
 			}
 			
 			return null;
@@ -803,13 +828,12 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null && entity.exists && entity.alive && 
 					((aClass == null) || (entity is aClass)))
 				{
 					return entity;
 				}
-				i++;
 			}
 			
 			return null;
@@ -832,12 +856,11 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null && !entity.alive && ((aClass == null) || (entity is aClass)))
 				{
 					return entity;
 				}
-				i++;
 			}
 			
 			return null;
@@ -860,12 +883,11 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null && entity.exists && entity.alive)
 				{
 					num++;
 				}
-				i++;
 			}
 			
 			return num;
@@ -888,12 +910,11 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null && !entity.alive)
 				{
 					num++;
 				}
-				i++;
 			}
 			
 			return num;
@@ -918,7 +939,7 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null)
 				{
 					if (aExistsOnly && entity.exists && ((aClass == null) || (entity is aClass)))
@@ -930,7 +951,6 @@ package ru.antkarlov.anthill
 						exists[exists.length] = entity;
 					}
 				}
-				i++;
 			}
 			
 			entity = exists[AntMath.randomRangeInt(0, exists.length)] as AntEntity;
@@ -938,8 +958,7 @@ package ru.antkarlov.anthill
 			var n:int = exists.length;
 			while (i < n)
 			{
-				exists[i] = null;
-				i++;
+				exists[i++] = null;
 			}
 			
 			exists.length = 0;
@@ -963,12 +982,11 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null && entity.tag == aTag)
 				{
 					return entity;
 				}
-				i++;
 			}
 			
 			return null;
@@ -997,7 +1015,7 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i] as AntEntity;
+				entity = children[i++] as AntEntity;
 				if (entity != null && entity.tag == aTag)
 				{
 					aResult[aResult.length] = entity;
@@ -1005,6 +1023,66 @@ package ru.antkarlov.anthill
 			}
 			
 			return aResult;
+		}
+		
+		/**
+		 * Устанавливает значение переменной по её имени для всех вложенных объектов.
+		 * 
+		 * @param	aVariableName	 Имя переменной для которой необходимо установить значение.
+		 * @param	aValue	 Значение которое будет установлено.
+		 * @param	aRecurse	 Флаг определяющий необходимость установки значения для вложенных объектов,
+		 * по умолчанию равен <code>true</code> - это означает, что для всех объектов внутри этой сущности, 
+		 * которые имеют вложения, будет так же вызыван метод <code>setCall()</code>.
+		 */
+		public function setAll(aVariableName:String, aValue:Object, aRecurse:Boolean = true):void
+		{
+			var entity:AntEntity;
+			var i:int = 0;
+			while (i < numChildren)
+			{
+				entity = children[i++] as AntEntity;
+				if (entity != null)
+				{
+					if (aRecurse && entity.isGroup)
+					{
+						entity.setAll(aVariableName, aValue, aRecurse);
+					}
+					else
+					{
+						entity[aVariableName] = aValue;
+					}
+				}
+			}
+		}
+		
+		/**
+		 * Вызывает метод по его имени для всех вложенных объектов.
+		 * 
+		 * @param	aFunctionName	 Имя метода который необходимо вызывать.
+		 * @param	aArgs	 Массив аргументов которые могут быть переданы в вызываемый метод.
+		 * @param	aRecurse	 Флаг определяющий необходмиость вызова метода для вложенных объектов,
+		 * по умолчанию равен <code>true</code> - это означает, что для всех объектов внутри этой сущности, 
+		 * которые имеют вложения, будет так же вызван метод <code>callAll()</code>.
+		 */
+		public function callAll(aFunctionName:String, aArgs:Array = null, aRecurse:Boolean = true):void
+		{
+			var entity:AntEntity;
+			var i:int = 0;
+			while (i < numChildren)
+			{
+				entity = children[i++] as AntEntity;
+				if (entity != null)
+				{
+					if (aRecurse && entity.isGroup)
+					{
+						entity.callAll(aFunctionName, aArgs, aRecurse);
+					}
+					else if (entity[aFunctionName] is Function)
+					{
+						(entity[aFunctionName] as Function).apply(this, aArgs);
+					}
+				}
+			}
 		}
 		
 		/**
@@ -1016,7 +1094,7 @@ package ru.antkarlov.anthill
 		 * @param	aY	 Положение точки по Y.
 		 * @return		Вернет true если точка находится внутри прямоугольника сущности.
 		 */
-		public function isInside(aX:Number, aY:Number):Boolean
+		public function hitTest(aX:Number, aY:Number):Boolean
 		{
 			var n:int = vertices.length;
 			var res:Boolean = false;
@@ -1038,9 +1116,9 @@ package ru.antkarlov.anthill
 		 * 
 		 * @return		Возвращает true если точка попадает в прямоугольник кнопки.
 		 */
-		public function isInsidePoint(aPoint:AntPoint):Boolean
+		public function hitTestPoint(aPoint:AntPoint):Boolean
 		{
-			return isInside(aPoint.x, aPoint.y);
+			return hitTest(aPoint.x, aPoint.y);
 		}
 		
 		/**
@@ -1128,19 +1206,19 @@ package ru.antkarlov.anthill
 		{
 			// Если объект не повернут, но изменилось положение или размер, то выполняем упрощенный прерасчет без учета поворота.
 			if (globalAngle == 0 && (!_oldPosition.equal(globalX, globalY) || 
-				!_oldSize.equal(width, height) || !_oldScale.equalPoint(scale)))
+				!_oldSize.equal(width, height) || !_oldScale.equal(scaleX, scaleY)))
 			{
 				calcBounds();
 			}
 			// Если объект повернут и если изменилось только его положение, то быстро обновляем положение границ.
 			else if (_oldAngle == globalAngle && !_oldPosition.equal(globalX, globalY) && 
-				_oldSize.equal(width, height) && _oldScale.equalPoint(scale))
+				_oldSize.equal(width, height) && _oldScale.equal(scaleX, scaleY))
 			{
 				moveBounds();
 			}
 			// Если предыдущие условия не сработали и что-то изменилось, то выполняем полный перерассчет прямоугольника.
 			else if (_oldAngle != globalAngle || !_oldPosition.equal(globalX, globalY) ||
-				!_oldSize.equal(width, height) || !_oldScale.equalPoint(scale))
+				!_oldSize.equal(width, height) || !_oldScale.equal(scaleX, scaleY))
 			{
 				rotateBounds();
 			}
@@ -1161,7 +1239,7 @@ package ru.antkarlov.anthill
 				var i:int = 0;
 				while (i < numChildren)
 				{
-					entity = children[i] as AntEntity;
+					entity = children[i++] as AntEntity;
 					if (entity != null && entity.exists)
 					{
 						/*
@@ -1180,7 +1258,6 @@ package ru.antkarlov.anthill
 							entity.postUpdate();
 						}
 					}
-					i++;
 				}
 			}
 		}
@@ -1188,7 +1265,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Отрисовка дочерних сущностей.
 		 */
-		protected function drawChildren():void
+		protected function drawChildren(aCamera:AntCamera):void
 		{
 			if (children != null)
 			{
@@ -1196,12 +1273,11 @@ package ru.antkarlov.anthill
 				var i:int = 0;
 				while (i < numChildren)
 				{
-					entity = children[i] as AntEntity;
+					entity = children[i++] as AntEntity;
 					if (entity != null && entity.exists && entity.visible)
 					{
-						entity.draw();
+						entity.draw(aCamera);
 					}
-					i++;
 				}
 			}
 		}
@@ -1211,10 +1287,10 @@ package ru.antkarlov.anthill
 		 */
 		protected function calcBounds():void
 		{
-			vertices[0].set(globalX + axis.x * scale.x, globalY + axis.y * scale.y); // top left
-			vertices[1].set(globalX + width * scale.x + axis.x * scale.x, globalY + axis.y * scale.y); // top right
-			vertices[2].set(globalX + width * scale.x + axis.x * scale.x, globalY + height * scale.y + axis.y * scale.y); // bottom right
-			vertices[3].set(globalX + axis.x * scale.x, globalY + height * scale.y + axis.y * scale.y); // bottom left			
+			vertices[0].set(globalX + origin.x * scaleX, globalY + origin.y * scaleY); // top left
+			vertices[1].set(globalX + width * scaleX + origin.x * scaleX, globalY + origin.y * scaleY); // top right
+			vertices[2].set(globalX + width * scaleX + origin.x * scaleX, globalY + height * scaleY + origin.y * scaleY); // bottom right
+			vertices[3].set(globalX + origin.x * scaleX, globalY + height * scaleY + origin.y * scaleY); // bottom left			
 			var tl:AntPoint = vertices[0];
 			var br:AntPoint = vertices[2];
 			bounds.set(tl.x, tl.y, br.x - tl.x, br.y - tl.y);
@@ -1250,10 +1326,10 @@ package ru.antkarlov.anthill
 		 */
 		protected function rotateBounds():void
 		{
-			vertices[0].set(globalX + axis.x * scale.x, globalY + axis.y * scale.y); // top left
-			vertices[1].set(globalX + width * scale.x + axis.x * scale.x, globalY + axis.y * scale.y); // top right
-			vertices[2].set(globalX + width * scale.x + axis.x * scale.x, globalY + height * scale.y + axis.y * scale.y); // bottom right
-			vertices[3].set(globalX + axis.x * scale.x, globalY + height * scale.y + axis.y * scale.y); // bottom left
+			vertices[0].set(globalX + origin.x * scaleX, globalY + origin.y * scaleY); // top left
+			vertices[1].set(globalX + width * scaleX + origin.x * scaleX, globalY + origin.y * scaleY); // top right
+			vertices[2].set(globalX + width * scaleX + origin.x * scaleX, globalY + height * scaleY + origin.y * scaleY); // bottom right
+			vertices[3].set(globalX + origin.x * scaleX, globalY + height * scaleY + origin.y * scaleY); // bottom left
 			
 			var dx:Number;
 			var dy:Number;
@@ -1294,8 +1370,8 @@ package ru.antkarlov.anthill
 		protected function locate(aX:Number, aY:Number, aAngle:Number):void
 		{
 			var rad:Number = aAngle / 180 * Math.PI;
-			var px:Number = x; // + axis.x;
-			var py:Number = y; // + axis.y;
+			var px:Number = x; // + origin.x;
+			var py:Number = y; // + origin.y;
 			var dx:Number = px * Math.cos(rad) - py * Math.sin(rad);
 			var dy:Number = px * Math.sin(rad) + py * Math.cos(rad);
 			
@@ -1348,7 +1424,7 @@ package ru.antkarlov.anthill
 		{
 			_oldPosition.set(globalX, globalY);
 			_oldSize.set(width, height);
-			_oldScale.set(scale.x, scale.y);
+			_oldScale.set(scaleX, scaleY);
 			_oldAngle = globalAngle;
 		}
 		
