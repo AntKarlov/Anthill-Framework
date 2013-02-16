@@ -19,7 +19,7 @@ package ru.antkarlov.anthill.debug
 	 * @author Anton Karlov
 	 * @since  23.11.2011
 	 */
-	public class AntMonitor extends AntPopup
+	public class AntMonitor extends AntWindow
 	{
 		//---------------------------------------
 		// PROTECTED VARIABLES
