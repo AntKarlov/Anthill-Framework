@@ -94,7 +94,6 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Хранилище указателей на все добавленные анимации.
-		 * @default    AntStorage
 		 */
 		protected var _animations:AntStorage;
 		
@@ -228,29 +227,11 @@ package ru.antkarlov.anthill
 		/**
 		 * @inheritDoc
 		 */
-		override public function draw():void
+		override public function draw(aCamera:AntCamera):void
 		{
 			updateBounds();
-			
-			if (cameras == null)
-			{
-				cameras = AntG.cameras;
-			}
-			
-			var cam:AntCamera;
-			var i:int = 0;
-			var n:int = cameras.length;
-			while (i < n)
-			{
-				cam = cameras[i] as AntCamera;
-				if (cam != null)
-				{
-					drawActor(cam);
-				}
-				i++;
-			}
-			
-			super.draw();
+			drawActor(aCamera);
+			super.draw(aCamera);
 		}
 		
 		/**
@@ -285,7 +266,7 @@ package ru.antkarlov.anthill
 		 */
 		public function addAnimationFromCache(aKey:String, aName:String = null, aSwitch:Boolean = true):void
 		{
-			addAnimation(AntG.cache.getAnimation(aKey), aName, aSwitch);
+			addAnimation(AntAnimation.fromCache(aKey), aName, aSwitch);
 		}
 		
 		/**
@@ -310,7 +291,7 @@ package ru.antkarlov.anthill
 			}
 			else
 			{
-				throw new Error("AntActor::switchAnimation() - Missing animation \"" + aName +"\".");
+				throw new Error("Missing animation \"" + aName +"\".");
 			}
 		}
 		
@@ -340,7 +321,7 @@ package ru.antkarlov.anthill
 		 */
 		public function play():void
 		{
-			_playing = (!_playing) ? true : _playing;
+			_playing = true;
 		}
 
 		/**
@@ -348,7 +329,7 @@ package ru.antkarlov.anthill
 		 */
 		public function stop():void
 		{
-			_playing = (_playing) ? false : _playing;
+			_playing = false;
 		}
 		
 		/**
@@ -390,7 +371,7 @@ package ru.antkarlov.anthill
 		 */
 		public function nextFrame(aUseSpeed:Boolean = false):void
 		{
-			aUseSpeed ? currentFrame += animationSpeed : currentFrame++;
+			aUseSpeed ? currentFrame += animationSpeed * AntG.timeScale : currentFrame++;
 			goto(currentFrame);
 		}
 		
@@ -401,7 +382,7 @@ package ru.antkarlov.anthill
 		 */
 		public function prevFrame(aUseSpeed:Boolean = false):void
 		{
-			aUseSpeed ? currentFrame -= animationSpeed : currentFrame--;
+			aUseSpeed ? currentFrame -= animationSpeed * AntG.timeScale : currentFrame--;
 			goto(currentFrame);
 		}
 		
@@ -416,7 +397,7 @@ package ru.antkarlov.anthill
 		 */
 		internal function drawActor(aCamera:AntCamera):void
 		{
-			_numOfVisible++;
+			NUM_OF_VISIBLE++;
 			
 			// Если нет текущего кадра или объект не попадает в камеру.
 			if (_pixels == null || !onScreen(aCamera))
@@ -424,15 +405,21 @@ package ru.antkarlov.anthill
 				return;
 			}
 
-			_numOnScreen++;
+			NUM_ON_SCREEN++;
 			var p:AntPoint = getScreenPosition(aCamera);
-			_flashPoint.x = p.x + axis.x;
-			_flashPoint.y = p.y + axis.y;
+			if (aCamera._isMasked)
+			{
+				p.x -= aCamera._maskOffset.x;
+				p.y -= aCamera._maskOffset.y;
+			}
+			
+			_flashPoint.x = p.x + origin.x;
+			_flashPoint.y = p.y + origin.y;
 			_flashRect.width = _pixels.width;
 			_flashRect.height = _pixels.height;
 
 			// Если не применено никаких трансформаций то выполняем простой рендер через copyPixels().
-			if (globalAngle == 0 && scale.x == 1 && scale.y == 1 && blend == null)
+			if (globalAngle == 0 && scaleX == 1 && scaleY == 1 && blend == null)
 			{
 				aCamera.buffer.copyPixels((_buffer != null) ? _buffer : _pixels, _flashRect, _flashPoint, null, null, true);
 			}
@@ -440,15 +427,15 @@ package ru.antkarlov.anthill
 			// Если объект имеет какие-либо трансформации, используем более сложный рендер через draw().
 			{
 				_matrix.identity();
-				_matrix.translate(axis.x, axis.y);
-				_matrix.scale(scale.x, scale.y);
+				_matrix.translate(origin.x, origin.y);
+				_matrix.scale(scaleX, scaleY);
 
 				if (globalAngle != 0)
 				{
 					_matrix.rotate(Math.PI * 2 * (globalAngle / 360));
 				}
 
-				_matrix.translate(_flashPoint.x - axis.x, _flashPoint.y - axis.y);
+				_matrix.translate(_flashPoint.x - origin.x, _flashPoint.y - origin.y);
 				aCamera.buffer.draw((_buffer != null) ? _buffer : _pixels, _matrix, null, blend, null, smoothing);
 			}
 		}
@@ -482,7 +469,7 @@ package ru.antkarlov.anthill
 		 */
 		protected function calcFrame(aFrame:int = 0):void
 		{
-			axis.set(_curAnim.offsetX[aFrame], _curAnim.offsetY[aFrame]);
+			origin.set(_curAnim.offsetX[aFrame], _curAnim.offsetY[aFrame]);
 		
 			if (_buffer != null)
 			{
@@ -554,11 +541,7 @@ package ru.antkarlov.anthill
 		 */
 		protected function animComplete():void
 		{
-			if (!repeat)
-			{
-				stop();
-			}
-			
+			if (!repeat) stop();
 			eventComplete.send([ this ]);
 		}
 		
