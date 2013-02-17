@@ -1,510 +1,87 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
-<meta content="AntDrawer,ru.antkarlov.anthill.debug.AntDrawer,_lineFrom,buffer,showAxis,showBorders,showBounds,showGrid,drawAxis,drawCircle,drawLine,drawPoint,drawRect,lineTo,moveTo" name="keywords">
-<title>ru.antkarlov.anthill.debug.AntDrawer</title>
-</head>
-<body>
-<script type="text/javascript" language="javascript" src="../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../cookies.js"></script><script type="text/javascript" language="javascript">
-<!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../../override.css" type="text/css"><meta name="keywords" content="AntDrawer,ru.antkarlov.anthill.debug.AntDrawer,ADD,ANT,BUG,CLEAR,CLOSE,CONSOLE,CURSOR,DATA,DEBUGDRAW_OFF,DEBUGDRAW_ON,DEFAULT,DEL,ERROR,EXIT,FONT_NAME,FONT_SIZE,ImgAdd,ImgAnt,ImgBug,ImgClear,ImgClose,ImgConsole,ImgCursor,ImgDebugDrawOff,ImgDebugDrawOn,ImgDel,ImgExit,ImgLoad,ImgMonitor,ImgMoveDown,ImgMoveLeft,ImgMoveLeftDown,ImgMoveLeftUp,ImgMoveRight,ImgMoveRightDown,ImgMoveRightUp,ImgMoveUp,ImgMusicOff,ImgMusicOn,ImgOptions,ImgPause,ImgPerfomance,ImgPlay,ImgPrint,ImgSave,ImgSoundOff,ImgSoundOn,ImgWarning,LOAD,MONITOR,MOVE_DOWN,MOVE_MOVE_LEFT,MOVE_MOVE_LEFT_DOWN,MOVE_MOVE_LEFT_UP,MOVE_RIGHT,MOVE_RIGHT_DOWN,MOVE_UP,MOVE_UP_RIGHT,MUSIC_OFF,MUSIC_ON,OPTIONS,PAUSE,PERFOMANCE,PLAY,PRINT,RESULT,SAVE,SOUND_OFF,SOUND_ON,WARNING,_background,_bitmap,_blinkInterval,_btnClose,_canRedraw,_classes,_commandStr,_cursorVisible,_fButton,_fDefault,_fGray,_fInput,_fNumbering,_fWhite,_height,_hints,_isConsoleVisible,_isDebugDraw,_isMonitorVisible,_isMove,_isOver,_isPerfomanceVisible,_isVisible,_kind,_lastCommands,_lastIndex,_lineFrom,_lineNum,_mask,_masked,_normal,_offsetX,_offsetY,_over,_parent,_prevHeight,_registry,_registry,_tfConsole,_tfInput,_tfKey,_tfNumbering,_tfTitle,_tfValue,_width,averageFps,buffer,color,console,currentFps,currentMem,enable,fpsList,history,intervalTime,kind,maxFps,maxMem,memList,minFps,minMem,monitor,onClick,perfomance,ratingPlugins,ratingRender,ratingTotal,ratingUpdate,runningTime,showAxis,showBorders,showBounds,showGrid,title,addButton,addHandlers,addHandlers,addSeparator,beginWatch,callGarbageCollector,clear,create,create,create,create,destroy,draw,draw,draw,draw,drawAxis,drawCircle,drawLine,drawPoint,drawRect,endWatch,execute,hide,hide,keyDownHandler,lineTo,log,makeButton,makeLabel,mouseClickHandler,mouseOutHandler,mouseOverHandler,moveTo,nextCommand,onCloseClick,onConsoleClick,onDebugDrawClick,onMonitorClick,onMuteClick,onPerfomanceClick,prevCommand,redrawDisplay,refresh,registerCommand,removeAllButtons,removeHandlers,removeHandlers,scrollDown,scrollUp,show,show,show,show,start,stop,track,unregisterCommand,unwatchValue,update,update,update,updateDisplay,updateDisplay,updateMinMax,updateVisualState,watchValue,write"><title>ru.antkarlov.anthill.debug.AntDrawer</title></head><body><script language="javascript" type="text/javascript" src="../../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
 				asdocTitle = 'AntDrawer - API Documentation';
 				var baseRef = '../../../../';
 				window.onload = configPage;
 			--></script>
-<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
-<tr>
-<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../index-list.html')" href="../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../index.html?ru/antkarlov/anthill/debug/AntDrawer.html&amp;ru/antkarlov/anthill/debug/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../images/logo.jpg"></td>
-</tr>
-<tr class="titleTableRow2">
-<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;AntDrawer</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
-</tr>
-<tr class="titleTableRow3">
-<td colspan="2">&nbsp;</td>
-</tr>
-</table>
-<script type="text/javascript" language="javascript">
-<!--
-if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class AntDrawer"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
---></script>
-<div class="MainContent">
-<table cellspacing="0" cellpadding="0" class="classHeaderTable">
-<tr>
-<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">ru.antkarlov.anthill.debug</a></td>
-</tr>
-<tr>
-<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class AntDrawer</td>
-</tr>
-</table>
-<p></p>
-  Отладочный невизуальный класс выполняющий отладочную отрисовку сущностей.
-  
-  <p></p>
-<br>
-<hr>
-</div>
-<a name="propertySummary"></a>
-<div class="summarySection">
-<div class="summaryTableTitle">Public Properties</div>
-<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
-<tr>
-<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#buffer">buffer</a> : BitmapData<div class="summaryTableDescription"></div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#showAxis">showAxis</a> : Boolean<div class="summaryTableDescription">
-   Флаг определяющий необходимость рисования осей сущности.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#showBorders">showBorders</a> : Boolean<div class="summaryTableDescription">
-   Флаг определяющий необходимость рисования краев сущности.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#showBounds">showBounds</a> : Boolean<div class="summaryTableDescription">
-   Флаг определяющий необходимость рисования занимаемую сущностью область.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#showGrid">showGrid</a> : Boolean<div class="summaryTableDescription"></div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-</table>
-</div>
-<a name="protectedPropertySummary"></a>
-<div class="summarySection">
-<div class="summaryTableTitle">Protected Properties</div>
-<table id="summaryTableProtectedProperty" class="summaryTable " cellpadding="3" cellspacing="0">
-<tr>
-<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_lineFrom">_lineFrom</a> : <a href="../../anthill/AntPoint.html">AntPoint</a>
-<div class="summaryTableDescription">
-   Точка помошник определяющая откуда будет нарисована линия.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-</table>
-</div>
-<a name="methodSummary"></a>
-<div class="summarySection">
-<div class="summaryTableTitle">Public Methods</div>
-<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
-<tr>
-<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#AntDrawer()">AntDrawer</a>()</div>
-<div class="summaryTableDescription">
-   </div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#drawAxis()">drawAxis</a>(aX:int, aY:int, aColor:uint = 0xffff00ff):void</div>
-<div class="summaryTableDescription">
-   Рисует оси (креcтик);
-   
-   </div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#drawCircle()">drawCircle</a>(aX:int, aY:int, aRadius:int, aColor:uint = 0xffff00ff):void</div>
-<div class="summaryTableDescription">
-   Рисует круг.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#drawLine()">drawLine</a>(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0xffff00ff):void</div>
-<div class="summaryTableDescription">
-   Рисует линию из точки A в точку B.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#drawPoint()">drawPoint</a>(aX:Number, aY:Number, aColor:uint = 0xffff00ff):void</div>
-<div class="summaryTableDescription">
-   Рисует однопиксельную точку.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#drawRect()">drawRect</a>(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0xffff00ff):void</div>
-<div class="summaryTableDescription">
-   Рисует прямоугольник.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#lineTo()">lineTo</a>(aX:int, aY:int, aColor:uint = 0xffff00ff):void</div>
-<div class="summaryTableDescription">
-   Рисует линию от ранее установленного положения в указанную точку.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#moveTo()">moveTo</a>(aX:int, aY:int):void</div>
-<div class="summaryTableDescription">
-   Устанавливает начальное положение для рисования линии.</div>
-</td><td class="summaryTableOwnerCol">AntDrawer</td>
-</tr>
-</table>
-</div>
-<script type="text/javascript" language="javascript">
-<!--
-showHideInherited();
---></script>
-<div class="MainContent">
-<a name="propertyDetail"></a>
-<div class="detailSectionHeader">Property detail</div>
-<a name="buffer"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">buffer</td><td class="detailHeaderType">property</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var buffer:BitmapData</code>
-</div>
-<a name="_lineFrom"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">_lineFrom</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>protected var _lineFrom:<a href="../../anthill/AntPoint.html">AntPoint</a></code><p>
-   Точка помошник определяющая откуда будет нарисована линия.
-   </p></div>
-<a name="showAxis"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">showAxis</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var showAxis:Boolean</code><p>
-   Флаг определяющий необходимость рисования осей сущности.
-   </p></div>
-<a name="showBorders"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">showBorders</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var showBorders:Boolean</code><p>
-   Флаг определяющий необходимость рисования краев сущности.
-   </p></div>
-<a name="showBounds"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">showBounds</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var showBounds:Boolean</code><p>
-   Флаг определяющий необходимость рисования занимаемую сущностью область.
-   </p></div>
-<a name="showGrid"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">showGrid</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var showGrid:Boolean</code>
-</div>
-<a name="constructorDetail"></a>
-<div class="detailSectionHeader">Constructor detail</div>
-<a name="AntDrawer()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">AntDrawer</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function AntDrawer()</code><p>
-   </p></div>
-<a name="methodDetail"></a>
-<div class="detailSectionHeader">Method detail</div>
-<a name="drawAxis()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">drawAxis</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function drawAxis(aX:int, aY:int, aColor:uint = 0xffff00ff):void</code><p>
-   Рисует оси (креcтик);
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Положение оси по X.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Положение оси по Y.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0xffff00ff</code>)<code></code></td>
-</tr>
-</table>
-</div>
-<a name="drawCircle()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">drawCircle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function drawCircle(aX:int, aY:int, aRadius:int, aColor:uint = 0xffff00ff):void</code><p>
-   Рисует круг.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Положение центра круга по X.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Положение центра круга по Y.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aRadius</span>:int</code> &mdash;  Радиус круга.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0xffff00ff</code>)<code></code> &mdash;  Цвет круга.
-   </td>
-</tr>
-</table>
-</div>
-<a name="drawLine()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">drawLine</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function drawLine(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0xffff00ff):void</code><p>
-   Рисует линию из точки A в точку B.
-   
-   "Extremely Fast Line Algorithm"
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aX1</span>:int</code> &mdash;  Координата X точки A.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aY1</span>:int</code> &mdash;  Координата Y точки A.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aX2</span>:int</code> &mdash;  Координата X точки B.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aY2</span>:int</code> &mdash;  Координата Y точки B.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0xffff00ff</code>)<code></code> &mdash;  Цвет линии.
-   </td>
-</tr>
-</table>
-</div>
-<a name="drawPoint()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">drawPoint</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function drawPoint(aX:Number, aY:Number, aColor:uint = 0xffff00ff):void</code><p>
-   Рисует однопиксельную точку.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aX</span>:Number</code> &mdash;  Координата X.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aY</span>:Number</code> &mdash;  Координата Y.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0xffff00ff</code>)<code></code> &mdash;  Цвет точки.
-   </td>
-</tr>
-</table>
-</div>
-<a name="drawRect()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">drawRect</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function drawRect(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0xffff00ff):void</code><p>
-   Рисует прямоугольник.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Положение прямоугольника по X.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Положение прямоугольника по Y.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aWidth</span>:int</code> &mdash;  Ширина прямоугольника.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aHeight</span>:int</code> &mdash;  Высота прямоугольника.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0xffff00ff</code>)<code></code> &mdash;  Цвет прямоугольника.
-   </td>
-</tr>
-</table>
-</div>
-<a name="lineTo()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">lineTo</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function lineTo(aX:int, aY:int, aColor:uint = 0xffff00ff):void</code><p>
-   Рисует линию от ранее установленного положения в указанную точку.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Координата X.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Координата Y.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0xffff00ff</code>)<code></code> &mdash;  Цвет линии.
-   </td>
-</tr>
-</table>
-</div>
-<a name="moveTo()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">moveTo</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function moveTo(aX:int, aY:int):void</code><p>
-   Устанавливает начальное положение для рисования линии.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Координата X.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Координата Y.
-   </td>
-</tr>
-</table>
-</div>
-<br>
-<br>
-<hr>
-<br>
-<p></p>
-<center class="copyright"> 
-</center>
-</div>
-</body>
-</html>
-<!-- -->
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">API Documentation</td><td class="titleTableTopNav" align="right"><a href="../../../../package-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../../class-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../../all-index-A.html" onclick="loadClassListFrame('../../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../../index.html?ru/antkarlov/anthill/debug/AntDrawer.html&amp;ru/antkarlov/anthill/debug/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">AntDrawer</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("AntDrawer"); titleBar_setSubNav(false,true,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">ru.antkarlov.anthill.debug</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  AntDrawer</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">AntDrawer  <img src="../../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> Object</td></tr></table><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Language Version :&nbsp;</b></td><td>ActionScript 3</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Since :&nbsp;</b></td><td>11.09.2012</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Runtime Versions :&nbsp;</b></td><td>AIR 1.0, Flash Player  9.0.0</td></tr></table><p></p><p></p><p></p>
+	 Отладочный невизуальный класс выполняющий отладочную отрисовку сущностей.
+	 
+	 <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#buffer" class="signatureLink">buffer</a> : BitmapData<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#showAxis" class="signatureLink">showAxis</a> : Boolean<div class="summaryTableDescription">
+		 Флаг определяющий необходимость рисования осей сущности.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#showBorders" class="signatureLink">showBorders</a> : Boolean<div class="summaryTableDescription">
+		 Флаг определяющий необходимость рисования краев сущности.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#showBounds" class="signatureLink">showBounds</a> : Boolean<div class="summaryTableDescription">
+		 Флаг определяющий необходимость рисования занимаемую сущностью область.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#showGrid" class="signatureLink">showGrid</a> : Boolean<div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr></table></div><a name="protectedPropertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Protected Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProtectedProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#_lineFrom" class="signatureLink">_lineFrom</a> : <a href="../../../../ru/antkarlov/anthill/AntPoint.html">AntPoint</a><div class="summaryTableDescription">
+		 Точка помошник определяющая откуда будет нарисована линия.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#AntDrawer()" class="signatureLink">AntDrawer</a>()</div><div class="summaryTableDescription">
+		 </div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#drawAxis()" class="signatureLink">drawAxis</a>(aX:int, aY:int, aColor:uint = 0):void</div><div class="summaryTableDescription">
+		 Рисует оси (креcтик);
+		 
+		 </div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#drawCircle()" class="signatureLink">drawCircle</a>(aX:int, aY:int, aRadius:int, aColor:uint = 0):void</div><div class="summaryTableDescription">
+		 Рисует круг.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#drawLine()" class="signatureLink">drawLine</a>(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0):void</div><div class="summaryTableDescription">
+		 Рисует линию из точки A в точку B.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#drawPoint()" class="signatureLink">drawPoint</a>(aX:Number, aY:Number, aColor:uint = 0):void</div><div class="summaryTableDescription">
+		 Рисует однопиксельную точку.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#drawRect()" class="signatureLink">drawRect</a>(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0):void</div><div class="summaryTableDescription">
+		 Рисует прямоугольник.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#lineTo()" class="signatureLink">lineTo</a>(aX:int, aY:int, aColor:uint = 0):void</div><div class="summaryTableDescription">
+		 Рисует линию от ранее установленного положения в указанную точку.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#moveTo()" class="signatureLink">moveTo</a>(aX:int, aY:int):void</div><div class="summaryTableDescription">
+		 Устанавливает начальное положение для рисования линии.</div></td><td class="summaryTableOwnerCol">AntDrawer</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="_lineFrom"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">_lineFrom</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>protected var _lineFrom:<a href="../../../../ru/antkarlov/anthill/AntPoint.html">AntPoint</a></code><p></p><p></p><p>
+		 Точка помошник определяющая откуда будет нарисована линия.
+		 </p></div><a name="propertyDetail"></a><a name="buffer"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">buffer</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var buffer:BitmapData</code><p></p></div><a name="propertyDetail"></a><a name="showAxis"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">showAxis</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var showAxis:Boolean</code><p></p><p></p><p>
+		 Флаг определяющий необходимость рисования осей сущности.
+		 </p></div><a name="propertyDetail"></a><a name="showBorders"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">showBorders</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var showBorders:Boolean</code><p></p><p></p><p>
+		 Флаг определяющий необходимость рисования краев сущности.
+		 </p></div><a name="propertyDetail"></a><a name="showBounds"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">showBounds</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var showBounds:Boolean</code><p></p><p></p><p>
+		 Флаг определяющий необходимость рисования занимаемую сущностью область.
+		 </p></div><a name="propertyDetail"></a><a name="showGrid"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">showGrid</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var showGrid:Boolean</code><p></p></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="AntDrawer()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">AntDrawer</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function AntDrawer()</code><p></p><p>
+		 </p></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="drawAxis()"></a><a name="drawAxis(int,int,uint)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">drawAxis</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public function drawAxis(aX:int, aY:int, aColor:uint = 0):void</code><p></p><p></p><p>
+		 Рисует оси (креcтик);
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Положение оси по X.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Положение оси по Y.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0</code>)<code></code></td></tr></table></p></div><a name="drawCircle()"></a><a name="drawCircle(int,int,int,uint)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">drawCircle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function drawCircle(aX:int, aY:int, aRadius:int, aColor:uint = 0):void</code><p></p><p></p><p>
+		 Рисует круг.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Положение центра круга по X.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Положение центра круга по Y.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aRadius</span>:int</code> &mdash;  Радиус круга.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0</code>)<code></code> &mdash;  Цвет круга.
+		 </td></tr></table></p></div><a name="drawLine()"></a><a name="drawLine(int,int,int,int,uint)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">drawLine</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function drawLine(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0):void</code><p></p><p></p><p>
+		 Рисует линию из точки A в точку B.
+		 
+		 "Extremely Fast Line Algorithm"
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aX1</span>:int</code> &mdash;  Координата X точки A.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aY1</span>:int</code> &mdash;  Координата Y точки A.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aX2</span>:int</code> &mdash;  Координата X точки B.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aY2</span>:int</code> &mdash;  Координата Y точки B.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0</code>)<code></code> &mdash;  Цвет линии.
+		 </td></tr></table></p></div><a name="drawPoint()"></a><a name="drawPoint(Number,Number,uint)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">drawPoint</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function drawPoint(aX:Number, aY:Number, aColor:uint = 0):void</code><p></p><p></p><p>
+		 Рисует однопиксельную точку.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aX</span>:Number</code> &mdash;  Координата X.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aY</span>:Number</code> &mdash;  Координата Y.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0</code>)<code></code> &mdash;  Цвет точки.
+		 </td></tr></table></p></div><a name="drawRect()"></a><a name="drawRect(int,int,int,int,uint)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">drawRect</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function drawRect(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0):void</code><p></p><p></p><p>
+		 Рисует прямоугольник.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Положение прямоугольника по X.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Положение прямоугольника по Y.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aWidth</span>:int</code> &mdash;  Ширина прямоугольника.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aHeight</span>:int</code> &mdash;  Высота прямоугольника.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0</code>)<code></code> &mdash;  Цвет прямоугольника.
+		 </td></tr></table></p></div><a name="lineTo()"></a><a name="lineTo(int,int,uint)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">lineTo</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function lineTo(aX:int, aY:int, aColor:uint = 0):void</code><p></p><p></p><p>
+		 Рисует линию от ранее установленного положения в указанную точку.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Координата X.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Координата Y.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aColor</span>:uint</code> (default = <code>0</code>)<code></code> &mdash;  Цвет линии.
+		 </td></tr></table></p></div><a name="moveTo()"></a><a name="moveTo(int,int)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">moveTo</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function moveTo(aX:int, aY:int):void</code><p></p><p></p><p>
+		 Устанавливает начальное положение для рисования линии.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aX</span>:int</code> &mdash;  Координата X.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aY</span>:int</code> &mdash;  Координата Y.
+		 </td></tr></table></p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Sun Feb 17 2013, 08:57 AM +04:00  </center></div></body></html><!--<br/>Sun Feb 17 2013, 08:57 AM +04:00  -->

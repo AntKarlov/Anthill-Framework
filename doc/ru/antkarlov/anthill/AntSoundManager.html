@@ -1,931 +1,165 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="../../../style.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../../../print.css" type="text/css" media="print">
-<meta content="AntSoundManager,ru.antkarlov.anthill.AntSoundManager,_classes,_streams,baseURL,listeners,mute,numSounds,radius,sounds,volume,add,addEmbedded,addListener,addStream,clear,containsListener,extractSound,getAvailable,isPlaying,numDead,numLiving,pause,play,recycle,remove,removeListener,resume,stop,stopAll,update" name="keywords">
-<title>ru.antkarlov.anthill.AntSoundManager</title>
-</head>
-<body>
-<script type="text/javascript" language="javascript" src="../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../cookies.js"></script><script type="text/javascript" language="javascript">
-<!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../override.css" type="text/css"><meta name="keywords" content="AntSoundManager,ru.antkarlov.anthill.AntSoundManager,A,ALT,ASCENDING,B,BACKSPACE,BACKWARD_SLASH,C,CAPS_LOCK,CENTER,CLEAR,CLOSED_BRACKET,COLON,CONTROL,D,DATA_ATLAS,DATA_ATLAS_GRAPHIC,DATA_CLIP,DATA_GRAPHIC,DELETE,DESCENDING,DEST_POINT,DEST_POINT,DOWN,DOWN,E,EIGHT,END,ENTER,EQUALS,ESC,F,F1,F10,F11,F12,F13,F14,F15,F2,F3,F4,F5,F6,F7,F8,F9,FIVE,FOUR,G,GREATER_THAN,H,HELP,HOME,I,INDENT_FOR_FILTER,INDENT_FOR_FILTER_DOUBLED,INSERT,J,JUSTIFY,K,L,LEFT,LEFT,LESS_THAN,LIB_MAINTENANCE,LIB_MAJOR_VERSION,LIB_MINOR_VERSION,LIB_NAME,M,N,NINE,NORMAL,NUMPAD_0,NUMPAD_1,NUMPAD_2,NUMPAD_3,NUMPAD_4,NUMPAD_5,NUMPAD_6,NUMPAD_7,NUMPAD_8,NUMPAD_9,NUMPAD_ADD,NUMPAD_DECIMAL,NUMPAD_DIVIDE,NUMPAD_ENTER,NUMPAD_MULTIPLY,NUMPAD_SUBTRACT,NUM_LOCK,NUM_OF_ACTIVE,NUM_OF_VISIBLE,NUM_ON_SCREEN,O,ONE,OPEN_BRACKET,OVER,P,PAGE_DOWN,PAGE_UP,Q,QUESTION_MARK,QUOTES,R,RIGHT,RIGHT,S,SEVEN,SHIFT,SIX,SPACEBAR,STYLE_FREELY,STYLE_HORIZONTAL,STYLE_VERTICAL,T,TAB,THREE,TILDE,TWO,U,UNDERSCORE,UP,V,W,X,Y,Z,ZERO,_align,_alpha,_alpha,_alpha,_animationCache,_animations,_animations,_animations,_anthill,_atlasBitmapData,_atlasRegions,_atlasStorage,_autoSize,_backendBuffer,_bottomRight,_buffer,_buffer,_buffer,_cacheFinished,_cacheStarted,_canRedraw,_classes,_clip,_clipCols,_clipRows,_color,_color,_color,_colorTransform,_colorTransform,_colorTransform,_contentStorage,_curAnim,_curAnim,_curAnimName,_curAnimName,_curAnimName,_curAnim,_curPoint,_down,_elapsed,_externalTileSet,_fadeInTimer,_fadeInTotal,_fadeOutTimer,_fadeOutTotal,_flashBitmap,_flashPoint,_flashPoint,_flashPoint,_flashPointTarget,_flashPointZero,_flashPointZero,_flashPointZero,_flashPointZero,_flashRect,_flashRect,_flashRect,_flashRect,_flashRect,_flashSprite,_frameRate,_functions,_globalScreenPos,_index,_initialState,_internalTileSet,_isCreated,_isMasked,_isStarted,_isStarted,_keys,_map,_maskOffset,_matrix,_matrix,_matrix,_matrix,_newPos,_numCols,_numRows,_numTiles,_oldAngle,_oldPosition,_oldScale,_oldSize,_over,_panAdjust,_pauseOnFadeOut,_pausePosition,_paused,_perfomance,_pixels,_pixels,_pixels,_playing,_playing,_point,_prevFrame,_prevFrame,_prevFrame,_processCurrent,_processTotal,_queue,_queue,_queueIndex,_ratingPan,_ratingVolume,_rect,_repeats,_selected,_share,_sortIndex,_sortOrder,_sound,_soundChannel,_soundTransform,_source,_streams,_textField,_textFormat,_tileHeight,_tileIndex,_tileOffsetX,_tileOffsetY,_tileWidth,_tilesTotal,_toggle,_topLeft,_total,_useSystemCursor,_volumeAdjust,acceleration,active,add,align,alive,allowDebugDraw,alpha,alpha,alpha,angle,angularAcceleration,angularDrag,angularVelocity,animationSpeed,animationSpeed,approximatePosition,atlasBitmapData,autoSize,backgroundColor,backgroundColor,baseURL,beginWatch,blend,blend,blend,bold,bottom,bounds,bounds,buffer,buffer,camera,cameras,cameras,cameras,children,color,color,color,countPerStep,currentAnimation,currentAnimation,currentAnimation,currentFrame,currentFrame,cursor,data,debugDrawer,debugger,defCursorAnim,defDownCursorAnim,defGroup,defOverCursorAnim,downCursorAnim,drag,drawQuickly,elapsed,endWatch,entryClass,eventClick,eventComplete,eventComplete,eventComplete,eventComplete,eventDown,eventDown,eventOut,eventOver,eventProcess,eventProcess,eventStart,eventStart,eventUp,eventUp,exists,fillBackground,fillBackground,followStyle,frameRate,frames,globalAngle,globalX,globalX,globalY,globalY,health,height,height,height,height,height,height,heightHalf,isEmpty,isGroup,isPlaying,isPlaying,isScrolled,junk,keys,label,labelOffset,leadingFactor,left,length,listeners,listeners,listeners,log,maxAngularVelocity,maxElapsed,maxVelocity,memory,mouse,moves,mute,name,name,name,numChars,numChildren,numCols,numLines,numOfActive,numOfVisible,numOnScreen,numPerStep,numRows,numSounds,numTiles,offsetX,offsetY,origin,origin,overCursorAnim,parent,parent,plugins,positionPropertyX,positionPropertyY,radius,registerCommand,remove,repeat,repeat,reverse,reverse,right,scale,scaleX,scaleY,screenCenter,screenX,screenY,scroll,scrollFactor,selected,smoothFactor,smoothing,smoothing,smoothing,sounds,sounds,source,stage,state,state,status,tag,target,target,text,text,tileAxisOffset,tileHeight,tileWidth,tiles,timeScale,toggle,top,totalFrames,totalFrames,totalFrames,track,unregisterCommand,unwatchValue,useSystemCursor,userData,velocity,vertices,visible,volume,volume,watchValue,wheelDelta,width,width,width,width,width,width,widthHalf,wordWrap,x,x,x,x,x,y,y,y,y,y,z,zoom,abs,add,add,add,addAnimation,addAnimation,addAnimation,addAnimationFromCache,addAnimationFromCache,addAnimationFromCache,addAtlas,addAtlasA,addCamera,addClip,addClip,addClips,addEmbedded,addGraphic,addGraphicFromAtlas,addKey,addListener,addPlugin,addRegion,addStream,angle,angleDeg,animComplete,animComplete,applyFilters,atHome,beginChange,beginDrawMask,cacheClip,cacheClipQuickly,cacheClips,calcBounds,calcFrame,calcFrame,calcFrame,calcFrame,calcVelocity,callAll,ceil,childNextFrame,clear,clear,clear,clear,clearAnimations,clearAnimations,closest,completed,contains,contains,containsKey,containsListener,copy,copy,copyFrom,copyFrom,create,create,debugDraw,debugDraw,debugDraw,destroy,destroy,destroy,destroy,destroy,destroy,destroy,destroy,destroy,destroy,destroy,distance,divide,dividePoint,draw,draw,draw,draw,draw,draw,draw,drawActor,drawButton,drawChildren,drawQuick,drawText,drawTo,dublicateWithFrames,endChange,endDrawMask,enterFrameHandler,enterFrameHandler,equal,equal,equalPoint,extractSound,fadeIn,fadeOut,floor,focusOn,follow,forceSave,fromCache,fromPercent,get,getAlive,getAvailable,getAvailable,getBitmap,getBitmaps,getByTag,getCamera,getCoordinates,getDead,getExtant,getHome,getIndex,getIndexByPosition,getKey,getNames,getPosition,getRandom,getRegion,getScreenPosition,getScreenPosition,getTile,getWorldPosition,goto,goto,goto,gotoAndPlay,gotoAndPlay,gotoAndStop,gotoAndStop,highlightText,hitTest,hitTestPoint,hurt,increment,incrementPoint,init,initialize,intersects,intersectsPoint,intersectsRect,isDown,isDown,isPlaying,isPressed,isPressed,isPressedAny,isReleased,isReleased,isWheelDown,isWheelUp,keyDownHandler,keyUpHandler,kill,kill,kill,kill,length,lerp,limitByX,limitByY,linesCross,linesCrossPoint,locate,makeAnimation,makeButton,makeFromGraphic,makeFromMovieClip,maxFrom,minFrom,mouseDownHandler,mouseOutHandler,mouseOverHandler,mouseUpHandler,mouseWheelHandler,moveBounds,multiply,multiplyPoint,nextFrame,nextFrame,normAngle,normAngleDeg,numDead,numDead,numLiving,numLiving,numTilesForCaching,onMouseDown,onMouseOut,onMouseOver,onMouseUp,onScreen,open,parseAtlasXML,pause,pause,play,play,play,play,playRandomFrame,playRandomFrame,postUpdate,postUpdate,preUpdate,preUpdate,prevFrame,prevFrame,process,queryByTag,random,randomRangeInt,randomRangeNumber,range,read,recycle,recycle,registerFunction,remap,remove,remove,remove,remove,removeAll,removeAnimation,removeAnimation,removeCamera,removeFromCache,removeListener,removePlugin,removeRegion,render,replace,reset,reset,reset,resetHelpers,resetHelpers,resetHelpers,resetHelpers,resetTileSet,resume,resume,revive,rotateBounds,rotateBounds,rotateDeg,rotatePointDeg,saveOldPosition,send,set,set,set,setAll,setBounds,setColor,setMapSize,setScreenSize,setScrollFactor,setSize,setStroke,setTileSet,setTileSetFromCache,setTileSize,sort,sortHandler,soundCompleteHandler,soundForCenter,soundForListeners,start,start,step,step,stop,stop,stop,stop,stop,stopAll,swap,switchAnimation,switchAnimation,switchAnimation,switchFrame,switchState,switchState,toCache,toDegrees,toPercent,toRadians,toScreenPosition,toString,toString,trimToRange,unregisterFunction,update,update,update,update,update,update,update,update,update,update,update,update,update,updateAnimation,updateAnimation,updateBounds,updateButton,updateChildren,updateFade,updateInput,updateLabel,updateMotion,updatePlugins,updatePosition,updateSettings,updateSound,updateSounds,updateTransform,updateVisualStatus,write"><title>ru.antkarlov.anthill.AntSoundManager</title></head><body><script language="javascript" type="text/javascript" src="../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
 				asdocTitle = 'AntSoundManager - API Documentation';
 				var baseRef = '../../../';
 				window.onload = configPage;
 			--></script>
-<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
-<tr>
-<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../all-classes.html')" href="../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../all-classes.html')" href="../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../index-list.html')" href="../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../index.html?ru/antkarlov/anthill/AntSoundManager.html&amp;ru/antkarlov/anthill/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../images/logo.jpg"></td>
-</tr>
-<tr class="titleTableRow2">
-<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;AntSoundManager</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
-</tr>
-<tr class="titleTableRow3">
-<td colspan="2">&nbsp;</td>
-</tr>
-</table>
-<script type="text/javascript" language="javascript">
-<!--
-if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class AntSoundManager"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
---></script>
-<div class="MainContent">
-<table cellspacing="0" cellpadding="0" class="classHeaderTable">
-<tr>
-<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">ru.antkarlov.anthill</a></td>
-</tr>
-<tr>
-<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class AntSoundManager</td>
-</tr>
-</table>
-<p></p>
-  Звуковой менеджер используется для взаимодействия со звуковыми сущностями.
-  
-  <p></p>
-<br>
-<hr>
-</div>
-<a name="propertySummary"></a>
-<div class="summarySection">
-<div class="summaryTableTitle">Public Properties</div>
-<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
-<tr>
-<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#baseURL">baseURL</a> : String<div class="summaryTableDescription">
-   Базовый путь для потоковых звуков если они все находятся в одном месте.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#listeners">listeners</a> : Array<div class="summaryTableDescription">
-   Массив с указателями на слушателей звуков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#mute">mute</a> : Boolean<div class="summaryTableDescription">
-   Флаг определяющий возможно ли воспроизведение звуков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#numSounds">numSounds</a> : int<div class="summaryTableDescription">
-   Количество звуков в менеджере.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#radius">radius</a> : Number<div class="summaryTableDescription">
-   Радиус в пределах которого слушатели могут слышать звуки.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#sounds">sounds</a> : Array<div class="summaryTableDescription">
-   Массив со всеми звуками которыми управляет данный менеджер.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#volume">volume</a> : Number<div class="summaryTableDescription">
-   Общая громкость для всех звуков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-</table>
-</div>
-<a name="protectedPropertySummary"></a>
-<div class="summarySection">
-<div class="summaryTableTitle">Protected Properties</div>
-<table id="summaryTableProtectedProperty" class="summaryTable " cellpadding="3" cellspacing="0">
-<tr>
-<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_classes">_classes</a> : <a href="../anthill/AntStorage.html">AntStorage</a>
-<div class="summaryTableDescription">
-   Хранилище классов на заэмбендженные звуки.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#_streams">_streams</a> : <a href="../anthill/AntStorage.html">AntStorage</a>
-<div class="summaryTableDescription">
-   Хранилище названий/путей до потоковых звуков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-</table>
-</div>
-<a name="methodSummary"></a>
-<div class="summarySection">
-<div class="summaryTableTitle">Public Methods</div>
-<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
-<tr>
-<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#AntSoundManager()">AntSoundManager</a>()</div>
-<div class="summaryTableDescription">
-   </div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#add()">add</a>(aSound:<a href="AntSound.html">AntSound</a>):<a href="../anthill/AntSound.html">AntSound</a>
-</div>
-<div class="summaryTableDescription">
-   Добавляет экземпляр звука в менеджер.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#addEmbedded()">addEmbedded</a>(aSoundClass:Class, aName:String = null):void</div>
-<div class="summaryTableDescription">
-   Добавляет оригинальный класс звука.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#addListener()">addListener</a>(aListener:<a href="AntEntity.html">AntEntity</a>):<a href="../anthill/AntEntity.html">AntEntity</a>
-</div>
-<div class="summaryTableDescription">
-   Добавляет слушателя звуков в менеджер.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#addStream()">addStream</a>(aURL:String, aName:String = null):void</div>
-<div class="summaryTableDescription">
-   Добавляет имя файла до потокового звука размещенного где-либо.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#clear()">clear</a>():void</div>
-<div class="summaryTableDescription">
-   Очищает все звуки и слушателей.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#containsListener()">containsListener</a>(aListener:<a href="AntEntity.html">AntEntity</a>):Boolean</div>
-<div class="summaryTableDescription">
-   Проверяет наличие слушателя в менеджере.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#getAvailable()">getAvailable</a>(aName:String):<a href="../anthill/AntSound.html">AntSound</a>
-</div>
-<div class="summaryTableDescription">
-   Возвращает доступный звук с указанным именем.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#isPlaying()">isPlaying</a>(aName:String, aSource:<a href="AntEntity.html">AntEntity</a> = null):Boolean</div>
-<div class="summaryTableDescription">
-   Проверяет проигрывается ли звук с указанным именем.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#numDead()">numDead</a>():int</div>
-<div class="summaryTableDescription">
-   Возвращает количество "мертвых" звуков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#numLiving()">numLiving</a>():int</div>
-<div class="summaryTableDescription">
-   Возвращает количество воспроизводимых звуков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#pause()">pause</a>():void</div>
-<div class="summaryTableDescription">
-   Ставит воспроизведение всех звуков на паузу.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#play()">play</a>(aName:String, aSource:<a href="AntEntity.html">AntEntity</a> = null, aSingle:Boolean = false, aRepeats:int = 1):<a href="../anthill/AntSound.html">AntSound</a>
-</div>
-<div class="summaryTableDescription">
-   Запускает воспроизведение звука с указанным именем.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#recycle()">recycle</a>(aName:String):<a href="../anthill/AntSound.html">AntSound</a>
-</div>
-<div class="summaryTableDescription">
-   Возвращает ранее использованный или новый звук для нового использования.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#remove()">remove</a>(aSound:<a href="AntSound.html">AntSound</a>, aSplice:Boolean = false):<a href="../anthill/AntSound.html">AntSound</a>
-</div>
-<div class="summaryTableDescription">
-   Удаляет экземпляр звука из менеджера.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#removeListener()">removeListener</a>(aListener:<a href="AntEntity.html">AntEntity</a>, aSplice:Boolean = false):<a href="../anthill/AntEntity.html">AntEntity</a>
-</div>
-<div class="summaryTableDescription">
-   Удаляет слушателя звуков из менеджера.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#resume()">resume</a>():void</div>
-<div class="summaryTableDescription">
-   Возобновляет воспроизведение всех звуков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#stop()">stop</a>(aName:String, aSource:<a href="AntEntity.html">AntEntity</a> = null):void</div>
-<div class="summaryTableDescription">
-   Останавливает воспроизведение всех звуков с указанным именем.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#stopAll()">stopAll</a>(aSource:<a href="AntEntity.html">AntEntity</a> = null):void</div>
-<div class="summaryTableDescription">
-   Останавливает воспроизведение всех звуков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#update()">update</a>():void</div>
-<div class="summaryTableDescription">
-   Обработчик всех звуков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-</table>
-</div>
-<a name="protectedMethodSummary"></a>
-<div class="summarySection">
-<div class="summaryTableTitle">Protected Methods</div>
-<table id="summaryTableProtectedMethod" class="summaryTable " cellpadding="3" cellspacing="0">
-<tr>
-<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
-</tr>
-<tr class="">
-<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
-<div class="summarySignature">
-<a class="signatureLink" href="#extractSound()">extractSound</a>(aName:String):Sound</div>
-<div class="summaryTableDescription">
-   Извлекает звук с указанным именем из хранилища заэмбедженных звуков или из потоков.</div>
-</td><td class="summaryTableOwnerCol">AntSoundManager</td>
-</tr>
-</table>
-</div>
-<script type="text/javascript" language="javascript">
-<!--
-showHideInherited();
---></script>
-<div class="MainContent">
-<a name="propertyDetail"></a>
-<div class="detailSectionHeader">Property detail</div>
-<a name="baseURL"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">baseURL</td><td class="detailHeaderType">property</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var baseURL:String</code><p>
-   Базовый путь для потоковых звуков если они все находятся в одном месте.
-   </p><p>The default value is <code>""</code>.</p>
-</div>
-<a name="_classes"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">_classes</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>protected var _classes:<a href="../anthill/AntStorage.html">AntStorage</a></code><p>
-   Хранилище классов на заэмбендженные звуки.
-   </p></div>
-<a name="listeners"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">listeners</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var listeners:Array</code><p>
-   Массив с указателями на слушателей звуков. Если нет ни одного слушателя,
-   то для звуков с источниками рассчитывается стерео-эффект исходя из наличия и положения камер.
-   </p></div>
-<a name="mute"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">mute</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var mute:Boolean</code><p>
-   Флаг определяющий возможно ли воспроизведение звуков.
-   </p><p>The default value is <code>false</code>.</p>
-</div>
-<a name="numSounds"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">numSounds</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var numSounds:int</code><p>
-   Количество звуков в менеджере. Может отличаться от реального количества звуков.
-   </p></div>
-<a name="radius"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">radius</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var radius:Number</code><p>
-   Радиус в пределах которого слушатели могут слышать звуки. Используется для рассчета стерео-эффекта.
-   </p><p>The default value is <code>500</code>.</p>
-</div>
-<a name="sounds"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">sounds</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var sounds:Array</code><p>
-   Массив со всеми звуками которыми управляет данный менеджер.
-   </p></div>
-<a name="_streams"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">_streams</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>protected var _streams:<a href="../anthill/AntStorage.html">AntStorage</a></code><p>
-   Хранилище названий/путей до потоковых звуков.
-   </p></div>
-<a name="volume"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">volume</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public var volume:Number</code><p>
-   Общая громкость для всех звуков.
-   </p><p>The default value is <code>1</code>.</p>
-</div>
-<a name="constructorDetail"></a>
-<div class="detailSectionHeader">Constructor detail</div>
-<a name="AntSoundManager()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">AntSoundManager</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function AntSoundManager()</code><p>
-   </p></div>
-<a name="methodDetail"></a>
-<div class="detailSectionHeader">Method detail</div>
-<a name="add()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">add</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function add(aSound:<a href="AntSound.html">AntSound</a>):<a href="../anthill/AntSound.html">AntSound</a></code><p>
-   Добавляет экземпляр звука в менеджер.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aSound</span>:<a href="AntSound.html">AntSound</a></code></td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code><a href="../anthill/AntSound.html">AntSound</a></code> &mdash; 
-                         Возвращает указатель на добавленный экземпляр звука.
-   
-                        
-                     </td>
-</tr>
-</table>
-</div>
-<a name="addEmbedded()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">addEmbedded</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function addEmbedded(aSoundClass:Class, aName:String = null):void</code><p>
-   Добавляет оригинальный класс звука.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aSoundClass</span>:Class</code> &mdash;  Оригинальный класс звука который включен в fla или swc.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aName</span>:String</code> (default = <code>null</code>)<code></code> &mdash;  Имя звука по которому можно вызвать его воспроизведение. Если имя не указано, то звук будет доступен по имени оригинального класса.
-   </td>
-</tr>
-</table>
-</div>
-<a name="addListener()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">addListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function addListener(aListener:<a href="AntEntity.html">AntEntity</a>):<a href="../anthill/AntEntity.html">AntEntity</a></code><p>
-   Добавляет слушателя звуков в менеджер. Слушателем звуков является персонаж или некий объект
-   исходя из положения которого рассчитывается стерео-эффект для звуков.
-   </p><p>Примечание: Если менеджер звуков не имеет ни одного слушателя, то стерео-эффект для звуков рассчитывается
-   на основе камер. То есть в таком случае слушателями будут центры камер.</p>
-   <p>Внимание: Стерео-эффект рассчитывается для звуков только в том случае, если для них указан объект источник.</p>
-   
-   <span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aListener</span>:<a href="AntEntity.html">AntEntity</a></code> &mdash;  Слушатель которого необходимо добавить.
-   </td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code><a href="../anthill/AntEntity.html">AntEntity</a></code> &mdash; 
-                         Возвращает указатель на добавленного слушателя.
-   
-                        
-                     </td>
-</tr>
-</table>
-</div>
-<a name="addStream()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">addStream</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function addStream(aURL:String, aName:String = null):void</code><p>
-   Добавляет имя файла до потокового звука размещенного где-либо.
-   </p><p>Внимание: В качестве потоковых звуков могут быть файлы только в формате mp3.</p>
-   
-   <span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aURL</span>:String</code> &mdash;  Путь и/или имя файла.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aName</span>:String</code> (default = <code>null</code>)<code></code> &mdash;  Имя звука по которому можно вызвать его воспроизведение. Если имя не указано, то звук будет доступен по указанному пути и/или имени файла.
-   </td>
-</tr>
-</table>
-</div>
-<a name="clear()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">clear</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function clear():void</code><p>
-   Очищает все звуки и слушателей.
-   </p></div>
-<a name="containsListener()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">containsListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function containsListener(aListener:<a href="AntEntity.html">AntEntity</a>):Boolean</code><p>
-   Проверяет наличие слушателя в менеджере.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aListener</span>:<a href="AntEntity.html">AntEntity</a></code> &mdash;  Слушател наличие которого необходимо проверить.
-   </td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code>Boolean</code> &mdash;  Возвращает true если слушатель уже добавлен в менеджер.
-   </td>
-</tr>
-</table>
-</div>
-<a name="extractSound()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">extractSound</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>protected function extractSound(aName:String):Sound</code><p>
-   Извлекает звук с указанным именем из хранилища заэмбедженных звуков или из потоков.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звука который необходимо получить.
-   </td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code>Sound</code> &mdash;  Возвращает указатель на экземпляр звука.
-   </td>
-</tr>
-</table>
-</div>
-<a name="getAvailable()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">getAvailable</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function getAvailable(aName:String):<a href="../anthill/AntSound.html">AntSound</a></code><p>
-   Возвращает доступный звук с указанным именем.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звука который необходимо получить.
-   </td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code><a href="../anthill/AntSound.html">AntSound</a></code> &mdash; 
-                         Возвращает указатель на доступный звук или null если доступных звуков с указанным именем нет.
-   
-                        
-                     </td>
-</tr>
-</table>
-</div>
-<a name="isPlaying()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">isPlaying</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function isPlaying(aName:String, aSource:<a href="AntEntity.html">AntEntity</a> = null):Boolean</code><p>
-   Проверяет проигрывается ли звук с указанным именем. Если источник звука не указан, то проверяются все звуки с указанным 
-   именем, иначе проигрывание звуков с указанным имемен для указанного источника.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Сущность для которой необходимо проверить наличие проигрываемого звука.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aSource</span>:<a href="AntEntity.html">AntEntity</a></code> (default = <code>null</code>)<code></code></td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code>Boolean</code> &mdash;  Возвращает true если звук с указанным именем проигрывается
-   </td>
-</tr>
-</table>
-</div>
-<a name="numDead()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">numDead</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function numDead():int</code><p>
-   Возвращает количество "мертвых" звуков.
-   
-   </p><p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code>int</code> &mdash;  Возвращает количество не используемых звуков.
-   </td>
-</tr>
-</table>
-</div>
-<a name="numLiving()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">numLiving</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function numLiving():int</code><p>
-   Возвращает количество воспроизводимых звуков.
-   
-   </p><p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code>int</code> &mdash;  Возвращает количество звуков которые воспроизводятся в данный момент времени.
-   </td>
-</tr>
-</table>
-</div>
-<a name="pause()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">pause</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function pause():void</code><p>
-   Ставит воспроизведение всех звуков на паузу.
-   </p></div>
-<a name="play()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">play</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function play(aName:String, aSource:<a href="AntEntity.html">AntEntity</a> = null, aSingle:Boolean = false, aRepeats:int = 1):<a href="../anthill/AntSound.html">AntSound</a></code><p>
-   Запускает воспроизведение звука с указанным именем.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звука который необходимо воспроизвести.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aSource</span>:<a href="AntEntity.html">AntEntity</a></code> (default = <code>null</code>)<code></code> &mdash;  Объект-источник звука.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aSingle</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Флаг определяющий могут ли быть запущены иные копии данного звука.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aRepeats</span>:int</code> (default = <code>1</code>)<code></code> &mdash;  Количество повторов воспроизведения звука.
-   </td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code><a href="../anthill/AntSound.html">AntSound</a></code> &mdash; 
-                         Возвращает указатель на экземпляр звука.
-   
-                        
-                     </td>
-</tr>
-</table>
-</div>
-<a name="recycle()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">recycle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function recycle(aName:String):<a href="../anthill/AntSound.html">AntSound</a></code><p>
-   Возвращает ранее использованный или новый звук для нового использования.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звука который необходимо получить.
-   </td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code><a href="../anthill/AntSound.html">AntSound</a></code> &mdash; 
-                         Возвращает указатель на экземпляр звука для использования.
-   
-                        
-                     </td>
-</tr>
-</table>
-</div>
-<a name="remove()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">remove</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function remove(aSound:<a href="AntSound.html">AntSound</a>, aSplice:Boolean = false):<a href="../anthill/AntSound.html">AntSound</a></code><p>
-   Удаляет экземпляр звука из менеджера.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aSound</span>:<a href="AntSound.html">AntSound</a></code> &mdash;  Звук который необходимо удалить.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aSplice</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Флаг определяющий необходимо ли удалить так же ячейку которую занимал удаляемый звук.
-   </td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code><a href="../anthill/AntSound.html">AntSound</a></code> &mdash; 
-                         Возвращает указатель на удаленный звук.
-   
-                        
-                     </td>
-</tr>
-</table>
-</div>
-<a name="removeListener()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">removeListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function removeListener(aListener:<a href="AntEntity.html">AntEntity</a>, aSplice:Boolean = false):<a href="../anthill/AntEntity.html">AntEntity</a></code><p>
-   Удаляет слушателя звуков из менеджера.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aListener</span>:<a href="AntEntity.html">AntEntity</a></code> &mdash;  Слушатель которого необходимо удалить.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aSplice</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Если true, то ячейка занимаемая слушателем звуков в массиве так же будет удалена.
-   </td>
-</tr>
-</table>
-<p></p>
-<span class="label">Returns</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20"></td><td><code><a href="../anthill/AntEntity.html">AntEntity</a></code> &mdash; 
-                         Возвращает указатель на удаленного слушателя.
-   
-                        
-                     </td>
-</tr>
-</table>
-</div>
-<a name="resume()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">resume</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function resume():void</code><p>
-   Возобновляет воспроизведение всех звуков.
-   </p></div>
-<a name="stop()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">stop</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function stop(aName:String, aSource:<a href="AntEntity.html">AntEntity</a> = null):void</code><p>
-   Останавливает воспроизведение всех звуков с указанным именем. Если источник звука не указан, то будут остановлены 
-   все звуки с указанным именем, иначе только звуки с указанным именем для указанного источника звука.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звуков которые необходимо остановить.
-   </td>
-</tr>
-<tr>
-<td class="paramSpacer">&nbsp;</td>
-</tr>
-<tr>
-<td width="20px"></td><td><code><span class="label">aSource</span>:<a href="AntEntity.html">AntEntity</a></code> (default = <code>null</code>)<code></code> &mdash;  Сущность для которой необходимо остановить воспроизведение звуков с указанным именем.
-   </td>
-</tr>
-</table>
-</div>
-<a name="stopAll()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">stopAll</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function stopAll(aSource:<a href="AntEntity.html">AntEntity</a> = null):void</code><p>
-   Останавливает воспроизведение всех звуков. Если указан источник звука, то будет остановлено воспроизведение всех звуков только
-   для указанного источника. Если источник звука не указан, то будут остановлены абсолютно все звуки.
-   
-   </p><span class="label">Parameters</span>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td width="20px"></td><td><code><span class="label">aSource</span>:<a href="AntEntity.html">AntEntity</a></code> (default = <code>null</code>)<code></code> &mdash;  Сущность для которой необходимо остановить воспроизведение всех звуков.
-   </td>
-</tr>
-</table>
-</div>
-<a name="update()"></a>
-<table cellspacing="0" cellpadding="0" class="detailHeader">
-<tr>
-<td class="detailHeaderName">update</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
-</tr>
-</table>
-<div class="detailBody">
-<code>public function update():void</code><p>
-   Обработчик всех звуков.
-   </p></div>
-<br>
-<br>
-<hr>
-<br>
-<p></p>
-<center class="copyright"> 
-</center>
-</div>
-</body>
-</html>
-<!-- -->
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">API Documentation</td><td class="titleTableTopNav" align="right"><a href="../../../package-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../class-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../all-index-A.html" onclick="loadClassListFrame('../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../index.html?ru/antkarlov/anthill/AntSoundManager.html&amp;ru/antkarlov/anthill/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">AntSoundManager</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("AntSoundManager"); titleBar_setSubNav(false,true,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">ru.antkarlov.anthill</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  AntSoundManager</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">AntSoundManager  <img src="../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> Object</td></tr></table><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Language Version :&nbsp;</b></td><td>ActionScript 3</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Since :&nbsp;</b></td><td>05.09.2012</td></tr></table><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Runtime Versions :&nbsp;</b></td><td>AIR 1.0, Flash Player  9.0.0</td></tr></table><p></p><p></p><p></p>
+	 Звуковой менеджер используется для взаимодействия со звуковыми сущностями.
+	 
+	 <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#baseURL" class="signatureLink">baseURL</a> : String<div class="summaryTableDescription">
+		 Базовый путь для потоковых звуков если они все находятся в одном месте.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#listeners" class="signatureLink">listeners</a> : Array<div class="summaryTableDescription">
+		 Массив с указателями на слушателей звуков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#mute" class="signatureLink">mute</a> : Boolean<div class="summaryTableDescription">
+		 Флаг определяющий возможно ли воспроизведение звуков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#numSounds" class="signatureLink">numSounds</a> : int<div class="summaryTableDescription">
+		 Количество звуков в менеджере.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#radius" class="signatureLink">radius</a> : Number<div class="summaryTableDescription">
+		 Радиус в пределах которого слушатели могут слышать звуки.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#sounds" class="signatureLink">sounds</a> : Array<div class="summaryTableDescription">
+		 Массив со всеми звуками которыми управляет данный менеджер.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#volume" class="signatureLink">volume</a> : Number<div class="summaryTableDescription">
+		 Общая громкость для всех звуков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr></table></div><a name="protectedPropertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Protected Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProtectedProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#_classes" class="signatureLink">_classes</a> : <a href="../../../ru/antkarlov/anthill/AntStorage.html">AntStorage</a><div class="summaryTableDescription">
+		 Хранилище классов на заэмбендженные звуки.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#_streams" class="signatureLink">_streams</a> : <a href="../../../ru/antkarlov/anthill/AntStorage.html">AntStorage</a><div class="summaryTableDescription">
+		 Хранилище названий/путей до потоковых звуков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#AntSoundManager()" class="signatureLink">AntSoundManager</a>()</div><div class="summaryTableDescription">
+		 </div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#add()" class="signatureLink">add</a>(aSound:<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a>):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></div><div class="summaryTableDescription">
+		 Добавляет экземпляр звука в менеджер.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#addEmbedded()" class="signatureLink">addEmbedded</a>(aSoundClass:Class, aName:String = null):void</div><div class="summaryTableDescription">
+		 Добавляет оригинальный класс звука.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#addListener()" class="signatureLink">addListener</a>(aListener:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a>):<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></div><div class="summaryTableDescription">
+		 Добавляет слушателя звуков в менеджер.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#addStream()" class="signatureLink">addStream</a>(aURL:String, aName:String = null):void</div><div class="summaryTableDescription">
+		 Добавляет имя файла до потокового звука размещенного где-либо.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#clear()" class="signatureLink">clear</a>():void</div><div class="summaryTableDescription">
+		 Очищает все звуки и слушателей.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#containsListener()" class="signatureLink">containsListener</a>(aListener:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a>):Boolean</div><div class="summaryTableDescription">
+		 Проверяет наличие слушателя в менеджере.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getAvailable()" class="signatureLink">getAvailable</a>(aName:String):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></div><div class="summaryTableDescription">
+		 Возвращает доступный звук с указанным именем.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#isPlaying()" class="signatureLink">isPlaying</a>(aName:String, aSource:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a> = null):Boolean</div><div class="summaryTableDescription">
+		 Проверяет проигрывается ли звук с указанным именем.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#numDead()" class="signatureLink">numDead</a>():int</div><div class="summaryTableDescription">
+		 Возвращает количество "мертвых" звуков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#numLiving()" class="signatureLink">numLiving</a>():int</div><div class="summaryTableDescription">
+		 Возвращает количество воспроизводимых звуков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#pause()" class="signatureLink">pause</a>():void</div><div class="summaryTableDescription">
+		 Ставит воспроизведение всех звуков на паузу.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#play()" class="signatureLink">play</a>(aName:String, aSource:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a> = null, aSingle:Boolean = false, aRepeats:int = 1):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></div><div class="summaryTableDescription">
+		 Запускает воспроизведение звука с указанным именем.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#recycle()" class="signatureLink">recycle</a>(aName:String):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></div><div class="summaryTableDescription">
+		 Возвращает ранее использованный или новый звук для нового использования.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#remove()" class="signatureLink">remove</a>(aSound:<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a>, aSplice:Boolean = false):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></div><div class="summaryTableDescription">
+		 Удаляет экземпляр звука из менеджера.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#removeListener()" class="signatureLink">removeListener</a>(aListener:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a>, aSplice:Boolean = false):<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></div><div class="summaryTableDescription">
+		 Удаляет слушателя звуков из менеджера.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#resume()" class="signatureLink">resume</a>():void</div><div class="summaryTableDescription">
+		 Возобновляет воспроизведение всех звуков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#stop()" class="signatureLink">stop</a>(aName:String, aSource:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a> = null):void</div><div class="summaryTableDescription">
+		 Останавливает воспроизведение всех звуков с указанным именем.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#stopAll()" class="signatureLink">stopAll</a>(aSource:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a> = null):void</div><div class="summaryTableDescription">
+		 Останавливает воспроизведение всех звуков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#update()" class="signatureLink">update</a>():void</div><div class="summaryTableDescription">
+		 Обработчик всех звуков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr></table></div><a name="protectedMethodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Protected Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProtectedMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#extractSound()" class="signatureLink">extractSound</a>(aName:String):Sound</div><div class="summaryTableDescription">
+		 Извлекает звук с указанным именем из хранилища заэмбедженных звуков или из потоков.</div></td><td class="summaryTableOwnerCol">AntSoundManager</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="_classes"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">_classes</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>protected var _classes:<a href="../../../ru/antkarlov/anthill/AntStorage.html">AntStorage</a></code><p></p><p></p><p>
+		 Хранилище классов на заэмбендженные звуки.
+		 </p></div><a name="propertyDetail"></a><a name="_streams"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">_streams</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>protected var _streams:<a href="../../../ru/antkarlov/anthill/AntStorage.html">AntStorage</a></code><p></p><p></p><p>
+		 Хранилище названий/путей до потоковых звуков.
+		 </p></div><a name="propertyDetail"></a><a name="baseURL"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">baseURL</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var baseURL:String</code><p></p><p></p><p>
+		 Базовый путь для потоковых звуков если они все находятся в одном месте.
+		 </p><p> The default value is <code>""</code>.</p></div><a name="propertyDetail"></a><a name="listeners"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">listeners</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var listeners:Array</code><p></p><p></p><p>
+		 Массив с указателями на слушателей звуков. Если нет ни одного слушателя,
+		 то для звуков с источниками рассчитывается стерео-эффект исходя из наличия и положения камер.
+		 </p></div><a name="propertyDetail"></a><a name="mute"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">mute</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var mute:Boolean</code><p></p><p></p><p>
+		 Флаг определяющий возможно ли воспроизведение звуков.
+		 </p><p> The default value is <code>false</code>.</p></div><a name="propertyDetail"></a><a name="numSounds"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">numSounds</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var numSounds:int</code><p></p><p></p><p>
+		 Количество звуков в менеджере. Может отличаться от реального количества звуков.
+		 </p></div><a name="propertyDetail"></a><a name="radius"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">radius</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var radius:Number</code><p></p><p></p><p>
+		 Радиус в пределах которого слушатели могут слышать звуки. Используется для рассчета стерео-эффекта.
+		 </p><p> The default value is <code>500</code>.</p></div><a name="propertyDetail"></a><a name="sounds"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">sounds</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var sounds:Array</code><p></p><p></p><p>
+		 Массив со всеми звуками которыми управляет данный менеджер.
+		 </p></div><a name="propertyDetail"></a><a name="volume"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">volume</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var volume:Number</code><p></p><p></p><p>
+		 Общая громкость для всех звуков.
+		 </p><p> The default value is <code>1</code>.</p></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="AntSoundManager()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">AntSoundManager</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function AntSoundManager()</code><p></p><p>
+		 </p></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="add()"></a><a name="add(ru.antkarlov.anthill.AntSound)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">add</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public function add(aSound:<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a>):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code><p></p><p></p><p>
+		 Добавляет экземпляр звука в менеджер.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aSound</span>:<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code></td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code> &mdash; Возвращает указатель на добавленный экземпляр звука.
+		 </td></tr></table></div><a name="addEmbedded()"></a><a name="addEmbedded(Class,String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">addEmbedded</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function addEmbedded(aSoundClass:Class, aName:String = null):void</code><p></p><p></p><p>
+		 Добавляет оригинальный класс звука.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aSoundClass</span>:Class</code> &mdash;  Оригинальный класс звука который включен в fla или swc.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aName</span>:String</code> (default = <code>null</code>)<code></code> &mdash;  Имя звука по которому можно вызвать его воспроизведение. Если имя не указано, то звук будет доступен по имени оригинального класса.
+		 </td></tr></table></p></div><a name="addListener()"></a><a name="addListener(ru.antkarlov.anthill.AntEntity)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">addListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function addListener(aListener:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a>):<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code><p></p><p></p><p>
+		 Добавляет слушателя звуков в менеджер. Слушателем звуков является персонаж или некий объект
+		 исходя из положения которого рассчитывается стерео-эффект для звуков.
+		 <p>Примечание: Если менеджер звуков не имеет ни одного слушателя, то стерео-эффект для звуков рассчитывается
+		 на основе камер. То есть в таком случае слушателями будут центры камер.</p>
+		 <p>Внимание: Стерео-эффект рассчитывается для звуков только в том случае, если для них указан объект источник.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aListener</span>:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code> &mdash;  Слушатель которого необходимо добавить.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code> &mdash; Возвращает указатель на добавленного слушателя.
+		 </td></tr></table></div><a name="addStream()"></a><a name="addStream(String,String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">addStream</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function addStream(aURL:String, aName:String = null):void</code><p></p><p></p><p>
+		 Добавляет имя файла до потокового звука размещенного где-либо.
+		 <p>Внимание: В качестве потоковых звуков могут быть файлы только в формате mp3.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aURL</span>:String</code> &mdash;  Путь и/или имя файла.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aName</span>:String</code> (default = <code>null</code>)<code></code> &mdash;  Имя звука по которому можно вызвать его воспроизведение. Если имя не указано, то звук будет доступен по указанному пути и/или имени файла.
+		 </td></tr></table></p></div><a name="clear()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">clear</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function clear():void</code><p></p><p></p><p>
+		 Очищает все звуки и слушателей.
+		 </p></div><a name="containsListener()"></a><a name="containsListener(ru.antkarlov.anthill.AntEntity)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">containsListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function containsListener(aListener:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a>):Boolean</code><p></p><p></p><p>
+		 Проверяет наличие слушателя в менеджере.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aListener</span>:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code> &mdash;  Слушател наличие которого необходимо проверить.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Boolean</code> &mdash; Возвращает true если слушатель уже добавлен в менеджер.
+		 </td></tr></table></div><a name="extractSound()"></a><a name="extractSound(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">extractSound</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> protected function extractSound(aName:String):Sound</code><p></p><p></p><p>
+		 Извлекает звук с указанным именем из хранилища заэмбедженных звуков или из потоков.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звука который необходимо получить.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Sound</code> &mdash; Возвращает указатель на экземпляр звука.
+		 </td></tr></table></div><a name="getAvailable()"></a><a name="getAvailable(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getAvailable</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function getAvailable(aName:String):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code><p></p><p></p><p>
+		 Возвращает доступный звук с указанным именем.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звука который необходимо получить.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code> &mdash; Возвращает указатель на доступный звук или null если доступных звуков с указанным именем нет.
+		 </td></tr></table></div><a name="isPlaying()"></a><a name="isPlaying(String,ru.antkarlov.anthill.AntEntity)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">isPlaying</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function isPlaying(aName:String, aSource:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a> = null):Boolean</code><p></p><p></p><p>
+		 Проверяет проигрывается ли звук с указанным именем. Если источник звука не указан, то проверяются все звуки с указанным 
+		 именем, иначе проигрывание звуков с указанным имемен для указанного источника.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Сущность для которой необходимо проверить наличие проигрываемого звука.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aSource</span>:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code> (default = <code>null</code>)<code></code></td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Boolean</code> &mdash; Возвращает true если звук с указанным именем проигрывается
+		 </td></tr></table></div><a name="numDead()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">numDead</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function numDead():int</code><p></p><p></p><p>
+		 Возвращает количество "мертвых" звуков.
+		 
+		 </p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>int</code> &mdash; Возвращает количество не используемых звуков.
+		 </td></tr></table></div><a name="numLiving()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">numLiving</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function numLiving():int</code><p></p><p></p><p>
+		 Возвращает количество воспроизводимых звуков.
+		 
+		 </p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>int</code> &mdash; Возвращает количество звуков которые воспроизводятся в данный момент времени.
+		 </td></tr></table></div><a name="pause()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">pause</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function pause():void</code><p></p><p></p><p>
+		 Ставит воспроизведение всех звуков на паузу.
+		 </p></div><a name="play()"></a><a name="play(String,ru.antkarlov.anthill.AntEntity,Boolean,int)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">play</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function play(aName:String, aSource:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a> = null, aSingle:Boolean = false, aRepeats:int = 1):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code><p></p><p></p><p>
+		 Запускает воспроизведение звука с указанным именем.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звука который необходимо воспроизвести.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aSource</span>:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code> (default = <code>null</code>)<code></code> &mdash;  Объект-источник звука.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aSingle</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Флаг определяющий могут ли быть запущены иные копии данного звука.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aRepeats</span>:int</code> (default = <code>1</code>)<code></code> &mdash;  Количество повторов воспроизведения звука.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code> &mdash; Возвращает указатель на экземпляр звука.
+		 </td></tr></table></div><a name="recycle()"></a><a name="recycle(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">recycle</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function recycle(aName:String):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code><p></p><p></p><p>
+		 Возвращает ранее использованный или новый звук для нового использования.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звука который необходимо получить.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code> &mdash; Возвращает указатель на экземпляр звука для использования.
+		 </td></tr></table></div><a name="remove()"></a><a name="remove(ru.antkarlov.anthill.AntSound,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">remove</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function remove(aSound:<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a>, aSplice:Boolean = false):<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code><p></p><p></p><p>
+		 Удаляет экземпляр звука из менеджера.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aSound</span>:<a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code> &mdash;  Звук который необходимо удалить.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aSplice</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Флаг определяющий необходимо ли удалить так же ячейку которую занимал удаляемый звук.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../ru/antkarlov/anthill/AntSound.html">AntSound</a></code> &mdash; Возвращает указатель на удаленный звук.
+		 </td></tr></table></div><a name="removeListener()"></a><a name="removeListener(ru.antkarlov.anthill.AntEntity,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">removeListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function removeListener(aListener:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a>, aSplice:Boolean = false):<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code><p></p><p></p><p>
+		 Удаляет слушателя звуков из менеджера.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aListener</span>:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code> &mdash;  Слушатель которого необходимо удалить.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aSplice</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash;  Если true, то ячейка занимаемая слушателем звуков в массиве так же будет удалена.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code> &mdash; Возвращает указатель на удаленного слушателя.
+		 </td></tr></table></div><a name="resume()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">resume</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function resume():void</code><p></p><p></p><p>
+		 Возобновляет воспроизведение всех звуков.
+		 </p></div><a name="stop()"></a><a name="stop(String,ru.antkarlov.anthill.AntEntity)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">stop</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function stop(aName:String, aSource:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a> = null):void</code><p></p><p></p><p>
+		 Останавливает воспроизведение всех звуков с указанным именем. Если источник звука не указан, то будут остановлены 
+		 все звуки с указанным именем, иначе только звуки с указанным именем для указанного источника звука.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aName</span>:String</code> &mdash;  Имя звуков которые необходимо остановить.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">aSource</span>:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code> (default = <code>null</code>)<code></code> &mdash;  Сущность для которой необходимо остановить воспроизведение звуков с указанным именем.
+		 </td></tr></table></p></div><a name="stopAll()"></a><a name="stopAll(ru.antkarlov.anthill.AntEntity)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">stopAll</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function stopAll(aSource:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a> = null):void</code><p></p><p></p><p>
+		 Останавливает воспроизведение всех звуков. Если указан источник звука, то будет остановлено воспроизведение всех звуков только
+		 для указанного источника. Если источник звука не указан, то будут остановлены абсолютно все звуки.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">aSource</span>:<a href="../../../ru/antkarlov/anthill/AntEntity.html">AntEntity</a></code> (default = <code>null</code>)<code></code> &mdash;  Сущность для которой необходимо остановить воспроизведение всех звуков.
+		 </td></tr></table></p></div><a name="update()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">update</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function update():void</code><p></p><p></p><p>
+		 Обработчик всех звуков.
+		 </p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Sun Feb 17 2013, 08:57 AM +04:00  </center></div></body></html><!--<br/>Sun Feb 17 2013, 08:57 AM +04:00  -->

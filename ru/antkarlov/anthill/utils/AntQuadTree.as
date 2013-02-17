@@ -1,7 +1,7 @@
 package ru.antkarlov.anthill.utils
 {
 	import ru.antkarlov.anthill.debug.AntDrawer;
-	import ru.antkarlov.anthill.AntRect;
+	import ru.antkarlov.anthill.*;
 	
 	/**
 	 * Древовидный список сущностей для быстрой обработки большого количества объектов.
