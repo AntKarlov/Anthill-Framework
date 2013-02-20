@@ -992,8 +992,7 @@ package ru.antkarlov.anthill
 				tile.active = false;
 				tile.addAnimation(_internalTileSet);
 				tile.gotoAndStop(i + 1);
-				tile.x = _rect.x + _tileOffsetX * _tileWidth;
-				tile.y = _rect.y + _tileOffsetY * _tileHeight;
+				tile.reset(_rect.x + _tileOffsetX * _tileWidth, _rect.y + _tileOffsetY * _tileHeight);
 				tiles[i] = tile;
 				add(tile);
 				_processCurrent++;
