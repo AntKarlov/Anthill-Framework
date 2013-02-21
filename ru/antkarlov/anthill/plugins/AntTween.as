@@ -48,6 +48,12 @@ package ru.antkarlov.anthill.plugins
 		public var nextTween:AntTween;
 		
 		/**
+		 * Определяет автоматический переход к следующему твину, если он указан.
+		 * @default    true
+		 */
+		public var autoStartOfNextTween:Boolean;
+		
+		/**
 		 * Определяет количество циклов выполнения.
 		 * @default    1
 		 */
@@ -183,6 +189,7 @@ package ru.antkarlov.anthill.plugins
 		{
 			super();
 			_isStarted = false;
+			autoStartOfNextTween = true;
 			reset(aTarget, aTime, aTransition);
 		}
 		
@@ -440,6 +447,10 @@ package ru.antkarlov.anthill.plugins
 				{
 					stop();
 					eventComplete.send(completeArgs);
+					if (autoStartOfNextTween && nextTween != null)
+					{
+						nextTween.start();
+					}
 				}
 			}
 			
