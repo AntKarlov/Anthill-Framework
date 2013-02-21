@@ -139,37 +139,37 @@ package ru.antkarlov.anthill
 				aClip.gotoAndStop(i);
 				childNextFrame(aClip);
 				rect = aClip.getBounds(aClip);
-                rect.width = Math.ceil(rect.width) + INDENT_FOR_FILTER_DOUBLED;
-                rect.height = Math.ceil(rect.height) + INDENT_FOR_FILTER_DOUBLED;
-                
-                flooredX = AntMath.floor(rect.x) - INDENT_FOR_FILTER;
-                flooredY = AntMath.floor(rect.y) - INDENT_FOR_FILTER;
-                mtx.tx = -flooredX;
-                mtx.ty = -flooredY;
-
-                scratchBitmapData = new BitmapData(rect.width, rect.height, true, 0);
-                scratchBitmapData.draw(aClip, mtx);
-                
-                var trimBounds:Rectangle = scratchBitmapData.getColorBoundsRect(0xFF000000, 0x00000000, false);
-                trimBounds.x -= 1;
-                trimBounds.y -= 1;
-                trimBounds.width += 2;
-                trimBounds.height += 2;
-                
-                var bmpData:BitmapData = new BitmapData(trimBounds.width, trimBounds.height, true, 0);
-                bmpData.copyPixels(scratchBitmapData, trimBounds, DEST_POINT);
-                
-                flooredX += trimBounds.x;
-                flooredY += trimBounds.y;
-
-                frames[frames.length] = bmpData;
-                offsetX[offsetX.length] = flooredX;
-                offsetY[offsetY.length] = flooredY;
+				rect.width = Math.ceil(rect.width) + INDENT_FOR_FILTER_DOUBLED;
+				rect.height = Math.ceil(rect.height) + INDENT_FOR_FILTER_DOUBLED;
+				
+				flooredX = AntMath.floor(rect.x) - INDENT_FOR_FILTER;
+				flooredY = AntMath.floor(rect.y) - INDENT_FOR_FILTER;
+				mtx.tx = -flooredX;
+				mtx.ty = -flooredY;
+				
+				scratchBitmapData = new BitmapData(rect.width, rect.height, true, 0);
+				scratchBitmapData.draw(aClip, mtx);
+				
+				var trimBounds:Rectangle = scratchBitmapData.getColorBoundsRect(0xFF000000, 0x00000000, false);
+				trimBounds.x -= 1;
+				trimBounds.y -= 1;
+				trimBounds.width += 2;
+				trimBounds.height += 2;
+				
+				var bmpData:BitmapData = new BitmapData(trimBounds.width, trimBounds.height, true, 0);
+				bmpData.copyPixels(scratchBitmapData, trimBounds, DEST_POINT);
+				
+				flooredX += trimBounds.x;
+				flooredY += trimBounds.y;
+				
+				frames[frames.length] = bmpData;
+				offsetX[offsetX.length] = flooredX;
+				offsetY[offsetY.length] = flooredY;
 				
 				width = (width < trimBounds.width) ? trimBounds.width : width;
 				height = (height < trimBounds.height) ? trimBounds.height : height;
-
-                scratchBitmapData.dispose();
+				
+				scratchBitmapData.dispose();
 				i++;
 			}
 		}
@@ -209,7 +209,7 @@ package ru.antkarlov.anthill
 				rect.x = rect.y = 0;
 				rect.width = aFrameWidth;
 				rect.height = aFrameHeight;
-							
+				
 				var n:int = frames.length = numFramesX * numFramesY;
 				var i:int = 0;
 				while (i < n)
@@ -224,17 +224,22 @@ package ru.antkarlov.anthill
 					
 					(aFlip) ? frames[n-i-1] = bmpData : frames[i] = bmpData;
 					/*frames[frames.length] = bmpData;*/
-	                offsetX[offsetX.length] = aOriginX;
-	                offsetY[offsetY.length] = aOriginY;
+					offsetX[offsetX.length] = aOriginX;
+					offsetY[offsetY.length] = aOriginY;
 					
 					i++;
 				}
+				
+				width = aFrameWidth;
+				height = aFrameHeight;
 			}
 			else
 			{
 				frames[frames.length] = pixels;
 				offsetX[offsetX.length] = aOriginX;
-                offsetY[offsetY.length] = aOriginY;
+				offsetY[offsetY.length] = aOriginY;
+				width = pixels.width;
+				height = pixels.height;
 			}
 			
 			totalFrames = frames.length;
