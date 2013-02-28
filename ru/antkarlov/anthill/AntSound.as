@@ -5,6 +5,7 @@ package ru.antkarlov.anthill
 	import flash.media.SoundChannel;
 	import flash.events.Event;
 	
+	import ru.antkarlov.anthill.signals.AntSignal;
 	import ru.antkarlov.anthill.utils.AntRating;
 	
 	/**
@@ -44,7 +45,7 @@ package ru.antkarlov.anthill
 		/**
 		 * @private
 		 */
-		public var eventComplete:AntEvent;
+		public var eventComplete:AntSignal;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -148,7 +149,7 @@ package ru.antkarlov.anthill
 			name = aName;
 			parent = null;
 			listeners = null;
-			eventComplete = new AntEvent();
+			eventComplete = new AntSignal(AntSound);
 			
 			_sound = aSound;
 			_paused = false;
@@ -178,7 +179,7 @@ package ru.antkarlov.anthill
 		{
 			kill();
 			
-			eventComplete.clear();
+			eventComplete.destroy();
 			eventComplete = null;
 			
 			if (parent != null)
@@ -480,7 +481,7 @@ package ru.antkarlov.anthill
 		protected function soundCompleteHandler(event:Event):void
 		{
 			kill();
-			eventComplete.send([ this ]);
+			eventComplete.dispatch(this);
 		}
 		
 		//---------------------------------------
