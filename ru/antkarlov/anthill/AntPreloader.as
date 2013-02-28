@@ -8,7 +8,12 @@ package ru.antkarlov.anthill
 	import flash.utils.getDefinitionByName;
 	
 	/**
-	 * Простой прелоадер. От этого класса следует наследовать свой прелоадер.
+	 * Базовый прелодаер для вашего приложения. 
+	 * 
+	 * <p>Чтобы реализовать свой анимированный прелоадер, унаследуйте от этого класса
+	 * свой прелоадер и перекройте метод <code>update()</code>, в этом методы вы можете
+	 * реализовать свою анимированную полосу загрузки. В качестве аргумента в метод 
+	 * <code>update()</code> передается текущий процент хода загрузки в промежутке от 0 до 1.</p>
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -18,7 +23,6 @@ package ru.antkarlov.anthill
 	 */
 	public class AntPreloader extends MovieClip
 	{
-		
 		//---------------------------------------
 		// PUBLIC VARIABLES
 		//---------------------------------------
@@ -56,7 +60,11 @@ package ru.antkarlov.anthill
 		 */
 		public function update(aPercent:Number):void
 		{
-			// Стандартная полоса загрузки.
+			/*
+				Реализация стандартной полосы загрузки.
+				Чтобы создать свой визуальный стиль загрузчика,
+				перекройте этот метод.
+			*/ 
 			graphics.clear();
 			
 			var sw:int = stage.stageWidth;
@@ -66,12 +74,8 @@ package ru.antkarlov.anthill
 			graphics.lineTo(sw * 0.5 + 50, sh * 0.5 + 5);
 			
 			graphics.beginFill(0x000000, 1);
-			graphics.drawRect(sw * 0.5 - 50, sh, 100 * aPercent, 5);
+			graphics.drawRect(sw * 0.5 - 50, sh * 0.5, 100 * aPercent, 5);
 			graphics.endFill();
-			
-			/*graphics.beginFill(0xC2758B, 1);
-			graphics.drawRect(0, stage.stageHeight / 2 - 10, stage.stageWidth * aPercent, 20);
-			graphics.endFill();*/
 		}
 		
 		/**
@@ -115,11 +119,12 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Возвращает домен на котором размещена флешка.
-		 * <p>Внимание: Если флешка размещена на домене второго или третьего уровня то вернется имя домена первого уровня,
-		 * то есть если ваша игра размещена на "http://cache.armorgames.com/", то результат будет "armorgames.com".</p>
+		 * Возвращает домен первого и второго уровня на котором размещена программа.
 		 * 
-		 * @return		Вернет local если флешка запущена на локальном компьютере или адрес домена первого уровня "domain.com".
+		 * <p>Внимание: Если игра размещена на домене третьего уровня то результатом работы будет имя домена первого уровня и второго уровня,
+		 * то есть если ваша игра размещена на "http://subdomain.domain.com/", то результат будет равен "domain.com".</p>
+		 * 
+		 * @return		Вернет local если флешка запущена на локальном компьютере или домен первого и второго уровня "domain.com".
 		 */
 		protected function getHome():String
 		{
@@ -130,26 +135,29 @@ package ru.antkarlov.anthill
 			var LastDot:Number = home.lastIndexOf(".") - 1;
 			var domEnd:Number = home.lastIndexOf(".", LastDot) + 1;
 			home = home.substring(domEnd, home.length);
+			home = home.split(":")[0];			
 			return (home == "") ? "local" : home;
 		}
 		
 		/**
-		 * Реализация элементарного сайтлока. 
-		 * Пример использования:
-		 * <code>
-		 * if (atHome([ "local", "mygreatsite.com" ])) {
-		 *   // Можно играть.
-		 * } else { 
-		 *   // Нельзя играть
-		 * }
-		 * </code>
+		 * Реализация элементарного сайтлока.
 		 * 
-		 * @param	aHomes	 Список доменов на которых флешке разрешено находится.
-		 * @return		Возвращает true если флешка находится на одном из разрешенных доменов.
+		 * <p>Пример использования:</p>
+		 * 
+		 * <listing>
+		 * if (atHome([ "local", "mygreatsite.com" ])) {
+		 *   ..start game here
+		 * } else { 
+		 *   ..show warning message
+		 * }
+		 * </listing>
+		 * 
+		 * @param	aHomes	 Список доменов на запуск программы разрешен.
+		 * @return		Возвращает true если программа находится на одном из разрешенных доменов.
 		 */
 		protected function atHome(aHomes:Array):Boolean
 		{
-			return (aHomes.indexOf(getHome()) > -1) ? true : false;
+			return (aHomes.indexOf(getHome()) > -1);
 		}
 		
 	}
