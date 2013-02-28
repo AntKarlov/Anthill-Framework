@@ -1,8 +1,10 @@
 package ru.antkarlov.anthill
 {
+	import flash.display.BitmapData;
+	
+	import ru.antkarlov.anthill.events.*;
 	import ru.antkarlov.anthill.debug.AntDrawer;
 	import ru.antkarlov.anthill.utils.AntColor;
-	import flash.display.BitmapData;
 	
 	/**
 	 * Базовый класс для визуальных объектов которые можно вкладывать друг в друга.
@@ -13,7 +15,7 @@ package ru.antkarlov.anthill
 	 * @author Антон Карлов
 	 * @since  26.08.2012
 	 */
-	public class AntEntity extends AntBasic
+	public class AntEntity extends AntBasic implements IBubbleEventHandler
 	{
 		//---------------------------------------
 		// CLASS CONSTANTS
@@ -53,8 +55,14 @@ package ru.antkarlov.anthill
 		public var numChildren:int;
 		
 		/**
+		 * Флаг определяющий будут воскрешены вложенные сущности при вызове метода <code>revive()</code>
+		 * @default    false
+		 */
+		public var autoReviveChildren:Boolean;
+		
+		/**
 		 * Аналог атрибута <code>tag</code> в <code>AntBasic</code>. 
-		 * Используйте для сортировки сущностей.
+		 * Рекомендуется использовать для сортировки.
 		 * @default    0
 		 */
 		public var z:int;
@@ -220,7 +228,8 @@ package ru.antkarlov.anthill
 		public var health:Number;
 		
 		/**
-		 * @private
+		 * Указатель на маску которая применена к сущности.
+		 * @default    null
 		 */
 		public var mask:AntMask;
 		
@@ -264,6 +273,19 @@ package ru.antkarlov.anthill
 		 */
 		protected var _sortOrder:int;
 		
+		/**
+		 * Содержит номер объекта если он вложен в другую сущность.
+		 * Номером объекта является его номер в очереди обработки. 
+		 * Номер объекта рассчитывается каждый раз при вызове метода <code>preUpdate()</code>.
+		 * @default    -1
+		 */
+		internal var _depth:int;
+		
+		/**
+		 * Используется для автоматического рассчета номеров в очереди обработки объектов.
+		 */
+		static internal var DEPTH_ID:int = 0;
+		
 		//---------------------------------------
 		// CONSTRUCTOR
 		//---------------------------------------
@@ -278,6 +300,8 @@ package ru.antkarlov.anthill
 			parent = null;
 			children = null;
 			numChildren = 0;
+			autoReviveChildren = false;
+			_depth = -1;
             
 			z = 0;
 			x = 0;
@@ -377,6 +401,37 @@ package ru.antkarlov.anthill
 			}
 			
 			super.kill();
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function revive():void
+		{
+			super.revive();
+
+			if (autoReviveChildren && children != null)
+			{
+				var entity:AntEntity;
+				var i:int = 0;
+				while (i < numChildren)
+				{
+					entity = children[i++] as AntEntity;
+					if (entity != null && !entity.exists)
+					{
+						entity.revive();
+					}
+				}
+			}
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function preUpdate():void
+		{
+			super.preUpdate();
+			_depth = DEPTH_ID++;
 		}
 		
 		/**
@@ -602,6 +657,7 @@ package ru.antkarlov.anthill
 			
 			children[i] = null;
 			aEntity.parent = null;
+			aEntity._depth = -1;
 			
 			if (aSplice)
 			{
@@ -749,6 +805,7 @@ package ru.antkarlov.anthill
 					}
 					
 					entity.parent = null;
+					entity._depth = -1;
 				}
 				children[i] = null;
 			}
@@ -1225,6 +1282,24 @@ package ru.antkarlov.anthill
 		}
 		
 		//---------------------------------------
+		// IBubbleEventHandler Implementation
+		//---------------------------------------
+
+		//import ru.antkarlov.anthill.events.IBubbleEventHandler;
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function onEventBubbled(aEvent:IEvent):Boolean
+		{
+			/*
+				Перекройте этот метод чтобы перехватить и обработать всплывающее сообщение.
+			*/
+			
+			return true;
+		}
+		
+		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------
 		
@@ -1448,7 +1523,15 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		// GETTER / SETTERS
 		//---------------------------------------
-
+		
+		/**
+		 * Возвращает глубину обработки и рендера для сущности.
+		 */
+		public function get depth():int
+		{
+			return _depth;
+		}
+		
 		/**
 		 * Определяет имеются ли в сущности дочерние сущности.
 		 */
