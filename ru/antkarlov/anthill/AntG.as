@@ -39,14 +39,14 @@ package ru.antkarlov.anthill
 		/**
 		 * Версия обслуживания.
 		 */
-		public static const LIB_MAINTENANCE:uint = 0;
+		public static const LIB_MAINTENANCE:uint = 1;
 		
 		//---------------------------------------
 		// PUBLIC VARIABLES
 		//---------------------------------------
 		
 		/**
-		 * Указатель на stage.
+		 * Указатель на <code>stage</code>.
 		 * Устанавливается автоматически при инициализации.
 		 * @default    null
 		 */
@@ -107,13 +107,14 @@ package ru.antkarlov.anthill
 		/**
 		 * Указатель на последнюю добавленную камеру. Для безопасного получения указателя
 		 * на текущую камеру используйте метод: <code>AntG.getCamera();</code>
+		 * @default    null
 		 */
 		public static var camera:AntCamera;
 		
 		/**
-		 * Массив добавленных плагинов.
+		 * Список добавленных плагинов.
 		 */
-		public static var plugins:Array;
+		public static var plugins:Vector.<IPlugin>;
 				
 		/**
 		 * Указатель на класс для работы с мышкой.
@@ -129,7 +130,7 @@ package ru.antkarlov.anthill
 		 * Указатель на класс для работы со звуками.
 		 */
 		public static var sounds:AntSoundManager;
-				
+		
 		/**
 		 * Указатель на отладчик.
 		 */
@@ -148,58 +149,92 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Указатель на метод <code>track()</code> класса <code>AntMemory</code>, для добавления объектов в список слежения.
-		 * Пример использования <code>AntG.track(myObject);</code>.
-		 * <p>Чтобы посмотреть содержимое <code>AntMemory</code>, наберите в консоли команду "-gc", после чего будет принудительно
-		 * вызван сборщик мусора и выведена информация о всех объектах которые по каким-либо причинам сохранились в <code>AntMemory</code>.</p>
+		 * 
+		 * <p>Чтобы посмотреть содержимое <code>AntMemory</code>, наберите в консоли команду "-gc", после чего будет 
+		 * принудительно вызван сборщик мусора и выведена информация о всех объектах которые по каким-либо причинам 
+		 * сохранились в <code>AntMemory</code>.</p>
+		 * 
+		 * <p>Пример использования:</p>
+		 * <pre>AntG.track(myObject);</pre>
 		 */
 		public static var track:Function;
 		
 		/**
-		 * Указатель на метод <code>registerCommand()</code> класса <code>AntConsole</code> для быстрого добавления пользовательских
-		 * команд в консоль. Пример использования <code>AntG.registerCommand("test", myMethod, "Эта команда запускает тестовый метод.");</code>
+		 * Указатель на метод <code>registerCommand()</code> класса <code>AntConsole</code> 
+		 * для добавления простых пользовательских команд в консоль.
+		 * 
+		 * <p>Пример использования:</p>
+		 * <pre>AntG.registerCommand("test", myMethod, "Тестовый метод.");</pre>
 		 */
 		public static var registerCommand:Function;
 		
 		/**
-		 * Указатель на метод <code>unregisterCommand()</code> класса <code>AntConsole</code> для быстрого удаления зарегистрированных
-		 * пользовальских команд из консоли. Пример использования <code>AntG.unregisterCommand("test");</code>
+		 * Указатель на метод <code>registerCommandWithArgs()</code> класса <code>AntConsole</code>
+		 * для добавления пользовательских команд с поддержкой аргументов в консоль.
+		 * 
+		 * <p>Пример использования:</p>
+		 * <pre>AntG.registerCommandWithArgs("test", myMethod, [ String, int ], "Тестовый метод с аргументами.");</pre>
+		 */
+		public static var registerCommandWithArgs:Function;
+		
+		/**
+		 * Указатель на метод <code>unregisterCommand()</code> класса <code>AntConsole</code> для быстрого удаления 
+		 * зарегистрированных пользовальских команд из консоли.
+		 * 
 		 * <p>Примичание: в качестве идентификатора команды может быть указатель на метод который выполняет команда.</p>
+		 * 
+		 * <p>Пример использования:</p>
+		 * <pre>AntG.unregisterCommand("test");</pre>
 		 */
 		public static var unregisterCommand:Function;
 		
 		/**
-		 * Указатель на метод <code>log()</code> класса <code>AntConsole</code> для быстрого вывода любой информации в консоль.
-		 * Пример использования: <code>AntG.log(someData);</code>
+		 * Указатель на метод <code>log()</code> класса <code>AntConsole</code> для быстрого 
+		 * вывода любой информации в консоль.
+		 * 
+		 * <p>Пример использования:</p>
+		 * <pre>AntG.log(someData);</pre>
 		 */
 		public static var log:Function;
 		
 		/**
-		 * Указатель на метод <code>watchValue()</code> класса <code>AntMonitor</code> используется для добавления или обновления
-		 * значения в "мониторе". Пример использования: <code>AntG.watchValue("valueName", value);</code>
+		 * Указатель на метод <code>watchValue()</code> класса <code>AntMonitor</code> используется 
+		 * для добавления или обновления значения в "мониторе". 
+		 * 
+		 * <p>Пример использования:</p>
+		 * <pre>AntG.watchValue("valueName", value);</pre>
 		 */
 		public static var watchValue:Function;
 		
 		/**
-		 * Указатель на метод <code>unwatchValue()</code> класса <code>AntMonitor</code> используется для удаления записи о значении
-		 * из "монитора". Пример использования: <code>AntG.unwatchValue("valueName");</code>
+		 * Указатель на метод <code>unwatchValue()</code> класса <code>AntMonitor</code> используется
+		 * для удаления записи о значении из "монитора". 
+		 * 
+		 * <p>Пример использования:</p> 
+		 * <pre>AntG.unwatchValue("valueName");</pre>
 		 */
 		public static var unwatchValue:Function;
 		
 		/**
-		 * Указатель на метод <code>beginWatch()</code> класса <code>AntMonitor</code> используется для блокировки обновления окна
-		 * монитора при обновлении сразу двух и более значений в мониторе. Пример использования:
-		 * <code>
+		 * Указатель на метод <code>beginWatch()</code> класса <code>AntMonitor</code> используется
+		 * для блокировки обновления окна монитора при обновлении сразу двух и более значений 
+		 * в мониторе.
+		 * 
+		 * <p>Пример использования:</p>
+		 * 
+		 * <listing>
 		 * AntG.beginWatch();
 		 * AntG.watchValue("someValue1", value1);
 		 * AntG.watchValue("someValue2", value2);
 		 * AntG.endWatch();
-		 * </code>
+		 * </listing>
 		 */
 		public static var beginWatch:Function;
 		
 		/**
-		 * Указатель на метод <code>endWatch()</code> класса <code>AntMonitor</code> используется для снятия блокировки обновления окна
-		 * монитора при обновлнии сразу двух и более значений в мониторе.
+		 * Указатель на метод <code>endWatch()</code> класса <code>AntMonitor</code> используется 
+		 * для снятия блокировки обновления окна монитора при обновлнии сразу двух и более значений 
+		 * в мониторе.
 		 */
 		public static var endWatch:Function;
 		
@@ -234,7 +269,7 @@ package ru.antkarlov.anthill
 			heightHalf = stage.stageHeight * 0.5;
 			
 			cameras = [];
-			plugins = [];
+			plugins = new <IPlugin>[];
 			
 			mouse = new AntMouse();
 			keys = new AntKeyboard();
@@ -246,6 +281,7 @@ package ru.antkarlov.anthill
 			track = AntMemory.track;
 			
 			registerCommand = debugger.console.registerCommand;
+			registerCommandWithArgs = debugger.console.registerCommandWithArgs;
 			unregisterCommand = debugger.console.unregisterCommand;
 			log = debugger.console.log;
 			
@@ -257,8 +293,11 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Позволяет задать размеры окна вручную.
-		 * <p>Примичание: по умолчанию размер экрана определятся исходя из размера <code>stage.stageWidth</code> и <code>stage.stageHeight.</code></p>
-		 * <p>Внимание: размеры экрана никак не влияют на работу с камерами.</p>
+		 * 
+		 * <p>Примичание: по умолчанию размер экрана определятся исходя из размера <code>stage.stageWidth</code>
+		 * и <code>stage.stageHeight.</code></p>
+		 * 
+		 * <p>Внимание: изменение размеров экрана никак не влияет на работу с камерами.</p>
 		 * 
 		 * @param	aWidth	 Новая ширина экрана.
 		 * @param	aHeight	 Новая высота экрана.
@@ -269,6 +308,15 @@ package ru.antkarlov.anthill
 			height = aHeight;
 			widthHalf = aWidth * 0.5;
 			heightHalf = aHeight * 0.5;
+		}
+		
+		/**
+		 * Сбрасывает текущее состояние средств пользовательского ввода.
+		 */
+		public static function resetInput():void
+		{
+			mouse.reset();
+			keys.reset();
 		}
 		
 		/**
@@ -294,18 +342,15 @@ package ru.antkarlov.anthill
 		public static function updatePlugins():void
 		{
 			var i:int = 0;
-			var n:int = plugins.length;
+			const n:int = plugins.length;
 			var plugin:IPlugin;
 			while (i < n)
 			{
-				plugin = plugins[i] as IPlugin;
+				plugin = plugins[i++] as IPlugin;
 				if (plugin != null)
 				{
-					plugin.preUpdate();
 					plugin.update();
-					plugin.postUpdate();
 				}
-				i++;
 			}
 		}
 		
@@ -324,7 +369,7 @@ package ru.antkarlov.anthill
 			}
 			
 			var i:int = 0;
-			var n:int = plugins.length;
+			const n:int = plugins.length;
 			while (i < n)
 			{
 				if (plugins[i] == null)
@@ -335,7 +380,7 @@ package ru.antkarlov.anthill
 				i++;
 			}
 			
-			plugins[plugins.length] = aPlugin;
+			plugins.push(aPlugin);
 			return aPlugin;
 		}
 		
@@ -385,7 +430,7 @@ package ru.antkarlov.anthill
 			}
 			
 			var i:int = 0;
-			var n:int = cameras.length;
+			const n:int = cameras.length;
 			while (i < n)
 			{
 				if (cameras[i] == null)
@@ -397,7 +442,7 @@ package ru.antkarlov.anthill
 				i++;
 			}
 			
-			cameras[cameras.length] = aCamera;
+			cameras.push(aCamera);
 			camera = aCamera;
 			return aCamera;
 		}
@@ -428,6 +473,11 @@ package ru.antkarlov.anthill
 				cameras.splice(i, 1);
 			}
 			
+			if (camera == aCamera)
+			{
+				camera = null;
+			}
+			
 			return aCamera;
 		}
 		
@@ -451,6 +501,25 @@ package ru.antkarlov.anthill
 			
 			return null;
 		}
+		
+		/**
+		 * Переключает игровые состояния.
+		 * 
+		 * @param	aState	 Новое состояние на которое необходимо произвести переключение.
+		 */
+		public static function switchState(aState:AntState):AntState
+		{
+			if (_anthill != null)
+			{
+				_anthill.switchState(aState);
+			}
+			
+			return aState;
+		}
+		
+		//---------------------------------------
+		// GETTER / SETTERS
+		//---------------------------------------
 		
 		/**
 		 * Определяет используется в игре системный курсор или нет.
@@ -484,21 +553,6 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Переключает игровые состояния.
-		 * 
-		 * @param	aState	 Новое состояние на которое необходимо произвести переключение.
-		 */
-		public static function switchState(aState:AntState):AntState
-		{
-			if (_anthill != null)
-			{
-				_anthill.switchState(aState);
-			}
-			
-			return aState;
-		}
-		
-		/**
 		 * Возвращает указатель на текущее игровое состояние.
 		 */
 		public static function get state():AntState
@@ -507,7 +561,7 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * @private
+		 * Возвращает указатель на экземпляр Anthill.
 		 */
 		public static function get anthill():Anthill
 		{
@@ -532,7 +586,9 @@ package ru.antkarlov.anthill
 
 		/**
 		 * Возвращает кол-во объектов которые были отрисованы (попали в видимость одной или нескольких камер).
-		 * <p>Примичание: если один и тот же объект попадет в видимость двух камер, то такой объект будет посчитан дважды.</p>
+		 * 
+		 * <p>Примичание: если один и тот же объект попадет в видимость двух камер, то такой объект будет 
+		 * посчитан дважды.</p>
 		 */
 		public static function get numOnScreen():int
 		{
