@@ -1,5 +1,7 @@
 package ru.antkarlov.anthill
 {
+	import ru.antkarlov.anthill.signals.AntSignal;
+	
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.ByteArray;
 	import flash.utils.setTimeout;
@@ -56,18 +58,18 @@ package ru.antkarlov.anthill
 		/**
 		 * Событие срабатывающее при запуске процесса загрузки активов.
 		 */
-		public var eventStart:AntEvent;
+		public var eventStart:AntSignal;
 		
 		/**
 		 * Событие срабатывающее каждый шаг процесса загрузки активов.
-		 * В качестве аргумента передается текущий процент загрузки в диапазоне от 1 до 100.
+		 * В качестве аргумента передается текущий процент загрузки в диапазоне от 0 до 1.
 		 */
-		public var eventProcess:AntEvent;
+		public var eventProcess:AntSignal;
 		
 		/**
 		 * Событие срабатывающее при завершении процесса загрузки активов.
 		 */
-		public var eventComplete:AntEvent;
+		public var eventComplete:AntSignal;
 		
 		/**
 		 * Количество обрабатываемых активов за один шаг.
@@ -104,9 +106,9 @@ package ru.antkarlov.anthill
 			_index = 0;
 			_isStarted = false;
 			
-			eventStart = new AntEvent();
-			eventProcess = new AntEvent();
-			eventComplete = new AntEvent();
+			eventStart = new AntSignal(AntAssetLoader);
+			eventProcess = new AntSignal(AntAssetLoader, Number);
+			eventComplete = new AntSignal(AntAssetLoader);
 			countPerStep = 10;
 		}
 		
@@ -123,9 +125,9 @@ package ru.antkarlov.anthill
 			
 			_queue = null;
 			
-			eventStart.clear();
-			eventProcess.clear();
-			eventComplete.clear();
+			eventStart.destroy();
+			eventProcess.destroy();
+			eventComplete.destroy();
 			
 			eventStart = null;
 			eventProcess = null;
@@ -268,12 +270,12 @@ package ru.antkarlov.anthill
 			{
 				_isStarted = true;
 				_index = 0;
-				eventStart.send([ this ]);
+				eventStart.dispatch(this);
 				step();
 			}
 			else
 			{
-				eventComplete.send([ this ]);
+				eventComplete.dispatch(this);
 			}
 		}
 		
@@ -299,12 +301,12 @@ package ru.antkarlov.anthill
 			{
 				_queue.length = 0;
 				_isStarted = false;
-				eventComplete.send([ this ]);
+				eventComplete.dispatch(this);
 			}
 			else
 			{
 				setTimeout(step, 1);
-				eventProcess.send([ AntMath.toPercent(_index, _queue.length) ]);
+				eventProcess.dispatch(this, _index / _queue.length);
 			}
 		}
 		
@@ -351,7 +353,8 @@ package ru.antkarlov.anthill
 						}
 						else
 						{
-							throw new Error("Atlas with key \"" + data.atlasKey + "\" not found. Add atlas into list before to making animations.");
+							throw new Error("Atlas with key \"" + data.atlasKey + "\" not found. Add atlas" +
+								"into list before to making animations.");
 						}
 					break;
 				}
