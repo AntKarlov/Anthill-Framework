@@ -4,6 +4,22 @@ package ru.antkarlov.anthill
 	import flash.geom.Rectangle;
 	import flash.geom.Point;
 	
+	import ru.antkarlov.anthill.signals.AntSignal;
+	
+	/**
+	 * Анимированная маска которая может быть применена к любой сущности.
+	 * 
+	 * <p>Работа с маской очень похожа на работу с актером. Для маски подходят точно
+	 * такие же анимации как и для актеров. При использовании анимации прозрачные области
+	 * кадров считаются как не прозрачные, а непрозрачные области являются своеобразным
+	 * окном в которое можно видеть что находится под маской.</p>
+	 * 
+	 * @langversion ActionScript 3
+	 * @playerversion Flash 9.0.0
+	 * 
+	 * @author Антон Карлов
+	 * @since  26.02.2013
+	 */
 	public class AntMask extends AntBasic
 	{
 		//---------------------------------------
@@ -11,23 +27,97 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		public var buffer:BitmapData;
 		
+		/**
+		 * Положение маски по X относительно сущности к которой она применена.
+		 * @default    0
+		 */
 		public var x:Number;
+		
+		/**
+		 * Положение маски по Y относительно сущности к которой она применена.
+		 * @default    0
+		 */
 		public var y:Number;
+		
+		/**
+		 * Размер маски по ширине, зависит от размера текущего кадра анимации.
+		 * @default    0
+		 */
 		public var width:int;
+		
+		/**
+		 * Размер маски по высоте, зависит от размера текущего кадра анимации.
+		 * @default    0
+		 */
 		public var height:int;
+		
+		/**
+		 * Глобальная позиция маски по X в игровом мире с учетом положения сущности
+		 * к которой применена маска.
+		 * @default    0
+		 */
 		public var globalX:Number;
+		
+		/**
+		 * Глобальная позиция маски по Y в игровом мире с учетом положения сущности
+		 * к которой применена маска.
+		 * @default    0
+		 */
 		public var globalY:Number;
+		
+		/**
+		 * Осевая точка маски.
+		 * @default    (0,0)
+		 */
 		public var origin:AntPoint;
 		
+		/**
+		 * Флаг определяющий следует ли выполнять заливку буфера маски.
+		 * @default    false
+		 */
 		public var fillBackground:Boolean;
+		
+		/**
+		 * Цвет которым будет заливаться буфер маски.
+		 * @default    0xFF000000
+		 */
 		public var backgroundColor:uint;
 		
+		/**
+		 * Номер текущего кадра с учетом скорости анимации. Значение может быть дробным.
+		 * @default    1
+		 */
 		public var currentFrame:Number;
+		
+		/**
+		 * Общее количество кадров для текущей анимации.
+		 * @default    1
+		 */
 		public var totalFrames:int;
+		
+		/**
+		 * Проигрывание анимации в обратном порядке.
+		 * @default    false
+		 */
 		public var reverse:Boolean;
+		
+		/**
+		 * Зациклинность воспроизведения анимации.
+		 * @default    true
+		 */
 		public var repeat:Boolean;
+		
+		/**
+		 * Скорость воспроизведения анимации.
+		 * @default    1
+		 */
 		public var animationSpeed:Number;
-		public var eventComplete:AntEvent;
+		
+		/**
+		 * Событие срабатывающее по окончанию проигрывания анимации.
+		 * Добавляемый метод должен иметь аргумент типа <code>function onComplete(actor:AntActor):void {}</code>
+		 */
+		public var eventComplete:AntSignal;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -68,7 +158,7 @@ package ru.antkarlov.anthill
 			_flashPointTarget = new Point();
 			
 			fillBackground = false;
-			backgroundColor = 0x000000;
+			backgroundColor = 0xFF000000;
 			
 			//--
 			currentFrame = 1;
@@ -76,7 +166,7 @@ package ru.antkarlov.anthill
 			reverse = false;
 			repeat = true;
 			animationSpeed = 1;
-			eventComplete = new AntEvent();
+			eventComplete = new AntSignal(AntMask);
 			
 			_animations = new AntStorage();
 			_curAnim = null;
@@ -96,7 +186,7 @@ package ru.antkarlov.anthill
 			_animations = null;
 			_curAnim = null;
 
-			eventComplete.clear();
+			eventComplete.destroy();
 			eventComplete = null;
 
 			_pixels = null;
@@ -164,7 +254,7 @@ package ru.antkarlov.anthill
 			}
 			else
 			{
-				throw new Error("Missing animation \"" + aName +"\".");
+				throw new Error("AntMask: Missing animation \'" + aName +"\'.");
 			}
 		}
 		
@@ -389,7 +479,7 @@ package ru.antkarlov.anthill
 		protected function animComplete():void
 		{
 			if (!repeat) stop();
-			eventComplete.send([ this ]);
+			eventComplete.dispatch(this);
 		}
 		
 		//---------------------------------------
