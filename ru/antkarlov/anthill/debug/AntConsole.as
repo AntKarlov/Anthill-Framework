@@ -18,7 +18,35 @@ package ru.antkarlov.anthill.debug
 	import flash.text.TextFieldAutoSize;
 	
 	/**
-	 * Отладочная консоль с возможностью ввода команд и вывода любой информации.
+	 * Отладочная консоль позволяет выводить сообщений и предупреждения о работе игры
+	 * не зависимо от того в какой версии Flash Player запущена игра (Debugger или Release).
+	 * 
+	 * <p>По мимо вывода сообщений в консоли можно зарегистрировать пользовательские команды
+	 * и вызывать отладочные методы вводом команд. Реализована поддержка команд с аргументами.</p>
+	 * 
+	 * <p>Пример использования простых команд без аргументов:</p>
+	 * 
+	 * <listing>
+	 * // Метод простой команды
+	 * function testCommand():void {
+	 *   trace("test command executed!");
+	 * }
+	 * 
+	 * // Регистрация простой команды
+	 * AntG.console.registerCommand("test", testCommand, "Its a simple command.");
+	 * </listing>
+	 * 
+	 * <p>Пример использования сложных команд с аргументами:</p>
+	 * 
+	 * <listing>
+	 * // Метод команды с аргументами, количество аргументов не ограничено.
+	 * function testCommandWithArgs(aArg1:int, aArg2:String):void {
+	 *   trace("test command with arguments: " + aArg1 + " " + aArg2);
+	 * }
+	 * 
+	 * // Регистрация команды с аргументами в консоли.
+	 * AntG.console.registerCommandWithArgs("test_args", testCommandWithArgs, [ int, String ], "Its a command with arguments.");
+	 * </listing>
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -33,43 +61,30 @@ package ru.antkarlov.anthill.debug
 		//---------------------------------------
 		
 		/**
-		 * Определяет стандартный цвет текста.
+		 * Константы стандартных цветов.
 		 */
 		public static const DEFAULT:String = "def";
-		
-		/**
-		 * Определяет цвет текста для ошибок.
-		 */
 		public static const ERROR:String = "error";
-		
-		/**
-		 * Определяет цвет текста для какой-либо информации.
-		 */
 		public static const DATA:String = "data";
-		
-		/**
-		 * Определяет цвет текста для вывода результата.
-		 */
 		public static const RESULT:String = "result";
 		
-		/**
-		 * @private
-		 */
 		private const LINE_SPACING:int = -3;
-		
-		//---------------------------------------
-		// PUBLIC VARIABLES
-		//---------------------------------------
-		
-		/**
-		 * Определяет текущий цвет текста для вывода информации.
-		 * @default    DEFAULT
-		 */
-		public var color:String;
 		
 		//---------------------------------------
 		// PRIVATE VARIABLES
 		//---------------------------------------
+		
+		/**
+		 * Текущий цвет строки.
+		 * @default    0xFFFFFF
+		 */
+		protected var _color:uint;
+		
+		/**
+		 * Флаг определяющий залочен ли текущий цвет от смены.
+		 * @default    false
+		 */
+		protected var _lockColor:Boolean;
 		
 		/**
 		 * Номер последней строки.
@@ -77,14 +92,19 @@ package ru.antkarlov.anthill.debug
 		protected var _lineNum:int;
 		
 		/**
-		 * Хранилище зарегистрированных команд и методов.
+		 * Хранилище зарегистрированных методов.
 		 */
-		protected var _registry:AntStorage;
+		protected var _functions:AntStorage;
 		
 		/**
-		 * Хранилище текстовых подсказок для зарегистрированных команд.
+		 * Хранилище зарегистрированных описаний для команд.
 		 */
-		protected var _hints:AntStorage;
+		protected var _descriptions:AntStorage;
+		
+		/**
+		 * Хранилище зарегистрированных аргументов для команд.
+		 */
+		protected var _arguments:AntStorage;
 		
 		/**
 		 * Текстовое поле для ввода команд.
@@ -167,12 +187,13 @@ package ru.antkarlov.anthill.debug
 		{
 			super(aParent, aX, aY, 618, 180);
 			
-			color = DEFAULT;
-			
+			_color = 0xFFFFFF;
+			_lockColor = false;
 			_lineNum = 0;
 			
-			_registry = new AntStorage();
-			_hints = new AntStorage();
+			_functions = new AntStorage();
+			_descriptions = new AntStorage();
+			_arguments = new AntStorage();
 			
 			_background = new Sprite();
 			_mask = new Sprite();
@@ -191,14 +212,58 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * Регистрирует новую команду в консоли.
 		 * 
-		 * @param	aCommand	 Текстовая команда.
-		 * @param	aFunction	 Метод который будет вызываться при активации команды.
-		 * @param	aHint	 Краткое текстовое описание которое будет отображаться в помощи.
+		 * @param	aCommandName	 Текстовая команда.
+		 * @param	aFunction	 Метод который будет выполняться при активации команды.
+		 * @param	aDesc	 Краткое текстовое описание команды которое будет отображаться в списке зарегистрированных команд.
 		 */
-		public function registerCommand(aCommand:String, aFunction:Function, aHint:String = ""):void
+		public function registerCommand(aCommandName:String, aFunction:Function, aDesc:String = null):void
 		{
-			_registry.set(aCommand, aFunction);
-			_hints.set(aCommand, aHint);
+			if (_functions.containsKey(aCommandName))
+			{
+				log("Command '" + aCommandName + "' already rigistered.", "error");
+				return;
+			}
+			
+			_functions.set(aCommandName, aFunction);
+			if (aDesc != null)
+			{
+				_descriptions.set(aCommandName, aDesc);
+			}
+		}
+		
+		/**
+		 * Регистрирует новую команду с аргументами в консоли.
+		 * 
+		 * @param	aCommandName	 Текстовая команда.
+		 * @param	aFunction	 Метод который будет выполняться при активации команды.
+		 * @param	aArgs	 Массив классов определяющий порядок и типы аргументов передаваемые в метод команду.
+		 * @param	aDesc	 Краткое текстовое описание команды которое будет отображаться в списке зарегистрированных команд.
+		 */
+		public function registerCommandWithArgs(aCommandName:String, aFunction:Function, aArgs:Array, aDesc:String = null):void
+		{
+			if (_functions.containsKey(aCommandName))
+			{
+				log("Command '" + aCommandName + "' already rigistered.", "error");
+				return;
+			}
+			
+			const numListenerArgs:int = aFunction.length;
+			const argumentString:String = (numListenerArgs == 1) ? "argument" : "arguments";
+			
+			if (numListenerArgs < aArgs.length)
+			{
+				log("Command '" + aCommandName + "' not registered. Reason: command method has " + 
+					numListenerArgs + " " + argumentString + " but it needs to be " + aArgs.length + 
+					" to match.", "error");
+				return;
+			}
+			
+			_functions.set(aCommandName, aFunction);
+			_arguments.set(aCommandName, aArgs);
+			if (aDesc != null)
+			{
+				_descriptions.set(aCommandName, aDesc);
+			}
 		}
 		
 		/**
@@ -211,30 +276,53 @@ package ru.antkarlov.anthill.debug
 			var cKey:String = "";
 			if (getQualifiedSuperclassName(aKey) == "Function")
 			{
-				cKey = _registry.getKey(aKey);
-				if (cKey != null)
+				cKey = _functions.getKey(aKey);
+				if (cKey != null && _functions.containsKey(cKey))
 				{
-					_registry.remove(cKey);
+					_functions.remove(cKey);
+				}
+				else
+				{
+					log("Command '" + cKey + "' not found.", ERROR);
+					return;
 				}
 			}
 			else
 			{
 				cKey = aKey.toString();
-				_registry.remove(cKey);
+				if (_functions.containsKey(cKey))
+				{
+					_functions.remove(cKey);
+				}
+				else
+				{
+					log("Command '" + cKey + "' not found.", ERROR);
+					return;
+				}
 			}
 			
-			_hints.remove(cKey);
+			if (_descriptions.containsKey(cKey))
+			{
+				_descriptions.remove(cKey);
+			}
+			
+			if (_arguments.containsKey(cKey))
+			{
+				_arguments.remove(cKey);
+			}
 		}
 		
 		/**
 		 * Выводит какую-либо информацию в консоль.
-		 * <p>Примечание: в качестве данных может быть совершенно любой объект. Если тип объекта не простой, 
+		 * 
+		 * <p>Примечание: в качестве данных может быть передан любой объект. Если тип объекта не простой, 
 		 * то вызывается его стандартный метод <code>toString()</code>.</p>
 		 * 
 		 * @param	aData	 Данные которые необходимо вывести. Это могут быть любые данные.
-		 * @param	aColor	 Цвет текста.
+		 * @param	aColor	 Цвет текста для вывода в консоль. Цвет может быть определен константами типа String:
+		 * "error", "data", "result", "default" или цветом в формате hex(uint): 0xFFFFFF.
 		 */
-		public function log(aData:*, aColor:String = null):void
+		public function log(aData:*, aColor:Object = null):void
 		{
 			_lineNum++;
 			_tfNumbering.appendText(_lineNum + "\n");
@@ -243,37 +331,61 @@ package ru.antkarlov.anthill.debug
 			var endIndex:int = startIndex + str.length;
 			_tfConsole.appendText(str);
 			
+			var prevColor:uint = _color;
+			var lc:Boolean = _lockColor;
+			if (aColor != null)
+			{
+				beginLog(aColor);
+			}
+			else if (!_lockColor)
+			{
+				_color = 0xFFFFFF;
+			}
+			
+			_fDefault.color = _color;
+			_tfConsole.setTextFormat(_fDefault, startIndex, endIndex);
+			refresh();
+			
+			(lc) ? _color = prevColor : _lockColor = false;
+		}
+		
+		/**
+		 * Определяет начало вывода строк в консоль с заданным цветом.
+		 * 
+		 * @param	aColor	 Цвет текста для вывода в консоль. Цвет может быть определен константами типа String:
+		 * "error", "data", "result", "default" или цветом в формате hex(uint): 0xFFFFFF.
+		 */
+		public function beginLog(aColor:Object = null):void
+		{
+			_lockColor = true;
+			_color = 0xFFFFFF;
 			if (aColor == null)
 			{
-				aColor = color;
+				return;
 			}
-						
-			switch (aColor)
+			
+			if (aColor is String)
 			{
-				case ERROR : 
-					_fDefault.color = 0xD65558;
-					//_tfConsole.setTextFormat(_fError, startIndex, endIndex); 
-				break;
-				
-				case DATA :
-					_fDefault.color = 0x7EA460;
-					//_tfConsole.setTextFormat(_fData, startIndex, endIndex);
-				break;
-				
-				case RESULT :
-					_fDefault.color = 0xF1E590;
-					//_tfConsole.setTextFormat(_fResult, startIndex, endIndex);
-				break;
-				
-				default :
-					_fDefault.color = 0xFFFFFF;
-					//_tfConsole.setTextFormat(_fDefault, startIndex, endIndex);
-				break;
+				switch (aColor)
+				{
+					case ERROR : _color = 0xD65558; break;
+					case DATA : _color = 0x7EA460; break;
+					case RESULT : _color = 0xF1E590; break;
+				}
 			}
-			
-			_tfConsole.setTextFormat(_fDefault, startIndex, endIndex);
-			
-			refresh();
+			else if (aColor is uint)
+			{
+				_color = uint(aColor);
+			}
+		}
+		
+		/**
+		 * Определяет завершение вывода однотипных строк в консоль (сбрасывает цвет).
+		 */
+		public function endLog():void
+		{
+			_fDefault.color = 0xFFFFFF;
+			_lockColor = false;
 		}
 		
 		/**
@@ -291,6 +403,115 @@ package ru.antkarlov.anthill.debug
 					_blinkInterval = 0.5;
 				}
 			}
+		}
+		
+		/**
+		 * Очищает окно консоли.
+		 */
+		public function clear():void
+		{
+			_tfConsole.text = "";
+			_tfNumbering.text = "";
+			_lineNum = 0;
+			log("Type \"-help\" to view list of defaults commands.");
+		}
+		
+		/**
+		 * Выводит системные команды с их описаниями.
+		 */
+		public function help():void
+		{
+			beginLog(DATA);
+			log("  Default commands");
+			log("-------------------------------------------------------");
+			log("  -clear - clear console window;");
+			log("  -help - shows this information;");
+			log("  -regs - show registered commands;");
+			log("  -sys - shows system information;");
+			log("  -gc - activate garbage collector and show results about tracked objects;");
+			log("");
+			log("  Use \"PageUp\" & \"PageDown\" to scroll console.");
+			log("");
+			endLog();
+		}
+		
+		/**
+		 * Выводит список зарегистрированных команд с их описаниями.
+		 */
+		public function registeredCommands():void
+		{
+			beginLog(DATA);
+			log("  Registered commands");
+			log("-------------------------------------------------------");
+			if (_functions.isEmpty)
+			{
+				log("  no registered commands");
+			}
+			else
+			{
+				var str:String;
+				var desc:String;
+				var valueClasses:Array;
+				var valueClassesStr:String;
+				for (var value:* in _functions)
+				{
+					if (_functions[value] == null)
+					{
+						continue;
+					}
+					
+					desc = _descriptions.get(value);
+					if (desc == null)
+					{
+						desc = "...";
+					}
+					
+					str = "";
+					valueClasses = _arguments.get(value);
+					if (valueClasses != null)
+					{
+						str = "[" + formatClasses(valueClasses).join("] [") + "] - ";
+					}
+					else
+					{
+						str = " - ";
+					}
+					
+					log("  " + value + " " + str + desc);
+				}
+			}
+			log("");
+			endLog();
+		}
+		
+		/**
+		 * Вызывает сборщик мусора из класса <code>AntMemory</code> и выводит результат работы в консоль.
+		 */
+		public function garbageCollector(aHighlightWords:Array = null):void
+		{
+			AntMemory.callGarbageCollector(aHighlightWords);
+		}
+		
+		/**
+		 * Выводит некоторую системную информацию.
+		 */
+		public function systemInfo():void
+		{
+			beginLog(DATA);
+			log("  System Information");
+			log("-------------------------------------------------------");
+			log("  Language: " + Capabilities.language);
+			log("  OS: " + Capabilities.os);
+			log("  Pixel aspect ratio: " + Capabilities.pixelAspectRatio);
+			log("  Player type: " + Capabilities.playerType);
+			log("  Screen DPI: " + Capabilities.screenDPI);
+			log("  Screen resolution: " + Capabilities.screenResolutionX + " x "+ Capabilities.screenResolutionY);
+			log("  Version: " + Capabilities.version);
+			log("  Debugger: " + Capabilities.isDebugger);
+			log("");
+			log("  Memory usage: " + System.totalMemory / 1024 + " Kb");
+			log("");
+			endLog();
 		}
 		
 		//---------------------------------------
@@ -311,6 +532,7 @@ package ru.antkarlov.anthill.debug
 			_fDefault.color = 0x80C4FC;
 			_tfConsole.appendText(str);
 			_tfConsole.setTextFormat(_fDefault, startIndex, endIndex);
+			_fDefault.color = 0xFFFFFF;
 			_commandStr = "";
 			refresh();
 		}
@@ -322,9 +544,6 @@ package ru.antkarlov.anthill.debug
 		{
 			var query:Array = _commandStr.substr(0, _commandStr.length).split(" ");
 			var key:String = query[0];
-			var paramA:String = query[1];
-			var paramB:String = query[2];
-			var paramC:String = query[3];
 			
 			if (key == "")
 			{
@@ -342,101 +561,134 @@ package ru.antkarlov.anthill.debug
 				// Очистка консоли.
 				case "-clear":
 					write();
-					_tfConsole.text = "";
-					_tfNumbering.text = "";
-					_lineNum = 0;
-					log("Type \"-help\" to view list of defaults commands.");
+					clear();
 				break;
 				
 				// Вывод стандартных команд консоли.
 				case "-help" :
 					write();
-					color = DATA;
-					log("  Default commands");
-					log("-------------------------------------------------------");
-					log("  -clear - clears console window;");
-					log("  -help - shows this information;");
-					log("  -regs - show registered commands in the console;");
-					log("  -sys - shows system information;");
-					log("  -gc - activates garbage collector and shows results from AntMemory;");
-					log("");
-					log("  Use \"PageUp\" & \"PageDown\" to scroll console");
-					log("");
-					color = DEFAULT;
+					help();
 				break;
 				
 				// Вывод зарегистрированных команд с подсказками.
 				case "-regs" :
 					write();
-					color = DATA;
-					log("  Registered commands");
-					log("-------------------------------------------------------");
-					if (_registry.isEmpty)
-					{
-						log("  no registered commands");
-					}
-					else
-					{
-						for (var value:* in _registry)
-						{
-							log("  " + value + " " + _hints.get(value));
-						}
-					}
-					log("");
-					color = DEFAULT;
+					registeredCommands();
 				break;
 				
 				// Принудительный вызов сборщика мусора.
 				case "-gc" :
 					write();
-					AntMemory.callGarbageCollector((!paramA) ? null : paramA.split(","));
+					if (query.length > 1)
+					{
+						query.splice(0, 1);
+						garbageCollector(query);
+					}
+					else
+					{
+						garbageCollector(null);
+					}
 				break;
 				
 				// Вывод системной информации.
 				case "-sys" :
 					write();
-					color = DATA;
-					log("  System Information");
-					log("-------------------------------------------------------");
-					log("  Language: " + Capabilities.language);
-					log("  OS: " + Capabilities.os);
-					log("  Pixel aspect ratio: " + Capabilities.pixelAspectRatio);
-					log("  Player type: " + Capabilities.playerType);
-					log("  Screen DPI: " + Capabilities.screenDPI);
-					log("  Screen resolution: " + Capabilities.screenResolutionX + " x "+ Capabilities.screenResolutionY);
-					log("  Version: " + Capabilities.version);
-					log("  Debugger: " + Capabilities.isDebugger);
-					log("");
-					log("  Memory usage: " + System.totalMemory / 1024 + " Kb");
-					log("");
-					color = DEFAULT;
+					systemInfo();
 				break;
 				
 				// Вызов зарегистрированной команды.
 				default:
 					write();
-					if (key != "")
-					{
-						if (_registry.containsKey(key))
-						{
-							if (!paramA)
-							{
-								_registry[key]();
-							}
-							else
-							{
-								_registry[key](paramA.split(","));
-							}
-						}
-						else
-						{
-							log(key + " - Unknown command", ERROR);
-						}
-					}
+					command.apply(null, query);
 				break;
 			}
 			
 			refresh();
+		}
+		
+		/**
+		 * @private
+		 */
+		protected function command(...aValueObjects):void
+		{
+			// Извлекаем команду.
+			var command:String = String(aValueObjects[0]);
+			
+			// Если команда не зарегистрирована.
+			if (!_functions.containsKey(command))
+			{
+				log("Unknown command: " + command, ERROR);
+				return;
+			}
+			
+			// Если аргументы не указаны и не зарегистрированы...
+			if (aValueObjects.length == 1 && !_arguments.containsKey(command))
+			{
+				// Вызываем метод без аргументов.
+				(_functions.get(command) as Function)();
+				return;
+			}
+			// Иначе если аргументы указаны, но не зарегистрированы...
+			else if (aValueObjects.length > 1 && !_arguments.containsKey(command))
+			{
+				log("Command '" + command + "' not supported arguments.", ERROR);
+				return;
+			}
+			
+			// Верефикация переданных аргументов с указанной командой.
+			var valueClasses:Array = _arguments.get(command);
+			var valueObject:Object;
+			var valueClass:Class;
+			
+			const numValueClasses:int = valueClasses.length;
+			const numValueObjects:int = aValueObjects.length - 1;
+			
+			// Количество указанных аргументов не соотвествует зарегистрированному количеству.
+			if (numValueObjects < numValueClasses)
+			{
+				log("Incorrect number of arguments. " +
+					"Expected at least " + numValueClasses + " but received " +
+					numValueObjects + ".", ERROR);
+				return;
+			}
+			
+			// Сверяем вероятные типы аргументов.
+			var value:Object;
+			for (var i:int = 1; i < numValueClasses; i++)
+			{
+				valueObject = aValueObjects[i];
+				valueClass = valueClasses[i];
+				
+				if (valueObject === null || valueObject is valueClass)
+				{
+					continue;
+				}
+				
+				log("Value '" + valueObject + "' is not '" + valueClass + "'.");
+				return;
+			}
+			
+			var func:Function = _functions.get(command) as Function;
+			if (func != null)
+			{
+				if (numValueObjects == 3)
+				{
+					func(aValueObjects[1], aValueObjects[2]);
+				}
+				else if (numValueObjects == 4)
+				{
+					func(aValueObjects[1], aValueObjects[2], aValueObjects[3]);
+				}
+				else
+				{
+					aValueObjects.splice(0, 1);
+					func.apply(null, aValueObjects);
+				}
+			}
+			else
+			{
+				log("Internal error.", ERROR);
+			}
 		}
 		
 		/**
@@ -647,6 +899,35 @@ package ru.antkarlov.anthill.debug
 			_tfNumbering.y = _background.height - _tfNumbering.textHeight - 20;
 		}
 		
+		/**
+		 * Преобразует имена переданных классов в String и вырезает спец оформление.
+		 * 
+		 * <p>Используется для автоматического определения типа аргументов для зарегистрированных 
+		 * методов при формировании краткой справки зарегистрированных команд.</p>
+		 * 
+		 * @param	aValueClasses	 Массив классов которые необходимо преобразовать в текст.
+		 * @return		Возвращает массив имен классов преобразованных в текст без спец оформления.
+		 */
+		protected function formatClasses(aValueClasses:Array /* of Class */):Array /* of String */
+		{
+			var result:Array = [];
+			var startIndex:int;
+			var endIndex:int;
+			var str:String;
+			const n:int = aValueClasses.length;
+			var i:int = 0;
+			while (i < n)
+			{
+				str = aValueClasses[i++].toString();
+				startIndex = str.indexOf("[class ");
+				endIndex = str.indexOf("]");
+				str = str.slice(startIndex + 7, endIndex);
+				result.push(str);
+			}
+			
+			return result;
+		}
+		
 		//---------------------------------------
 		// EVENT HANDLERS
 		//---------------------------------------
@@ -685,7 +966,7 @@ package ru.antkarlov.anthill.debug
 					(AntG.debugger.visible) ? AntG.debugger.hide() : AntG.debugger.show();
 				break;
 
-				// Нажат Enter.
+				// Нажата клавиша 'Enter'.
 				case "13" :
 					if (visible)
 					{
@@ -693,7 +974,7 @@ package ru.antkarlov.anthill.debug
 					}
 				break;
 
-				// Нажат Backspace.
+				// Нажата клавиша 'Backspace'.
 				case "8" :
 					if (visible && _commandStr.length > 0)
 					{
@@ -703,7 +984,7 @@ package ru.antkarlov.anthill.debug
 					}
 				break;
 				
-				// Нажат Esc.
+				// Нажата клавиша 'Esc'.
 				case "27" :
 					if (visible)
 					{
