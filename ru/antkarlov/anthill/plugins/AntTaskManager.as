@@ -1,16 +1,37 @@
 package ru.antkarlov.anthill.plugins
 {
 	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.signals.AntSignal; 
+	import ru.antkarlov.anthill.events.AntEvent; 
 	import ru.antkarlov.anthill.utils.AntList;
 	
 	/**
 	 * Менеджер задач используется для выполнения задач (вызова указанных методов) в заданном порядке.
 	 * 
-	 * <p>Позволяет легко и быстро программировать последовательность каких-либо действий, например появление 
-	 * кнопок в игровых меню.</p>
+	 * <p>Позволяет легко и быстро программировать последовательность каких-либо действий. Менеджер 
+	 * задач запускается автоматически при наличии одной и более задачь завершает свою работу если
+	 * все задачи были выполнены или удалены.</p>
 	 * 
-	 * <p>Менеджер задач запускается автоматически при добавлении хотябы одной задачи и останавливается когда 
-	 * все задачи выполнены.</p>
+	 * <p>Пример использования:</p>
+	 * 
+	 * <listing>
+	 * var tm:AntTaskManager = new AntTaskManager();
+	 * tm.addTask(onMove);
+	 * tm.addInstantTask(onSwitchAnim);
+	 * 
+	 * ..Этот метод будет выполнятся менеджером до тех пор пока не вернет true.
+	 * function onMove():Boolean
+	 * {
+	 *   x += 1;
+	 *   return (x > 100);
+	 * }
+	 * 
+	 * ..Этот метод будет выполнен один раз не зависимо от того что вернет.
+	 * function onSwitchAnim():void
+	 * {
+	 *   ..какой-нибудь код
+	 * }
+	 * </listing>
 	 * 
 	 * <p>Позаимствовано у <a href="http://xitri.com/2010/10/27/ai-creation-tool-casual-connect-kiev-2010.html">Xitri.com</a></p>
 	 * 
@@ -43,7 +64,7 @@ package ru.antkarlov.anthill.plugins
 		 * }
 		 * </listing>
 		 */
-		public var eventComplete:AntEvent;
+		public var eventComplete:AntSignal;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -103,7 +124,7 @@ package ru.antkarlov.anthill.plugins
 			_cycle = aCycle;
 			_delay = 0;
 			
-			eventComplete = new AntEvent();
+			eventComplete = new AntSignal(AntTaskManager);
 		}
 		
 		/**
@@ -113,7 +134,7 @@ package ru.antkarlov.anthill.plugins
 		public function destroy():void
 		{
 			clear();
-			eventComplete.clear();
+			eventComplete.destroy();
 			eventComplete = null;
 		}
 		
@@ -227,11 +248,10 @@ package ru.antkarlov.anthill.plugins
 		//---------------------------------------
 
 		//import ru.antkarlov.anthill.plugins.IPlugin;
-		public function preUpdate():void
-		{
-			//
-		}
-
+		
+		/**
+		 * @inheritDoc
+		 */
 		public function update():void
 		{
 			if (_task != null && _isStarted)
@@ -245,15 +265,13 @@ package ru.antkarlov.anthill.plugins
 			else
 			{
 				stop();
-				eventComplete.send();
+				eventComplete.dispatch(this);
 			}
 		}
-
-		public function postUpdate():void
-		{
-			//
-		}
 		
+		/**
+		 * @inheritDoc
+		 */		
 		public function draw(aCamera:AntCamera):void
 		{
 			//
