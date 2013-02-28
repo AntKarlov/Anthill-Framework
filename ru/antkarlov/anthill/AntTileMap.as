@@ -1,6 +1,7 @@
 package ru.antkarlov.anthill
 {
 	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.signals.AntSignal;
 	import ru.antkarlov.anthill.debug.AntDrawer;
 	import ru.antkarlov.anthill.utils.AntColor;
 	
@@ -30,19 +31,19 @@ package ru.antkarlov.anthill
 		/**
 		 * Событие выполняющееся при запуске процесса кэширования.
 		 */
-		public var eventStart:AntEvent;
+		public var eventStart:AntSignal;
 		
 		/**
 		 * Событие выполняющееся при каждом шаге кэширования.
 		 * <p>Внимание: В качестве атрибута в функцию передается 
 		 * процент выполненной работы: <code>function yourFunc(percent:int):void { trace(percent); }</code></p>
 		 */
-		public var eventProcess:AntEvent;
+		public var eventProcess:AntSignal;
 		
 		/**
 		 * Событие выполняющееся при завершении процесса кэширования.
 		 */
-		public var eventComplete:AntEvent;
+		public var eventComplete:AntSignal;
 		
 		/**
 		 * Список всех тайлов, используется для доступа к тайлам по индексу.
@@ -221,9 +222,9 @@ package ru.antkarlov.anthill
 		{
 			super();
 			
-			eventStart = new AntEvent();
-			eventProcess = new AntEvent();
-			eventComplete = new AntEvent();
+			eventStart = new AntSignal(AntTileMap);
+			eventProcess = new AntSignal(AntTileMap, Number);
+			eventComplete = new AntSignal(AntTileMap);
 			tiles = [];
 			tileAxisOffset = new AntPoint();
 			numPerStep = 10;
@@ -267,9 +268,9 @@ package ru.antkarlov.anthill
 		 */
 		override public function destroy():void
 		{
-			eventStart.clear();
-			eventProcess.clear();
-			eventComplete.clear();
+			eventStart.destroy();
+			eventProcess.destroy();
+			eventComplete.destroy();
 			
 			eventStart = null;
 			eventProcess = null;
@@ -296,7 +297,7 @@ package ru.antkarlov.anthill
 		override public function kill():void
 		{
 			var i:int = 0;
-			var n:int = tiles.length;
+			const n:int = tiles.length;
 			while (i < n)
 			{
 				tiles[i] = null;
@@ -319,10 +320,13 @@ package ru.antkarlov.anthill
 		 * var tileMap:AntTileMap = new AntTileMap();
 		 * tileMap.setMapSize(20, 10);
 		 * tileMap.setTileSize(64, 64);
-		 * // Содержимое первого клипа будет размещено в: по высоте с 0 по 10 тайлы; и по ширине с 0 по 10 тайлы.<br>
+		 * 
+		 * // Содержимое первого клипа будет размещено в: по высоте с 0 по 10 тайлы; и по ширине с 0 по 10 тайлы.
 		 * tileMap.addClip(MyLevelA_mc, 0, 0, 10, 10);
-		 * // Содержимое второго клипа размещено в: по высоте с 0 по 10 тайлы; и по ширине с 10 по 20 тайлы.<br>
+		 * 
+		 * // Содержимое второго клипа размещено в: по высоте с 0 по 10 тайлы; и по ширине с 10 по 20 тайлы.
 		 * tileMap.addClip(MyLevelB_mc, 10, 0, 20, 10);
+		 * 
 		 * tileMap.cacheClips();
 		 * </listing>
 		 * 
@@ -346,13 +350,13 @@ package ru.antkarlov.anthill
 		{
 			if (_queue.length == 0)
 			{
-				AntG.log("WARNING: Unable to perform caching. Don't have clips for caching.", "error");
+				throw new Error("WARNING: Unable to perform caching. Don't have clips for caching.");
 				return;
 			}
 			
 			if (_cacheStarted)
 			{
-				AntG.log("WARNING: Unable to perform caching. Another clip in processing.", "error");
+				throw new Error("WARNING: Unable to perform caching. Another clip in processing.");
 				return;
 			}
 			
@@ -364,7 +368,7 @@ package ru.antkarlov.anthill
 			_cacheStarted = true;
 			_cacheFinished = false;
 			
-			eventStart.send();
+			eventStart.dispatch(this);
 			resetTileSet();
 			cacheClip();
 		}
@@ -472,14 +476,13 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				actor = children[i] as AntActor;
+				actor = children[i++] as AntActor;
 				if (actor != null)
 				{
 					actor.clearAnimations();
 					actor.addAnimation(_externalTileSet);
 					actor.gotoAndStop(1);
 				}
-				i++;
 			}
 			
 			if (_internalTileSet != null)
@@ -511,12 +514,11 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				actor = children[i] as AntActor;
+				actor = children[i++] as AntActor;
 				if (actor != null)
 				{
 					actor.scrollFactor.set(aX, aY);
 				}
-				i++;
 			}
 			
 			scrollFactor.set(aX, aY);
@@ -721,7 +723,12 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * @private
+		 * Извлекает массив индексов попадающие в прямоугольник заданный угловыми индексами.
+		 * 
+		 * @param	aFirstIndex	 Первый индекс определяющий прямоугольник (например, левый верхний угол).
+		 * @param	aLastIndex	 Последний индекс определяющий прямоугольник (например, правый нижний угол).
+		 * @param	aResult	 Массив в который может быть записан результат.
+		 * @return		Массив индексов попадающих в заданный прямоугольник независимо от наличия тайлов.
 		 */
 		public function queryRectIndexes(aFirstIndex:int, aLastIndex:int, aResult:Array = null):Array
 		{
@@ -830,6 +837,8 @@ package ru.antkarlov.anthill
 		/**
 		 * Быстрая отрисовка только тех тайлов которые попадают в поле видимости камер.
 		 * Другие тайлы полностью игнорируются.
+		 * 
+		 * @param	aCamera	 Камера для которой выполняется отрисовка.
 		 */
 		protected function drawQuick(aCamera:AntCamera):void
 		{
@@ -999,7 +1008,7 @@ package ru.antkarlov.anthill
 			}
 			
 			_tileIndex = n;
-			eventProcess.send([ AntMath.toPercent(_processCurrent, _processTotal) ]);
+			eventProcess.dispatch(this, _processCurrent / _processTotal);
 			
 			if (_tileIndex == _tilesTotal)
 			{
@@ -1011,7 +1020,7 @@ package ru.antkarlov.anthill
 					_cacheFinished = true;
 					_cacheStarted = false;
 					
-					eventComplete.send();
+					eventComplete.dispatch(this);
 				}
 				else
 				{
@@ -1031,7 +1040,7 @@ package ru.antkarlov.anthill
 		{
 			var sum:int = 0;
 			var i:int = 0;
-			var n:int = _queue.length;
+			const n:int = _queue.length;
 			var o:Object;
 			while (i < n)
 			{
