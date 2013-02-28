@@ -1,6 +1,7 @@
 package ru.antkarlov.anthill.plugins
 {
 	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.signals.AntSignal;
 	
 	/**
 	 * Класс реализации плавных трансформации каких-либо значений объектов. Класс использует различные
@@ -75,22 +76,22 @@ package ru.antkarlov.anthill.plugins
 		/**
 		 * Событие срабатывающее при запуске твина.
 		 */
-		public var eventStart:AntEvent;
+		public var eventStart:AntSignal;
 		
 		/**
 		 * Событие срабатывающее каждый тик твина.
 		 */
-		public var eventUpdate:AntEvent;
+		public var eventUpdate:AntSignal;
 		
 		/**
 		 * Событие срабатывающее каждый повтор твина.
 		 */
-		public var eventRepeat:AntEvent;
+		public var eventRepeat:AntSignal;
 		
 		/**
 		 * Событие срабатывающее при завершении выполнения твина.
 		 */
-		public var eventComplete:AntEvent;
+		public var eventComplete:AntSignal;
 		
 		/**
 		 * Пользовательские аргументы которые могут быть переданы в событие при запуске твина.
@@ -229,13 +230,19 @@ package ru.antkarlov.anthill.plugins
 			}
 			else
 			{
-				throw new Error("Transition must be either a string or a function");
+				throw new ArgumentError("Transition must be either a string or a function");
 			}
 			
-			(eventStart == null) ? eventStart = new AntEvent() : eventStart.clear();
-			(eventUpdate == null) ? eventUpdate = new AntEvent() : eventUpdate.clear();
-			(eventRepeat == null) ? eventRepeat = new AntEvent() : eventRepeat.clear();
-			(eventComplete == null) ? eventComplete = new AntEvent() : eventComplete.clear();
+			(eventStart == null) ? eventStart = new AntSignal() : eventStart.clear();
+			(eventUpdate == null) ? eventUpdate = new AntSignal() : eventUpdate.clear();
+			(eventRepeat == null) ? eventRepeat = new AntSignal() : eventRepeat.clear();
+			(eventComplete == null) ? eventComplete = new AntSignal() : eventComplete.clear();
+			
+			// Отключение типизации для сигналов
+			eventStart.strict = false;
+			eventUpdate.strict = false;
+			eventRepeat.strict = false;
+			eventComplete.strict = false;
 			
 			(_properties == null) ? _properties = new <String>[] : _properties.length = 0;
 			(_startValues == null) ? _startValues = new <Number>[] : _startValues.length = 0;
@@ -272,9 +279,9 @@ package ru.antkarlov.anthill.plugins
 		}
 		
 		/**
-		 * Трансформирует свойства объекта 'scaleX' и 'scaleY'.
+		 * Трансформирует свойства объекта <code>scaleX</code> и <code>scaleY</code>.
 		 * 
-		 * @param	aValue	 Значение свойства 'scaleX' и 'scaleY' которого необходимо достигнуть.
+		 * @param	aValue	 Значение свойства <code>scaleX</code> и <code>scaleY</code> которого необходимо достигнуть.
 		 */
 		public function scaleTo(aValue:Number):void
 		{
@@ -283,10 +290,10 @@ package ru.antkarlov.anthill.plugins
 		}
 		
 		/**
-		 * Трансформирует свойства объекта 'x' и 'y'.
+		 * Трансформирует свойства объекта <code>x</code> и <code>y</code>.
 		 * 
-		 * @param	aX	 Значение свойства 'x' которого необходимо достигнуть.
-		 * @param	aY	 Значение свойства 'y' которого необходимо достигнуть.
+		 * @param	aX	 Значение свойства <code>x</code> которого необходимо достигнуть.
+		 * @param	aY	 Значение свойства <code>y</code> которого необходимо достигнуть.
 		 */
 		public function moveTo(aX:Number, aY:Number):void
 		{
@@ -295,9 +302,9 @@ package ru.antkarlov.anthill.plugins
 		}
 		
 		/**
-		 * Трансформирует свойства объекта 'x' и 'y'.
+		 * Трансформирует свойства объекта <code>alpha</code>.
 		 * 
-		 * @param	aAlpha	 Значения свойства 'alpha' которого необходимо достигнуть.
+		 * @param	aAlpha	 Значения свойства <code>alpha</code>.
 		 */
 		public function fadeTo(aAlpha:Number):void
 		{
@@ -339,7 +346,7 @@ package ru.antkarlov.anthill.plugins
 			var i:int = _properties.indexOf(aProperty);
 			if (i == -1)
 			{
-				throw new Error("The property '" + aProperty + "' is not animated.");
+				throw new ArgumentError("The property '" + aProperty + "' is not animated.");
 			}
 			
 			return _properties[i] as Number;
@@ -350,24 +357,21 @@ package ru.antkarlov.anthill.plugins
 		//---------------------------------------
 
 		//import ru.antkarlov.anthill.plugins.IPlugin;
-		public function preUpdate():void
-		{
-			
-		}
-
+		
+		/**
+		 * @inheritDoc
+		 */
 		public function update():void
 		{
 			updateTween(AntG.elapsed);
 		}
-
-		public function postUpdate():void
-		{
-			
-		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function draw(aCamera:AntCamera):void
 		{
-			
+			//
 		}
 		
 		//---------------------------------------
@@ -400,7 +404,7 @@ package ru.antkarlov.anthill.plugins
 			if (_currentCycle < 0 && previousTime <= 0 && _currentTime > 0)
 			{
 				_currentCycle++;
-				eventStart.send(startArgs);
+				eventStart.dispatch.apply(null, startArgs);
 			}
 			
 			var ratio:Number = _currentTime / _totalTime;
@@ -428,7 +432,7 @@ package ru.antkarlov.anthill.plugins
 				_target[_properties[i]] = currentValue;
 			}
 			
-			eventUpdate.send(updateArgs);
+			eventUpdate.dispatch.apply(this, updateArgs);
 			
 			if (previousTime < _totalTime && _currentTime >= _totalTime)
 			{
@@ -441,12 +445,12 @@ package ru.antkarlov.anthill.plugins
 						repeatCount--;
 					}
 					
-					eventRepeat.send(repeatArgs);
+					eventRepeat.dispatch.apply(this, repeatArgs);
 				}
 				else
 				{
 					stop();
-					eventComplete.send(completeArgs);
+					eventComplete.dispatch.apply(this, completeArgs);
 					if (autoStartOfNextTween && nextTween != null)
 					{
 						nextTween.start();
@@ -491,7 +495,7 @@ package ru.antkarlov.anthill.plugins
 			
 			if (_transitionFunc == null)
 			{
-				throw new Error("Invalid transition: " + value);
+				throw new ArgumentError("Invalid transition: " + value);
 			}
 		}
 		
