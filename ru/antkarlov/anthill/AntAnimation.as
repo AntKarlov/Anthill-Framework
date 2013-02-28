@@ -349,7 +349,7 @@ package ru.antkarlov.anthill
 		{
 			if (!_animationCache.containsKey(aKey))
 			{
-				throw new Error("Missing animation \"" + aKey + "\".");
+				throw new Error("AntAnimation: Missing animation \'" + aKey + "\'.");
 			}
 
 			return _animationCache.get(aKey) as AntAnimation;
