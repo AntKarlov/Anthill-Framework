@@ -13,11 +13,15 @@ package ru.antkarlov.anthill.debug
 	 * сборщиком мусора.
 	 * 
 	 * <p>Чтобы отслеживать удаление объектов из памяти, следует добавить указатель 
-	 * на необходимый объект через <code>AntG.track(aObject:*, aLabel:String = "");</code> Чтобы посмотреть
-	 * список существующих объектов выполните команду <code>-gc</code> в консоли. При выполнении
-	 * команды <code>-gc</code> будет принудительно запущен сборщик мусора после чего в консоли
-	 * отобразится список всех сохранившихся объектов. <a href="http://divillysausages.com/blog/tracking_memory_leaks_in_as3">
-	 * Подробнее...</a></p>
+	 * на необходимый объект. Например:</p>
+	 * 
+	 * <pre>AntG.track(aObject:*, aLabel:String = "");</pre>
+	 * 
+	 * <p>Чтобы посмотреть список существующих объектов выполните команду <code>-gc</code> в консоли. 
+	 * При выполнении команды <code>-gc</code> будет принудительно запущен сборщик мусора после чего в консоли
+	 * отобразится список всех сохранившихся объектов.</p>
+	 * 
+	 * <p><a href="http://divillysausages.com/blog/tracking_memory_leaks_in_as3">Источник идеи и реализации...</a></p>
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -33,13 +37,13 @@ package ru.antkarlov.anthill.debug
 		private static var _highlightLabels:Array;
 		private static var _tracking:Dictionary = new Dictionary(true);
 		private static var _count:int = 0;
-				
+		
 		//---------------------------------------
 		// PUBLIC METHODS
 		//---------------------------------------
-				
+		
 		/**
-		 * Добавляет объект слежения для слежения.
+		 * Добавляет объект для слежения.
 		 * 
 		 * @param	aObject	 Указатель на объект который следует отслеживать.
 		 * @param	aLabel	 Текстовая метка для идентификации объекта в списке.
@@ -55,7 +59,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aLabels	 Список меток которые необходимо подсветить в результатах.
 		 */
 		public static function callGarbageCollector(aHighlightLabels:Array = null):void
-		{			
+		{
 			_highlightLabels = aHighlightLabels;
 			_count = 0;
 			AntG.stage.addEventListener(Event.ENTER_FRAME, AntMemory.enterFrameHandler);
@@ -70,39 +74,39 @@ package ru.antkarlov.anthill.debug
 		 */
 		private static function enterFrameHandler(event:Event):void
 		{
-            var runLast:Boolean = false;
-
-            //CONFIG::release
-            {
-                /* Хак для принудительного запуска сборщика мусора, используется для
+			var runLast:Boolean = false;
+			
+			//CONFIG::release
+ 			{
+				/* Хак для принудительного запуска сборщика мусора, используется для
  				релизной версии плеера. */
-                try
+ 				try
 				{
-                    new LocalConnection().connect("foo");
-                    new LocalConnection().connect("foo");
-                } 
+ 					new LocalConnection().connect("foo");
+					new LocalConnection().connect("foo");
+				} 
 				catch (e:Error) 
 				{
 					// ...
 				}
-
-                runLast = true;
-            }
-
-            //CONFIG::debug
-            {
-                System.gc();
-                runLast = _count++ > 1;
-            }
-
+				
+				runLast = true;
+			}
+			
+			//CONFIG::debug
+			{
+				System.gc();
+				runLast = _count++ > 1;
+			}
+			
 			/* Следует ли остановить обработчик события и запустить последний GC?
 			В дебаг режиме мы вызываем System.gc() 4 раза: 3 из них в этом методе,
 			а на последок в методе doLastGC() */
-            if (runLast)
-            {
-                AntG.stage.removeEventListener(Event.ENTER_FRAME, enterFrameHandler);
-                setTimeout(callLastGarbageCollector, 40);
-            }
+			if (runLast)
+			{
+				AntG.stage.removeEventListener(Event.ENTER_FRAME, enterFrameHandler);
+				setTimeout(callLastGarbageCollector, 40);
+			}
 		}
 		
 		/**
@@ -110,26 +114,28 @@ package ru.antkarlov.anthill.debug
 		 * в консоль.
 		 */
 		private static function callLastGarbageCollector():void
-        {
-            //CONFIG::debug
-            {
-                System.gc();
-            }
-
-            // Выводим существующие объекты из библиотеки
-			AntG.log("  Remaining references in the AntMemory", "data");
-            AntG.log("-------------------------------------------------------", "data");		
+		{
+			//CONFIG::debug
+			{
+				System.gc();
+			}
 			
-			var n:int = (_highlightLabels != null) ? _highlightLabels.length : 0;
+			// Выводим существующие объекты из библиотеки
+			AntG.log("  Remaining references in the AntMemory", "data");
+			AntG.log("-------------------------------------------------------", "data");
+			
+			const n:int = (_highlightLabels != null) ? _highlightLabels.length : 0;
 			var highlight:String;
 			var numOfHighlight:int = 0;
 			var num:int = 0;
-            for (var key:Object in _tracking)
+			var i:int = 0;
+			for (var key:Object in _tracking)
 			{
 				highlight = "data";
 				if (n > 0)
 				{
-					for (var i:int = 0; i < n; i++)
+					i = 0;
+					while (i < n)
 					{
 						if (key.toString().indexOf(_highlightLabels[i]) > -1)
 						{
@@ -143,6 +149,7 @@ package ru.antkarlov.anthill.debug
 							numOfHighlight++;
 							break;
 						}
+						i++;
 					}
 				}
 				
@@ -161,9 +168,9 @@ package ru.antkarlov.anthill.debug
 				AntG.log("  AntMemory is empty.", "data");
 			}
 			
-            AntG.log("", "data");
-        }
-
+			AntG.log("", "data");
+		}
+		
 	}
 
 }
