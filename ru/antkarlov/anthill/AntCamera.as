@@ -43,9 +43,24 @@ package ru.antkarlov.anthill
 		// PUBLIC VARIABLES
 		//---------------------------------------
 		
+		/**
+		 * Положение камеры на экране Flash окна по X.
+		 */
 		public var x:Number;
+		
+		/**
+		 * Положение камеры на экране Flash окна по Y.
+		 */
 		public var y:Number;
+		
+		/**
+		 * Размер окна камеры по ширине.
+		 */
 		public var width:int;
+		
+		/**
+		 * Размер окна камеры по высоте.
+		 */
 		public var height:int;
 		
 		/**
@@ -124,7 +139,7 @@ package ru.antkarlov.anthill
 		 * Определяет следует ли при преследовании цели округлять координаты камеры.
 		 * @default    false
 		 */
-		public var approximatePosition:Boolean;
+		public var roundToIntPosition:Boolean;
 		
 		/**
 		 * Центр экрана.
@@ -188,9 +203,6 @@ package ru.antkarlov.anthill
 			_flashSprite.y = y + screenCenter.y;
 			_flashSprite.addChild(_flashBitmap);
 			
-			//buffer = _flashBitmap.bitmapData;
-			//buffer.lock();
-			
 			_flashRect = new Rectangle(0, 0, aWidth, aHeight);
 			_newPos = new AntPoint();
 			
@@ -200,7 +212,7 @@ package ru.antkarlov.anthill
 			smoothFactor = 0.25;
 			positionPropertyX = "globalX";
 			positionPropertyY = "globalY";
-			approximatePosition = false;
+			roundToIntPosition = false;
 			
 			_isMasked = false;
 			_maskOffset = new AntPoint();
@@ -211,9 +223,9 @@ package ru.antkarlov.anthill
 		 */
 		override public function destroy():void
 		{
+			target = null;
 			AntG.removeCamera(this);
 			
-			//buffer.unlock();
 			buffer.dispose();
 			buffer = null;
 			
@@ -309,7 +321,7 @@ package ru.antkarlov.anthill
 					break;
 				}
 				
-				if (approximatePosition)
+				if (roundToIntPosition)
 				{
 					_newPos.x += (_newPos.x > 0) ? 0.0000001 : -0.0000001;
 					_newPos.y += (_newPos.y > 0) ? 0.0000001 : -0.0000001;
