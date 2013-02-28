@@ -6,6 +6,8 @@ package ru.antkarlov.anthill
 	import flash.geom.Point;
 	import flash.geom.Matrix;
 	
+	import ru.antkarlov.anthill.signals.AntSignal;
+	
 	/**
 	 * Кнопка обыкновенная.
 	 * 
@@ -69,31 +71,31 @@ package ru.antkarlov.anthill
 		 * Событие выполняющееся когда кнопка нажата. 
 		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
 		 */
-		public var eventDown:AntEvent;
+		public var eventDown:AntSignal;
 		
 		/**
 		 * Событие выполняющееся когда на кнопку наведен курсор мыши. 
 		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
 		 */
-		public var eventOver:AntEvent;
+		public var eventOver:AntSignal;
 		
 		/**
 		 * Событие выполняющееся когда курсор мыши вышел за пределы кнопки. 
 		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
 		 */
-		public var eventOut:AntEvent;
+		public var eventOut:AntSignal;
 		
 		/**
 		 * Событие выполняющееся когда кнопка отпущена. 
 		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
 		 */
-		public var eventUp:AntEvent;
+		public var eventUp:AntSignal;
 		
 		/**
 		 * Событие выполняющееся когда был произведен клик по кнопке (нажатие и отпускание мыши в пределах кнопки). 
 		 * В качестве атрибута в метод подписчика передается указатель на кнопку.
 		 */
-		public var eventClick:AntEvent;
+		public var eventClick:AntSignal;
 		
 		/**
 		 * Указатель на текстовую метку кнопки.
@@ -264,11 +266,11 @@ package ru.antkarlov.anthill
 			
 			super();
 			
-			eventDown = new AntEvent();
-			eventOver = new AntEvent();
-			eventOut = new AntEvent();
-			eventUp = new AntEvent();
-			eventClick = new AntEvent();
+			eventDown = new AntSignal(AntButton);
+			eventOver = new AntSignal(AntButton);
+			eventOut = new AntSignal(AntButton);
+			eventUp = new AntSignal(AntButton);
+			eventClick = new AntSignal(AntButton);
 			
 			label = null;
 			labelOffset = new AntPoint(0, 1);
@@ -318,11 +320,11 @@ package ru.antkarlov.anthill
 		 */
 		override public function destroy():void
 		{
-			eventDown.clear();
-			eventOver.clear();
-			eventOut.clear();
-			eventUp.clear();
-			eventClick.clear();
+			eventDown.destroy();
+			eventOver.destroy();
+			eventOut.destroy();
+			eventUp.destroy();
+			eventClick.destroy();
 			
 			eventDown = null;
 			eventOver = null;
@@ -362,25 +364,6 @@ package ru.antkarlov.anthill
 		override public function draw(aCamera:AntCamera):void
 		{
 			updateBounds();
-			
-			/*if (cameras == null)
-			{
-				cameras = AntG.cameras;
-			}
-			
-			var cam:AntCamera;
-			var i:int = 0;
-			var n:int = cameras.length;
-			while (i < n)
-			{
-				cam = cameras[i] as AntCamera;
-				if (cam != null)
-				{
-					drawButton(cam);
-				}
-				i++;
-			}*/
-			
 			drawButton(aCamera);
 			super.draw(aCamera);
 		}
@@ -442,7 +425,7 @@ package ru.antkarlov.anthill
 			}
 			else
 			{
-				throw new Error("AntButton::switchAnimation() - Missing animation \"" + aName +"\".");
+				throw new Error("Missing button animation \"" + aName +"\".");
 			}
 		}
 		
@@ -527,7 +510,7 @@ package ru.antkarlov.anthill
 			_over = true;
 			if (o != _over)
 			{
-				eventOver.send([ this ]);
+				eventOver.dispatch(this);
 			}
 			
 			if (!_down && overCursorAnim != null)
@@ -545,7 +528,7 @@ package ru.antkarlov.anthill
 			_over = false;
 			if (o != _over)
 			{
-				eventOut.send([ this ]);
+				eventOut.dispatch(this);
 				if (!_down)
 				{
 					AntG.mouse.changeCursor();
@@ -562,7 +545,7 @@ package ru.antkarlov.anthill
 			_down = true;
 			if (o != _down)
 			{
-				eventDown.send([ this ]);
+				eventDown.dispatch(this);
 				AntG.mouse.changeCursor(downCursorAnim);
 			}
 		}
@@ -572,7 +555,7 @@ package ru.antkarlov.anthill
 		 */
 		protected function onMouseUp():void
 		{
-			eventUp.send([ this ]);
+			eventUp.dispatch(this);
 			
 			if (_toggle && _over)
 			{
@@ -584,7 +567,7 @@ package ru.antkarlov.anthill
 			if (_over && o)
 			{
 				AntG.mouse.changeCursor(overCursorAnim);
-				eventClick.send([ this ]);
+				eventClick.dispatch(this);
 			}
 			else
 			{
