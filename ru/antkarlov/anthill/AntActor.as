@@ -6,6 +6,8 @@ package ru.antkarlov.anthill
 	import flash.geom.Point;
 	import flash.geom.Matrix;
 	
+	import ru.antkarlov.anthill.signals.AntSignal;
+	
 	/**
 	 * Данный класс занимается воспроизведением и отображением растеризированных анимаций.
 	 * От этого класса следует наследовать все визуальные игровые объекты.
@@ -68,7 +70,7 @@ package ru.antkarlov.anthill
 		 * Событие срабатывающее по окончанию проигрывания анимации.
 		 * Добавляемый метод должен иметь аргумент типа <code>function onComplete(actor:AntActor):void {}</code>
 		 */
-		public var eventComplete:AntEvent;
+		public var eventComplete:AntSignal;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -169,7 +171,7 @@ package ru.antkarlov.anthill
 			reverse = false;
 			repeat = true;
 			animationSpeed = 1;
-			eventComplete = new AntEvent();
+			eventComplete = new AntSignal(AntActor);
 			
 			_alpha = 1;
 			_color = 0x00FFFFFF;
@@ -201,7 +203,7 @@ package ru.antkarlov.anthill
 			_animations = null;
 			_curAnim = null;
 			
-			eventComplete.clear();
+			eventComplete.destroy();
 			eventComplete = null;
 			
 			_colorTransform = null;
@@ -291,7 +293,7 @@ package ru.antkarlov.anthill
 			}
 			else
 			{
-				throw new Error("Missing animation \"" + aName +"\".");
+				throw new Error("AntActor: Missing animation \'" + aName +"\'.");
 			}
 		}
 		
@@ -542,7 +544,7 @@ package ru.antkarlov.anthill
 		protected function animComplete():void
 		{
 			if (!repeat) stop();
-			eventComplete.send([ this ]);
+			eventComplete.dispatch(this);
 		}
 		
 		//---------------------------------------
