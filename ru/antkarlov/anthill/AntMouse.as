@@ -4,6 +4,8 @@ package ru.antkarlov.anthill
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	
+	import ru.antkarlov.anthill.signals.AntSignal;
+	
 	/**
 	 * Класс обработчик событий мыши.
 	 * 
@@ -58,12 +60,12 @@ package ru.antkarlov.anthill
 		/**
 		 * Событие выполняющиеся при нажатии кнопки мыши.
 		 */
-		public var eventDown:AntEvent;
+		public var eventDown:AntSignal;
 		
 		/**
 		 * Событие выполняющиеся при отпускании кнопки мыши.
 		 */
-		public var eventUp:AntEvent;
+		public var eventUp:AntSignal;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -124,8 +126,8 @@ package ru.antkarlov.anthill
 			screenY = 0;
 			cursor = null;
 			defCursorAnim = null;
-			eventDown = new AntEvent();
-			eventUp = new AntEvent();
+			eventDown = new AntSignal();
+			eventUp = new AntSignal();
 		}
 
 		//---------------------------------------
@@ -393,7 +395,7 @@ package ru.antkarlov.anthill
 		{
 			target = event.target;
 			_current = (_current > 0) ? 1 : 2;
-			eventDown.send();
+			eventDown.dispatch();
 		}
 		
 		/**
@@ -402,7 +404,7 @@ package ru.antkarlov.anthill
 		internal function mouseUpHandler(event:MouseEvent):void
 		{
 			_current = (_current > 0) ? -1 : 0;
-			eventUp.send();
+			eventUp.dispatch();
 		}
 		
 		/**
