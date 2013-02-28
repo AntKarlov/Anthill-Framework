@@ -48,6 +48,11 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
+		 * @private
+		 */
+		protected var _defaultCamera:AntCamera;
+		
+		/**
 		 * Класс игрового состояния которое будет создано при инициализации.
 		 */
 		protected var _initialState:Class;
@@ -191,10 +196,32 @@ package ru.antkarlov.anthill
 				state.destroy();
 				swapChildren(state, aState);
 				removeChild(state);
+				
+				if (_defaultCamera != null && AntG.camera == _defaultCamera)
+				{
+					AntG.removeCamera(_defaultCamera);
+				}
 			}
 
 			state = aState;
 			state.create();
+			
+			// Если камера не создана состоянием, создаем камеру по умолчанию.
+			if (AntG.camera == null)
+			{
+				if (_defaultCamera == null)
+				{
+					_defaultCamera = new AntCamera(0, 0, AntG.width, AntG.height);
+					_defaultCamera.fillBackground = true;
+				}
+				
+				AntG.addCamera(_defaultCamera);
+			}
+			else if (AntG.camera != null && _defaultCamera != null && AntG.camera != _defaultCamera)
+			{
+				_defaultCamera.destroy();
+				_defaultCamera = null;
+			}
 		}
 		
 		//---------------------------------------
@@ -245,6 +272,7 @@ package ru.antkarlov.anthill
 			AntG.updateSounds();
 
 			AntBasic.NUM_OF_ACTIVE = 0;
+			AntEntity.DEPTH_ID = 0;
 			if (state != null)
 			{
 				state.preUpdate();
