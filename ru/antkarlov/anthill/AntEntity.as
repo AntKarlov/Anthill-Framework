@@ -615,6 +615,7 @@ package ru.antkarlov.anthill
 			// Обновляем положение добавляемой сущности и добавляем указатель на родителя (себя).
 			aEntity.parent = this;
 			aEntity.locate(globalX, globalY, globalAngle);
+			aEntity.scrollFactor.copyFrom(scrollFactor);
 			
 			// Ищем пустую ячейку.
 			var i:int = 0;
@@ -1194,8 +1195,13 @@ package ru.antkarlov.anthill
 				aCamera = AntG.getCamera();
 			}
 			
-			return bounds.intersects(aCamera.scroll.x * -1 * scrollFactor.x, aCamera.scroll.y * -1 * scrollFactor.y,
-				aCamera.width / aCamera.zoom, aCamera.height / aCamera.zoom);
+			var offX:Number = (scaleX < 0) ? width : 0;
+			var offY:Number = (scaleY < 0) ? height : 0;
+			
+			return bounds.intersects((aCamera.scroll.x - offX) * -1 * scrollFactor.x, 
+				(aCamera.scroll.y - offY) * -1 * scrollFactor.y,
+				aCamera.width / aCamera.zoom,
+				aCamera.height / aCamera.zoom);
 		}
 		
 		/**
@@ -1508,6 +1514,15 @@ package ru.antkarlov.anthill
 		 */
 		protected function sortHandler(aEntity1:AntEntity, aEntity2:AntEntity):int
 		{
+			if (aEntity1 == null)
+			{
+				return _sortOrder;
+			}
+			else if (aEntity2 == null)
+			{
+				return -_sortOrder;
+			}
+			
 			if (aEntity1[_sortIndex] < aEntity2[_sortIndex])
 			{
 				return _sortOrder;
