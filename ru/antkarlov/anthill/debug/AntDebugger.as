@@ -42,12 +42,6 @@ package ru.antkarlov.anthill.debug
 		 */
 		public var monitor:AntMonitor;
 		
-		/**
-		 * Флаг определяющий активирован ли отладчик.
-		 * @default    true
-		 */
-		public var enable:Boolean;
-		
 		//---------------------------------------
 		// PRIVATE VARIABLES
 		//---------------------------------------
@@ -108,7 +102,6 @@ package ru.antkarlov.anthill.debug
 			addChild(_tfTitle);
 			
 			visible = false;
-			enable = true;
 			draw();
 		}
 		
@@ -121,7 +114,7 @@ package ru.antkarlov.anthill.debug
 		 */
 		public function update():void
 		{
-			if (enable)
+			if (AntG.debugMode)
 			{
 				perfomance.update();
 				if (console.visible)
@@ -136,7 +129,7 @@ package ru.antkarlov.anthill.debug
 		 */
 		public function show():void
 		{
-			if (!enable)
+			if (!AntG.debugMode)
 			{
 				return;
 			}
