@@ -304,18 +304,32 @@ package ru.antkarlov.anthill
 				if (camera != null && camera.exists)
 				{
 					camera.update();
+					
+					if (debugDraw)
+					{
+						AntG.debugDrawer.buffer = camera.buffer;
+					}
+					
 					camera.beginDraw();
+					
+					// Отрисовка содержимого для текущего состояния.
 					if (state != null && state.defGroup.exists && state.defGroup.visible)
 					{
 						state.defGroup.draw(camera);
 						if (debugDraw)
 						{
-							AntG.debugDrawer.buffer = camera.buffer;
 							state.defGroup.debugDraw(camera);
-							AntG.debugDrawer.buffer = null;
 						}
 					}
+					
+					// Отрисовка плагинов.
+					AntG.drawPlugins(camera);
 					camera.endDraw();
+					
+					if (debugDraw)
+					{
+						AntG.debugDrawer.buffer = null;
+					}
 				}
 			}
 			
