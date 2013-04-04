@@ -2,6 +2,8 @@ package ru.antkarlov.anthill
 {
 	import flash.display.Stage;
 	import flash.ui.Mouse;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	
 	import ru.antkarlov.anthill.plugins.IPlugin;
 	import ru.antkarlov.anthill.debug.*;
@@ -39,7 +41,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Версия обслуживания.
 		 */
-		public static const LIB_MAINTENANCE:uint = 1;
+		public static const LIB_MAINTENANCE:uint = 2;
 		
 		//---------------------------------------
 		// PUBLIC VARIABLES
@@ -238,6 +240,12 @@ package ru.antkarlov.anthill
 		 */
 		public static var endWatch:Function;
 		
+		/**
+		 * Блокирует переход по внешним ссылкам.
+		 * @default    false
+		 */
+		public static var lockExternalLinks:Boolean;
+		
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
@@ -246,6 +254,16 @@ package ru.antkarlov.anthill
 		 * Указатель на экземпляр класса <code>Anthill</code>.
 		 */
 		internal static var _anthill:Anthill;
+		
+		/**
+		 * Определяет отладочный режим для Anthill.
+		 * 
+		 * <p>Если отладочный режим отключен, то консоль и другие отладочные инструменты не доступны 
+		 * для просмотра.</p>
+		 * 
+		 * @default    true
+		 */
+		private static var _debugMode:Boolean;
 		
 		//---------------------------------------
 		// PUBLIC METHODS
@@ -262,6 +280,7 @@ package ru.antkarlov.anthill
 			maxElapsed = 0.0333333;
 			
 			_anthill = aAnthill;
+			_debugMode = true;
 			stage = _anthill.stage;
 			width = stage.stageWidth;
 			height = stage.stageHeight;
@@ -289,6 +308,8 @@ package ru.antkarlov.anthill
 			unwatchValue = debugger.monitor.unwatchValue;
 			beginWatch = debugger.monitor.beginWatch;
 			endWatch = debugger.monitor.endWatch;
+			
+			lockExternalLinks = false;
 		}
 		
 		/**
@@ -350,6 +371,24 @@ package ru.antkarlov.anthill
 				if (plugin != null)
 				{
 					plugin.update();
+				}
+			}
+		}
+		
+		/**
+		 * Отрисовка плагинов.
+		 */
+		public static function drawPlugins(aCamera:AntCamera):void
+		{
+			var i:int = 0;
+			const n:int = plugins.length;
+			var plugin:IPlugin;
+			while (i < n)
+			{
+				plugin = plugins[i++] as IPlugin;
+				if (plugin != null)
+				{
+					plugin.draw(aCamera);
 				}
 			}
 		}
@@ -517,9 +556,36 @@ package ru.antkarlov.anthill
 			return aState;
 		}
 		
+		/**
+		 * Выполняет переход по внешней ссылке.
+		 * 
+		 * @param	aUrl	 Внешняя ссылка по которой необходимо выполнить переход.
+		 * @param	aTarget	 Атрибут target для ссылки.
+		 */
+		public static function openUrl(aUrl:String, aTarget:String = "_blank"):void
+		{
+			if (!lockExternalLinks)
+			{
+				navigateToURL(new URLRequest(aUrl), aTarget);
+			}
+		}
+		
 		//---------------------------------------
 		// GETTER / SETTERS
 		//---------------------------------------
+		
+		/**
+		 * @private
+		 */
+		public static function get debugMode():Boolean { return _debugMode; }
+		public static function set debugMode(value:Boolean):void
+		{
+			_debugMode = value;
+			if (!_debugMode && debugger.visible)
+			{
+				debugger.hide();
+			}
+		}
 		
 		/**
 		 * Определяет используется в игре системный курсор или нет.
