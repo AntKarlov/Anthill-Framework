@@ -294,7 +294,7 @@ package ru.antkarlov.anthill
 				bounds = new AntRect();
 			}
 			
-			bounds.set(aLowerY, aLowerY, aUpperX, aUpperY);
+			bounds.set(aLowerX, aLowerY, aUpperX, aUpperY);
 			update();
 		}
 		
