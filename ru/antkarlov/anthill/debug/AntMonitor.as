@@ -64,10 +64,13 @@ package ru.antkarlov.anthill.debug
 		 */
 		public function watchValue(aKey:String, aValue:*):void
 		{
-			_registry.set(aKey, aValue);
-			if (_canRedraw)
+			if (AntG.debugMode)
 			{
-				updateDisplay();
+				_registry.set(aKey, aValue);
+				if (_canRedraw)
+				{
+					updateDisplay();
+				}
 			}
 		}
 		
@@ -78,10 +81,13 @@ package ru.antkarlov.anthill.debug
 		 */
 		public function unwatchValue(aKey:String):void
 		{
-			_registry.remove(aKey);
-			if (_canRedraw)
+			if (AntG.debugMode)
 			{
-				updateDisplay();
+				_registry.remove(aKey);
+				if (_canRedraw)
+				{
+					updateDisplay();
+				}
 			}
 		}
 		
