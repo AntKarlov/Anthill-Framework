@@ -888,9 +888,9 @@ package ru.antkarlov.anthill
 			_internalTileSet = new AntAnimation("TileMap");
 			_internalTileSet.width = _rect.width = _tileWidth;
 			_internalTileSet.height = _rect.height = _tileHeight;
-			_internalTileSet.frames = new Array(_numTiles);
-			_internalTileSet.offsetX = new Array(_numTiles);
-			_internalTileSet.offsetY = new Array(_numTiles);
+			_internalTileSet.frames = new Vector.<BitmapData>(_numTiles);
+			_internalTileSet.offsetX = new Vector.<Number>(_numTiles);
+			_internalTileSet.offsetY = new Vector.<Number>(_numTiles);
 			_internalTileSet.totalFrames = _processTotal = numTilesForCaching();
 		}
 		
