@@ -1,10 +1,12 @@
 package ru.antkarlov.anthill
 {
-	import flash.geom.Rectangle;
 	import flash.display.BitmapData;
-	import flash.geom.Matrix;
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.geom.Point;
+	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
+	
 	
 	/**
 	 * Данный класс используется для растеризации векторных клипов и для последующего их хранения в памяти.
@@ -116,6 +118,55 @@ package ru.antkarlov.anthill
 			frames.length = 0;
 			offsetY.length = 0;
 			offsetY.length = 0;
+		}
+		
+		/**
+		 * Создает растровую однокадровую анимацию из указанного спрайта.
+		 * 
+		 * @param	aSprite	 Спрайт из которого необходимо создать растровую анимацию.
+		 */
+		public function makeFromSprite(aSprite:Sprite):void
+		{
+			totalFrames = 1;
+			
+			var rect:Rectangle;
+			var flooredX:int;
+			var flooredY:int;
+			var mtx:Matrix = new Matrix();
+			var scratchBitmapData:BitmapData = null;
+			
+			rect = aSprite.getBounds(aSprite);
+			rect.width = Math.ceil(rect.width) + INDENT_FOR_FILTER_DOUBLED;
+			rect.height = Math.ceil(rect.height) + INDENT_FOR_FILTER_DOUBLED;
+			
+			flooredX = Math.floor(rect.x) - INDENT_FOR_FILTER;
+			flooredY = Math.floor(rect.y) - INDENT_FOR_FILTER;
+			mtx.tx = -flooredX;
+			mtx.ty = -flooredY;
+			
+			scratchBitmapData = new BitmapData(rect.width, rect.height, true, 0);
+			scratchBitmapData.draw(aSprite, mtx);
+			
+			var trimBounds:Rectangle = scratchBitmapData.getColorBoundsRect(0xFF000000, 0x00000000, false);
+			trimBounds.x -= 1;
+			trimBounds.y -= 1;
+			trimBounds.width += 2;
+			trimBounds.height += 2;
+			
+			var bmpData:BitmapData = new BitmapData(trimBounds.width, trimBounds.height, true, 0);
+			bmpData.copyPixels(scratchBitmapData, trimBounds, DEST_POINT);
+			
+			flooredX += trimBounds.x;
+			flooredY += trimBounds.y;
+			
+			frames.push(bmpData);
+			offsetX.push(flooredX);
+			offsetY.push(flooredY);
+			
+			width = (width < trimBounds.width) ? trimBounds.width : width;
+			height = (height < trimBounds.height) ? trimBounds.height : height;
+			
+			scratchBitmapData.dispose();
 		}
 		
 		/**
