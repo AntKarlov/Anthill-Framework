@@ -1105,10 +1105,8 @@ package ru.antkarlov.anthill
 					{
 						entity.setAll(aVariableName, aValue, aRecurse);
 					}
-					else
-					{
-						entity[aVariableName] = aValue;
-					}
+					
+					entity[aVariableName] = aValue;
 				}
 			}
 		}
@@ -1135,7 +1133,8 @@ package ru.antkarlov.anthill
 					{
 						entity.callAll(aFunctionName, aArgs, aRecurse);
 					}
-					else if (entity[aFunctionName] is Function)
+					
+					if (entity[aFunctionName] is Function)
 					{
 						(entity[aFunctionName] as Function).apply(this, aArgs);
 					}
