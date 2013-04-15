@@ -222,6 +222,11 @@ package ru.antkarlov.anthill
 				_defaultCamera.destroy();
 				_defaultCamera = null;
 			}
+			
+			if (!_isStarted)
+			{
+				start();
+			}
 		}
 		
 		//---------------------------------------
