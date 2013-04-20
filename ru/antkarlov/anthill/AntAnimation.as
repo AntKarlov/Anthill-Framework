@@ -260,7 +260,7 @@ package ru.antkarlov.anthill
 				rect.width = aFrameWidth;
 				rect.height = aFrameHeight;
 				
-				var n:int = frames.length = numFramesX * numFramesY;
+				var n:int = numFramesX * numFramesY;
 				var i:int = 0;
 				while (i < n)
 				{
