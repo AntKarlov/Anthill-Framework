@@ -1144,14 +1144,19 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Проверяет попадает ли указанные координаты в прямоугольник сущности.
-		 * <p>Примечание: Для невизуальной сущности прямоугольник не рассчитывается. 
-		 * Данный метод корректно работает для визуальных объектов.</p>
+		 * 
+		 * <p>Примечание: В данной реализации при проверки пересечения сущности с точкой флаг aPixelFlag 
+		 * игнорируется так как сущность не имеет графического представления.</p>
+		 * 
+		 * <p>Внимание: Для невизуальной сущности прямоугольник не рассчитывается. 
+		 * Данный метод корректно работает только для визуальных объектов.</p>
 		 * 
 		 * @param	aX	 Положение точки по X.
 		 * @param	aY	 Положение точки по Y.
+		 * @param	aPixelFlag	 Определяет следует ли при проверке учитывать графический образ объекта.
 		 * @return		Вернет true если точка находится внутри прямоугольника сущности.
 		 */
-		public function hitTest(aX:Number, aY:Number):Boolean
+		public function hitTest(aX:Number, aY:Number, aPixelFlag:Boolean = false):Boolean
 		{
 			var n:int = vertices.length;
 			var res:Boolean = false;
@@ -1173,9 +1178,9 @@ package ru.antkarlov.anthill
 		 * 
 		 * @return		Возвращает true если точка попадает в прямоугольник кнопки.
 		 */
-		public function hitTestPoint(aPoint:AntPoint):Boolean
+		public function hitTestPoint(aPoint:AntPoint, aPixelFlag:Boolean = false):Boolean
 		{
-			return hitTest(aPoint.x, aPoint.y);
+			return hitTest(aPoint.x, aPoint.y, aPixelFlag);
 		}
 		
 		/**
