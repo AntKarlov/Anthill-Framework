@@ -7,6 +7,7 @@ package ru.antkarlov.anthill
 	import flash.geom.Matrix;
 	
 	import ru.antkarlov.anthill.signals.AntSignal;
+	import ru.antkarlov.anthill.utils.AntColor;
 	
 	/**
 	 * Кнопка обыкновенная.
@@ -298,18 +299,14 @@ package ru.antkarlov.anthill
 			
 			var btn:AntButton = new AntButton();
 			btn.addAnimationFromCache(aAnimName);
+			btn.isScrolled = aIsScrolled;
 			if (aLabel != null)
 			{
 				btn.label = aLabel;
 				btn.add(aLabel);
 				aLabel.x = btn.width * 0.5 - aLabel.width * 0.5 + btn.origin.x;
 				aLabel.y = btn.height * 0.5 - aLabel.height * 0.5 + btn.origin.y;
-			}
-			
-			if (!aIsScrolled)
-			{
-				btn.isScrolled = false;
-				aLabel.isScrolled = false;
+				aLabel.isScrolled = aIsScrolled;
 			}
 			
 			return btn;
@@ -427,6 +424,41 @@ package ru.antkarlov.anthill
 			{
 				throw new Error("Missing button animation \"" + aName +"\".");
 			}
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function hitTest(aX:Number, aY:Number, aPixelFlag:Boolean = false):Boolean
+		{
+			var res:Boolean = super.hitTest(aX, aY);
+			if (res && aPixelFlag)
+			{
+				var absOrigin:AntPoint = new AntPoint(Math.abs(origin.x), Math.abs(origin.y));
+				var dx:int = Math.floor(Math.abs(aX - x + absOrigin.x));
+				var dy:int = Math.floor(Math.abs(aY - y + absOrigin.y));
+				var p:AntPoint = AntMath.rotateDeg(dx, dy, absOrigin.x, absOrigin.y, -globalAngle);
+				res = false;
+				
+				if (_buffer != null)
+				{
+					res = (AntColor.extractAlpha(_buffer.getPixel32(p.x, p.y)) > 0);
+				}
+				else if (_pixels != null)
+				{
+					res = (AntColor.extractAlpha(_pixels.getPixel32(p.x, p.y)) > 0);
+				}
+			}
+			
+			return res;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function hitTestPoint(aPoint:AntPoint, aPixelFlag:Boolean = false):Boolean
+		{
+			return hitTest(aPoint.x, aPoint.y, aPixelFlag);
 		}
 		
 		//---------------------------------------
