@@ -89,9 +89,12 @@ package ru.antkarlov.anthill
 		 */
 		public function update():void
 		{
-			defGroup.preUpdate();
-			defGroup.update();
-			defGroup.postUpdate();
+			if (defGroup != null && defGroup.exists && defGroup.active)
+			{
+				defGroup.preUpdate();
+				defGroup.update();
+				defGroup.postUpdate();
+			}
 		}
 		
 		/**
