@@ -797,7 +797,7 @@ package ru.antkarlov.anthill
 			var i:int = 0;
 			while (i < numChildren)
 			{
-				entity = children[i++] as AntEntity;
+				entity = children[i] as AntEntity;
 				if (entity != null)
 				{
 					if (aDestroy)
@@ -809,6 +809,7 @@ package ru.antkarlov.anthill
 					entity._depth = -1;
 				}
 				children[i] = null;
+				i++;
 			}
 			
 			children.length = 0;
