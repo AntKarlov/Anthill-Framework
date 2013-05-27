@@ -435,8 +435,8 @@ package ru.antkarlov.anthill
 			if (res && aPixelFlag)
 			{
 				var absOrigin:AntPoint = new AntPoint(Math.abs(origin.x), Math.abs(origin.y));
-				var dx:int = Math.floor(Math.abs(aX - x + absOrigin.x));
-				var dy:int = Math.floor(Math.abs(aY - y + absOrigin.y));
+				var dx:int = Math.floor(Math.abs((aX - x) / scaleX + absOrigin.x));
+				var dy:int = Math.floor(Math.abs((aY - y) / scaleY + absOrigin.y));
 				var p:AntPoint = AntMath.rotateDeg(dx, dy, absOrigin.x, absOrigin.y, -globalAngle);
 				res = false;
 				
