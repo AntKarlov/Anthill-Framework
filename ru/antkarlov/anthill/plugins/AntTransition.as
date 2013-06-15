@@ -179,7 +179,7 @@ package ru.antkarlov.anthill.plugins
 		{
 			var invRatio:Number = aRatio - 1.0;
 			var s:Number = 1.70158;
-			return Math.pow(invRatio, 2) * ((s + 1.0) * aRatio + s) + 1.0;
+			return Math.pow(invRatio, 2) * ((s + 1.0) * invRatio + s) + 1.0;
 		}
 		
 		/**
