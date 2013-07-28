@@ -656,7 +656,7 @@ package ru.antkarlov.anthill.debug
 			var value:Object;
 			for (var i:int = 1; i < numValueClasses; i++)
 			{
-				valueObject = aValueObjects[i];
+				valueObject = aValueObjects[i] as valueClasses[i];
 				valueClass = valueClasses[i];
 				
 				if (valueObject === null || valueObject is valueClass)
@@ -671,19 +671,8 @@ package ru.antkarlov.anthill.debug
 			var func:Function = _functions.get(command) as Function;
 			if (func != null)
 			{
-				if (numValueObjects == 3)
-				{
-					func(aValueObjects[1], aValueObjects[2]);
-				}
-				else if (numValueObjects == 4)
-				{
-					func(aValueObjects[1], aValueObjects[2], aValueObjects[3]);
-				}
-				else
-				{
-					aValueObjects.splice(0, 1);
-					func.apply(null, aValueObjects);
-				}
+				aValueObjects.splice(0, 1);
+				func.apply(null, aValueObjects);
 			}
 			else
 			{
