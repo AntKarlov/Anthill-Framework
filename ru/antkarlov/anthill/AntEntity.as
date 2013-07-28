@@ -274,6 +274,11 @@ package ru.antkarlov.anthill
 		protected var _sortOrder:int;
 		
 		/**
+		 * @private
+		 */
+		protected var _testBounds:AntRect;
+		
+		/**
 		 * Содержит номер объекта если он вложен в другую сущность.
 		 * Номером объекта является его номер в очереди обработки. 
 		 * Номер объекта рассчитывается каждый раз при вызове метода <code>preUpdate()</code>.
@@ -346,6 +351,7 @@ package ru.antkarlov.anthill
 			_oldAngle = -1;
 			_sortIndex = null;
 			_sortOrder = ASCENDING;
+			_testBounds = new AntRect();
 		}
 		
 		/**
@@ -1200,13 +1206,35 @@ package ru.antkarlov.anthill
 				aCamera = AntG.getCamera();
 			}
 			
-			var offX:Number = (scaleX < 0) ? width : 0;
+			if (bounds.bottom < bounds.top && bounds.right < bounds.left)
+			{
+				_testBounds.set(bounds.right, bounds.bottom, -bounds.width, -bounds.height);
+			}
+			else if (bounds.bottom < bounds.top)
+			{
+				_testBounds.set(bounds.x, bounds.bottom, bounds.width, -bounds.height);
+			}
+			else if (bounds.right < bounds.left)
+			{
+				_testBounds.set(bounds.right, bounds.y, -bounds.width, bounds.height);
+			}
+			else
+			{ 
+				_testBounds.copyFrom(bounds); 
+			} 
+
+			return _testBounds.intersects(aCamera.scroll.x * -1 * scrollFactor.x, 
+				aCamera.scroll.y * -1 * scrollFactor.y, 
+				aCamera.width / aCamera.zoom, 
+				aCamera.height / aCamera.zoom);
+			
+			/*var offX:Number = (scaleX < 0) ? width : 0;
 			var offY:Number = (scaleY < 0) ? height : 0;
 			
 			return bounds.intersects((aCamera.scroll.x - offX) * -1 * scrollFactor.x, 
 				(aCamera.scroll.y - offY) * -1 * scrollFactor.y,
 				aCamera.width / aCamera.zoom,
-				aCamera.height / aCamera.zoom);
+				aCamera.height / aCamera.zoom);*/
 		}
 		
 		/**
