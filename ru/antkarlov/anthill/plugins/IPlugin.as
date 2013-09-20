@@ -20,6 +20,24 @@ package ru.antkarlov.anthill.plugins
 		 */
 		function draw(aCamera:AntCamera):void;
 		
+		/**
+		 * Задает идентификатор для плагина.
+		 * 
+		 * <p>Используя идентификаторы можно объеденять плагины в группы и, например, останавливать 
+		 * сразу несколько плагинов и возобновлять их работу.</p>
+		 */
+		function get tag():String;
+		function set tag(aValue:String):void;
+		
+		/**
+		 * Задает приоритет для плагина.
+		 * 
+		 * <p>Приоритет влияет только на порядок обновления и отрисовки плагинов. Плагины с наибольшим 
+		 * приоритетом выполняются в первую очередь чем с наименьшим.</p>
+		 */
+		function get priority():int;
+		function set priority(aValue:int):void;
+		
 	}
 
 }
