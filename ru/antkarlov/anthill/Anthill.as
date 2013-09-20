@@ -261,7 +261,7 @@ package ru.antkarlov.anthill
 			var rndTime:uint = getTimer();
 			_perfomance.ratingRender.add(rndTime - updTime);
 			
-			AntG.updatePlugins();
+			AntG.plugins.update();
 			
 			// Рассчет времени ушедшего на плагины.
 			_perfomance.ratingPlugins.add(getTimer() - rndTime);
@@ -274,7 +274,7 @@ package ru.antkarlov.anthill
 		protected function update():void
 		{
 			AntG.updateInput();
-			AntG.updateSounds();
+			AntG.sounds.update();
 
 			AntBasic.NUM_OF_ACTIVE = 0;
 			AntEntity.DEPTH_ID = 0;
@@ -328,7 +328,7 @@ package ru.antkarlov.anthill
 					}
 					
 					// Отрисовка плагинов.
-					AntG.drawPlugins(camera);
+					AntG.plugins.draw(camera);
 					camera.endDraw();
 					
 					if (debugDraw)
