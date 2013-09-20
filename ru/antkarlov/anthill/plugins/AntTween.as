@@ -12,7 +12,7 @@ package ru.antkarlov.anthill.plugins
 	 * любое цифровое свойство объекта (<code>int, uint, Number</code>). Чтобы посмотреть список 
 	 * возможных типов анимаций для трансформаций, посмотрите класс <code>AntTransition</code>.</p>
 	 * 
-	 * <p>Пример использования использующий движение объекта, вращение и затухание:</p>
+	 * <p>Пример использования твина для движение объекта, вращения и затухания:</p>
 	 * 
 	 * <listing>
 	 * var tween:AntTween = new AntTween(object, 2.0, AntTransition.EASE_IN_OUT);
@@ -21,6 +21,19 @@ package ru.antkarlov.anthill.plugins
 	 * tween.fadeTo(0); // Тоже самое что и animate("alpha", 0);
 	 * tween.start();
 	 * </listing>
+	 * 
+	 * <p>После того как твин закончил свою анимацию, он будет автоматически помещен в кэш для повторного 
+	 * использования. Чтобы извлечь твин из кэша для повторного использования, используйте статический метод 
+	 * <code>AntTween.get(yourObject, durationTime, transition):AntTween</code>.</p>
+	 * 
+	 * <p>По умолчанию, при помещении твина в кэш, для него сбрасываются все пользовательские настройки, включая 
+	 * слушателей событий (сигналов). Чтобы отключить сброс пользовательских настроек при помещении твина в 
+	 * кэш, установите флаг <code>autocachingReset = false</code>. А если вы не хотите чтобы твин помещался в кэш,
+	 * то установите флаг <code>autocaching = false</code>.</p>
+	 * 
+	 * <p>Вы можете вручную помещать твины в кэш используя метод <code>AntTween.set(tween, false)</code> — второй
+	 * аргумент определяет необходимость сброса пользовательских настроек для помещаемого твина. Если установить
+	 * вторым аргументом <code>TRUE</code>, то все пользовательские настройки будут сброшены для кэшируемого твина.</p>
 	 * 
 	 * <p>Идея и реализация подсмотрена у <a href="http://gamua.com/starling/">Starling Framework</a>.</p>
 	 * 
@@ -31,6 +44,15 @@ package ru.antkarlov.anthill.plugins
 	 */
 	public class AntTween implements IPlugin
 	{
+		//---------------------------------------
+		// CLASS CONSTANTS
+		//---------------------------------------
+		
+		/**
+		 * Максимальная вместимость кэша.
+		 */
+		public static const MAX_CACHE_CAPACITY:int = 30;
+		
 		//---------------------------------------
 		// PUBLIC METHODS
 		//---------------------------------------
@@ -117,6 +139,18 @@ package ru.antkarlov.anthill.plugins
 		 */
 		public var completeArgs:Array;
 		
+		/**
+		 * Автоматическое кэширование твина для повторного использования.
+		 * @default    true
+		 */
+		public var autocaching:Boolean;
+		
+		/**
+		 * Автоматический сброс пользовательских настроек при помещении твина в кэш.
+		 * @default    true
+		 */
+		public var autocachingReset:Boolean;
+		
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
@@ -179,6 +213,26 @@ package ru.antkarlov.anthill.plugins
 		 */
 		protected var _isStarted:Boolean;
 		
+		/**
+		 * Идентификатор плагина.
+		 */
+		protected var _tag:String;
+		
+		/**
+		 * Приоритет плагина.
+		 */
+		protected var _priority:int;
+		
+		/**
+		 * Список твинов помещенных в кэш.
+		 */
+		protected static var _cache:Vector.<AntTween>;
+		
+		/**
+		 * Количество твинов в кэше.
+		 */
+		protected static var _numCacheItems:int = 0;
+		
 		//---------------------------------------
 		// CONSTRUCTOR
 		//---------------------------------------
@@ -190,7 +244,10 @@ package ru.antkarlov.anthill.plugins
 		{
 			super();
 			_isStarted = false;
+			_tag = null;
 			autoStartOfNextTween = true;
+			autocaching = true;
+			autocachingReset = true;
 			reset(aTarget, aTime, aTransition);
 		}
 		
@@ -318,7 +375,7 @@ package ru.antkarlov.anthill.plugins
 		{
 			if (!_isStarted)
 			{
-				AntG.addPlugin(this);
+				AntG.plugins.add(this);
 				_isStarted = true;
 			}
 		}
@@ -330,7 +387,7 @@ package ru.antkarlov.anthill.plugins
 		{
 			if (_isStarted)
 			{
-				AntG.removePlugin(this);
+				AntG.plugins.remove(this);
 				_isStarted = false;
 			}
 		}
@@ -350,6 +407,39 @@ package ru.antkarlov.anthill.plugins
 			}
 			
 			return _properties[i] as Number;
+		}
+		
+		/**
+		 * Уничтожает твин перед его полным удалением.
+		 */
+		public function destroy():void
+		{
+			if (_isStarted)
+			{
+				stop();
+			}
+			
+			nextTween = null;
+			eventStart.destroy();
+			eventUpdate.destroy();
+			eventRepeat.destroy();
+			eventComplete.destroy();
+			
+			eventStart = null;
+			eventUpdate = null;
+			eventRepeat = null;
+			eventComplete = null;
+			
+			startArgs = null;
+			updateArgs = null;
+			repeatArgs = null;
+			completeArgs = null;
+
+			_target = null;
+			_transitionFunc = null;
+			_properties = null;
+ 			_startValues = null;
+			_endValues = null;
 		}
 		
 		//---------------------------------------
@@ -373,6 +463,18 @@ package ru.antkarlov.anthill.plugins
 		{
 			//
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get tag():String { return _tag; }
+		public function set tag(aValue:String):void { _tag = aValue; }
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get priority():int { return _priority; }
+		public function set priority(aValue:int):void { _priority = aValue; }
 		
 		//---------------------------------------
 		// PROTECTED METHODS
@@ -432,7 +534,10 @@ package ru.antkarlov.anthill.plugins
 				_target[_properties[i]] = currentValue;
 			}
 			
-			eventUpdate.dispatch.apply(this, updateArgs);
+			if (eventUpdate.numListeners > 0)
+			{
+				eventUpdate.dispatch.apply(this, updateArgs);
+			}
 			
 			if (previousTime < _totalTime && _currentTime >= _totalTime)
 			{
@@ -454,6 +559,13 @@ package ru.antkarlov.anthill.plugins
 					if (autoStartOfNextTween && nextTween != null)
 					{
 						nextTween.start();
+					}
+					
+					// Если включено автоматическое кэширование.
+					if (autocaching)
+					{
+						// Помещаем твин в кэш.
+						set(this, autocachingReset);
 					}
 				}
 			}
@@ -533,6 +645,98 @@ package ru.antkarlov.anthill.plugins
 		{
 			_currentTime = _currentTime + _delay - value;
 			_delay = value;
+		}
+		
+		//---------------------------------------
+		// CACHE
+		//---------------------------------------
+		
+		/**
+		 * Извлекает свободный твин из кэша и подготавливает его к работе.
+		 * Если в кэше нет свободных твинов, то будет создан и возвращен новый экземпляр твина.
+		 * 
+		 * @param	aTarget	 Указатель на объект к которому применяется твинер.
+		 * @param	aTime	 Продолжительность работы твинера.
+		 * @param	aTransition	 Тип анимации твина.
+		 * @return		Возвращает свободный твин из кэша.
+		 */
+		public static function get(aTarget:Object, aTime:Number, aTransition:Object = "linear"):AntTween
+		{
+			if (_cache != null)
+			{
+				var tween:AntTween;
+				var i:int = 0;
+				while (i < MAX_CACHE_CAPACITY)
+				{
+					tween = _cache[i] as AntTween;
+					if (tween != null)
+					{
+						_cache[i] = null;
+						_numCacheItems--;
+						tween.reset(aTarget, aTime, aTransition);
+						return tween;
+					}
+					i++;
+				}
+			}
+			
+			return new AntTween(aTarget, aTime, aTransition);
+		}
+		
+		/**
+		 * Помещает твин в кэш для последующего использования.
+		 * 
+		 * @param	aTween	 Твин который будет помещен в кэш.
+		 * @param	aResetProperties	 Определяет следует ли очистить пользовательские настройки твина перед его отправкой в кэш.
+		 */
+		public static function set(aTween:AntTween, aResetProperties:Boolean = true):void
+		{
+			if (_cache == null)
+			{
+				_cache = new Vector.<AntTween>(MAX_CACHE_CAPACITY, true);
+			}
+			
+			aTween.stop();
+			
+			if (aResetProperties)
+			{
+				aTween.nextTween = null;
+				aTween.eventStart.clear();
+				aTween.eventUpdate.clear();
+				aTween.eventRepeat.clear();
+				aTween.eventComplete.clear();
+
+				aTween.startArgs = null;
+				aTween.updateArgs = null;
+				aTween.repeatArgs = null;
+				aTween.completeArgs = null;
+
+				aTween._target = null;
+				aTween._transitionFunc = null;
+				aTween._properties = null;
+	 			aTween._startValues = null;
+				aTween._endValues = null;
+			}
+			
+			var i:int = 0;
+			while (i < MAX_CACHE_CAPACITY)
+			{
+				if (_cache[i] == null)
+				{
+					_cache[i] = aTween;
+					_numCacheItems++;
+					return;
+				}
+				i++;
+			}
+		}
+		
+		/**
+		 * Возвращает количество объектов в кэше.
+		 */
+		public static function getNumCacheItems():int
+		{
+			return _numCacheItems;
 		}
 		
 	}
