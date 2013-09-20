@@ -106,6 +106,16 @@ package ru.antkarlov.anthill.plugins
 		 */
 		protected var _delay:Number;
 		
+		/**
+		 * Идентификатор плагина.
+		 */
+		protected var _tag:String;
+		
+		/**
+		 * Приоритет плагина.
+		 */
+		protected var _priority:int;
+		
 		//---------------------------------------
 		// CONSTRUCTOR
 		//---------------------------------------
@@ -123,6 +133,7 @@ package ru.antkarlov.anthill.plugins
 			_result = false;
 			_cycle = aCycle;
 			_delay = 0;
+			_tag = null;
 			
 			eventComplete = new AntSignal(AntTaskManager);
 		}
@@ -277,6 +288,18 @@ package ru.antkarlov.anthill.plugins
 			//
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
+		public function get tag():String { return _tag; }
+		public function set tag(aValue:String):void { _tag = aValue; }
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get priority():int { return _priority; }
+		public function set priority(aValue:int):void { _priority = aValue; }
+		
 		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------
@@ -288,7 +311,7 @@ package ru.antkarlov.anthill.plugins
 		{
 			if (!_isStarted)
 			{
-				AntG.addPlugin(this);
+				AntG.plugins.add(this);
 				_isStarted = true;
 				_isPaused = false;
 			}
@@ -301,7 +324,7 @@ package ru.antkarlov.anthill.plugins
 		{
 			if (_isStarted)
 			{
-				AntG.removePlugin(this);
+				AntG.plugins.add(this);
 				_isStarted = false;
 			}
 		}
@@ -406,7 +429,7 @@ package ru.antkarlov.anthill.plugins
 			{
 				if (_isStarted)
 				{
-					AntG.removePlugin(this);
+					AntG.plugins.remove(this);
 				}
 				_isPaused = true;
 			}
@@ -414,7 +437,7 @@ package ru.antkarlov.anthill.plugins
 			{
 				if (_isStarted)
 				{
-					AntG.addPlugin(this);
+					AntG.plugins.add(this);
 				}
 				_isPaused = false;
 			}
