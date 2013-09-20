@@ -274,7 +274,7 @@ package ru.antkarlov.anthill
 		protected var _sortOrder:int;
 		
 		/**
-		 * @private
+		 * Помошник для проверки пересечений.
 		 */
 		protected var _testBounds:AntRect;
 		
@@ -1227,10 +1227,10 @@ package ru.antkarlov.anthill
 				aCamera.scroll.y * -1 * scrollFactor.y, 
 				aCamera.width / aCamera.zoom, 
 				aCamera.height / aCamera.zoom);
-			
+
 			/*var offX:Number = (scaleX < 0) ? width : 0;
 			var offY:Number = (scaleY < 0) ? height : 0;
-			
+
 			return bounds.intersects((aCamera.scroll.x - offX) * -1 * scrollFactor.x, 
 				(aCamera.scroll.y - offY) * -1 * scrollFactor.y,
 				aCamera.width / aCamera.zoom,
