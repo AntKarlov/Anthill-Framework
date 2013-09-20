@@ -319,7 +319,7 @@ package ru.antkarlov.anthill
 			{
 				if (aCopy)
 				{
-					origBmp = frames[i] as BitmapData;
+					origBmp = frames[ aFrames[i] ] as BitmapData;
 					rect.x = rect.y = 0;
 					rect.width = origBmp.width;
 					rect.height = origBmp.height;
@@ -329,11 +329,11 @@ package ru.antkarlov.anthill
 				}
 				else
 				{
-					newAnim.frames.push(frames[i]);
+					newAnim.frames.push(frames[ aFrames[i] ]);
 				}
 				
-				newAnim.offsetX.push(offsetX[i]);
-				newAnim.offsetY.push(offsetY[i]);
+				newAnim.offsetX.push(offsetX[ aFrames[i] ]);
+				newAnim.offsetY.push(offsetY[ aFrames[i] ]);
 				i++;
 			}
 			
