@@ -114,10 +114,10 @@ package ru.antkarlov.anthill
 		public static var camera:AntCamera;
 		
 		/**
-		 * Список добавленных плагинов.
+		 * Менеджер плагинов.
 		 */
-		public static var plugins:Vector.<IPlugin>;
-				
+		public static var plugins:AntPluginManager;
+		
 		/**
 		 * Указатель на класс для работы с мышкой.
 		 */
@@ -288,7 +288,7 @@ package ru.antkarlov.anthill
 			heightHalf = stage.stageHeight * 0.5;
 			
 			cameras = [];
-			plugins = new <IPlugin>[];
+			plugins = new AntPluginManager;
 			
 			mouse = new AntMouse();
 			keys = new AntKeyboard();
@@ -347,102 +347,6 @@ package ru.antkarlov.anthill
 		{
 			mouse.update(stage.mouseX, stage.mouseY);
 			keys.update();
-		}
-		
-		/**
-		 * Обработка классов звука.
-		 */
-		public static function updateSounds():void
-		{
-			sounds.update();
-		}
-		
-		/**
-		 * Обработка плагинов.
-		 */
-		public static function updatePlugins():void
-		{
-			var i:int = 0;
-			const n:int = plugins.length;
-			var plugin:IPlugin;
-			while (i < n)
-			{
-				plugin = plugins[i++] as IPlugin;
-				if (plugin != null)
-				{
-					plugin.update();
-				}
-			}
-		}
-		
-		/**
-		 * Отрисовка плагинов.
-		 */
-		public static function drawPlugins(aCamera:AntCamera):void
-		{
-			var i:int = 0;
-			const n:int = plugins.length;
-			var plugin:IPlugin;
-			while (i < n)
-			{
-				plugin = plugins[i++] as IPlugin;
-				if (plugin != null)
-				{
-					plugin.draw(aCamera);
-				}
-			}
-		}
-		
-		/**
-		 * Добавляет плагин в список для обработки.
-		 * 
-		 * @param	aPlugin	 Плагин который необходимо добавить.
-		 * @param	aSingle	 Если true то один и тот же экземпляр плагина не может быть добавлен дважды.
-		 * @return		Возвращает указатель на добавленный плагин.
-		 */
-		public static function addPlugin(aPlugin:IPlugin, aSingle:Boolean = true):IPlugin
-		{
-			if (aSingle && plugins.indexOf(aPlugin) > -1)
-			{
-				return aPlugin;
-			}
-			
-			var i:int = 0;
-			const n:int = plugins.length;
-			while (i < n)
-			{
-				if (plugins[i] == null)
-				{
-					plugins[i] = aPlugin;
-					return aPlugin;
-				}
-				i++;
-			}
-			
-			plugins.push(aPlugin);
-			return aPlugin;
-		}
-		
-		/**
-		 * Удаляет плагин из списка для обработки.
-		 * 
-		 * @param	aPlugin	 Плагин который необходимо удалить.
-		 * @param	aSplice	 Если true то элемент массива в котором размещался плагин так же будет удален.
-		 * @default    Возвращает указатель на удаленный плагин.
-		 */
-		public static function removePlugin(aPlugin:IPlugin, aSplice:Boolean = false):IPlugin
-		{
-			var i:int = plugins.indexOf(aPlugin);
-			if (i >= 0 && i < plugins.length)
-			{
-				plugins[i] = null;
-				if (aSplice)
-				{
-					plugins.splice(i, 1);
-				}
-			}
-			
-			return aPlugin;
 		}
 		
 		/**
