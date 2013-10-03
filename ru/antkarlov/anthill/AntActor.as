@@ -470,7 +470,7 @@ package ru.antkarlov.anthill
 
 				if (globalAngle != 0)
 				{
-					_matrix.rotate(Math.PI * 2 * (globalAngle / 360));
+					_matrix.rotate(Math.PI * (globalAngle / 180));
 				}
 
 				_matrix.translate(_flashPoint.x - origin.x, _flashPoint.y - origin.y);
