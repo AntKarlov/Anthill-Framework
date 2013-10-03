@@ -85,7 +85,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Как быстро протекает время в игровом мире. 
 		 * Изменяя этот параметр можно получить эффект слоу-мо.
-		 * @default    0.5
+		 * @default    1
 		 */
 		public static var timeScale:Number;
 		
@@ -275,7 +275,7 @@ package ru.antkarlov.anthill
 		 */
 		public static function init(aAnthill:Anthill):void
 		{
-			timeScale = 0.5;
+			timeScale = 1;
 			elapsed = 0.02;
 			maxElapsed = 0.0333333;
 			
