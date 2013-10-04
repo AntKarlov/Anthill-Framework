@@ -148,10 +148,7 @@ package ru.antkarlov.anthill
 		 */
 		public static function remap(value:Number, aLower:Number, aUpper:Number, bLower:Number, bUpper:Number):Number
 		{
-			/*
-				TODO протестировать
-			*/
-			return bLower + (bUpper - aLower) * (value - aLower) / (aUpper - aLower);
+			return bLower + (bUpper - bLower) * (value - aLower) / (aUpper - aLower);
 		}
 		
 		/**
