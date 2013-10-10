@@ -214,11 +214,18 @@ package ru.antkarlov.anthill
 		public var bounds:AntRect;
 		
 		/**
-		 * Фактор прокручивания сущности. Используется для расчета положения сущности исходя из положения камеры. 
-		 * Если фактор прокручивания равен (1,1) то скорость прокручивания будет равна скорости движения камеры, то есть 1 к 1.
-		 * @default    (1,1)
+		 * Фактор прокручивания сущности по горизонтали. Используется для расчета положения сущности исходя из положения камеры.
+		 * Если фактор прокручивания равен 1, то скорость прокручивания будет равна скорости движения камеры.
+		 * @default    1
 		 */
-		public var scrollFactor:AntPoint;
+		public var scrollFactorX:Number;
+		
+		/**
+		 * Фактор прокручивания сущности по вертикали. Используется для расчета положения сущности исходя из положения камеры.
+		 * Если фактор прокручивания равен 1, то скорость прокручивания будет равна скорости движения камеры.
+		 * @default    1
+		 */
+		public var scrollFactorY:Number;
 		
 		/**
 		 * Объем жизни сущности. Используйте на свое усмотрение.
@@ -274,9 +281,9 @@ package ru.antkarlov.anthill
 		protected var _sortOrder:int;
 		
 		/**
-		 * Помошник для проверки пересечений.
+		 * Помошник для работы с вершинами.
 		 */
-		protected var _testBounds:AntRect;
+		protected var _helperPoint:AntPoint;
 		
 		/**
 		 * Содержит номер объекта если он вложен в другую сущность.
@@ -341,7 +348,8 @@ package ru.antkarlov.anthill
 			}
 			
 			bounds = new AntRect();
-			scrollFactor = new AntPoint(1, 1);
+			scrollFactorX = 1;
+			scrollFactorY = 1;
             
 			health = 1;
 
@@ -351,7 +359,7 @@ package ru.antkarlov.anthill
 			_oldAngle = -1;
 			_sortIndex = null;
 			_sortOrder = ASCENDING;
-			_testBounds = new AntRect();
+			_helperPoint = new AntPoint();
 		}
 		
 		/**
@@ -621,7 +629,6 @@ package ru.antkarlov.anthill
 			// Обновляем положение добавляемой сущности и добавляем указатель на родителя (себя).
 			aEntity.parent = this;
 			aEntity.locate(globalX, globalY, globalAngle);
-			aEntity.scrollFactor.copyFrom(scrollFactor);
 			
 			// Ищем пустую ячейку.
 			var i:int = 0;
@@ -1206,34 +1213,38 @@ package ru.antkarlov.anthill
 				aCamera = AntG.getCamera();
 			}
 			
-			if (bounds.bottom < bounds.top && bounds.right < bounds.left)
+			/*var offX:Number = aCamera.width * ((aCamera.zoom - 1) * 0.5);
+			var offY:Number = aCamera.height * ((aCamera.zoom - 1) * 0.5);
+			
+			offX += aCamera.scroll.x * -1 * scrollFactorX;
+			offY += aCamera.scroll.y * -1 * scrollFactorY;*/
+			
+			var posX:Number = 0;
+			var posY:Number = 0;
+			
+			if (aCamera.zoomStyle == AntCamera.ZOOM_STYLE_CENTER)
 			{
-				_testBounds.set(bounds.right, bounds.bottom, -bounds.width, -bounds.height);
-			}
-			else if (bounds.bottom < bounds.top)
-			{
-				_testBounds.set(bounds.x, bounds.bottom, bounds.width, -bounds.height);
-			}
-			else if (bounds.right < bounds.left)
-			{
-				_testBounds.set(bounds.right, bounds.y, -bounds.width, bounds.height);
+				posX = aCamera.scroll.x * -1 * scrollFactorX + (aCamera.width * 0.5);
+				posY = aCamera.scroll.y * -1 * scrollFactorY + (aCamera.height * 0.5);
+				posX = posX - ((aCamera.width / aCamera.zoom) * 0.5);
+				posY = posY - ((aCamera.height / aCamera.zoom) * 0.5);
 			}
 			else
-			{ 
-				_testBounds.copyFrom(bounds); 
-			} 
-
-			return _testBounds.intersects(aCamera.scroll.x * -1 * scrollFactor.x, 
-				aCamera.scroll.y * -1 * scrollFactor.y, 
-				aCamera.width / aCamera.zoom, 
-				aCamera.height / aCamera.zoom);
-
-			/*var offX:Number = (scaleX < 0) ? width : 0;
-			var offY:Number = (scaleY < 0) ? height : 0;
-
-			return bounds.intersects((aCamera.scroll.x - offX) * -1 * scrollFactor.x, 
-				(aCamera.scroll.y - offY) * -1 * scrollFactor.y,
+			{
+				posX = aCamera.scroll.x * -1 * scrollFactorX;
+				posY = aCamera.scroll.y * -1 * scrollFactorY;
+			}
+			
+			return bounds.intersects(posX, posY, aCamera.width / aCamera.zoom, aCamera.height / aCamera.zoom);
+			
+			/*return bounds.intersects(aCamera.scaledScrollX * -1 * scrollFactorX,
+				aCamera.scaledScrollY * -1 * scrollFactorY,
 				aCamera.width / aCamera.zoom,
+				aCamera.height / aCamera.zoom);*/
+			
+			/*return bounds.intersects(aCamera.scroll.x * -1 * scrollFactorX, 
+				aCamera.scroll.y * -1 * scrollFactorY, 
+				aCamera.width / aCamera.zoom, 
 				aCamera.height / aCamera.zoom);*/
 		}
 		
@@ -1272,8 +1283,8 @@ package ru.antkarlov.anthill
 				aCamera = AntG.getCamera();
 			}
 			
-			aResult.x = aX + aCamera.scroll.x * scrollFactor.x;
-			aResult.y = aY + aCamera.scroll.y * scrollFactor.y;
+			aResult.x = aX + aCamera.scroll.x * scrollFactorX;
+			aResult.y = aY + aCamera.scroll.y * scrollFactorY;
 			return aResult;
 		}
 		
@@ -1405,9 +1416,13 @@ package ru.antkarlov.anthill
 			vertices[1].set(globalX + width * scaleX + origin.x * scaleX, globalY + origin.y * scaleY); // top right
 			vertices[2].set(globalX + width * scaleX + origin.x * scaleX, globalY + height * scaleY + origin.y * scaleY); // bottom right
 			vertices[3].set(globalX + origin.x * scaleX, globalY + height * scaleY + origin.y * scaleY); // bottom left			
+			
+			invertVertices();
+			
 			var tl:AntPoint = vertices[0];
 			var br:AntPoint = vertices[2];
 			bounds.set(tl.x, tl.y, br.x - tl.x, br.y - tl.y);
+
 			saveOldPosition();
 		}
 		
@@ -1445,6 +1460,8 @@ package ru.antkarlov.anthill
 			vertices[2].set(globalX + width * scaleX + origin.x * scaleX, globalY + height * scaleY + origin.y * scaleY); // bottom right
 			vertices[3].set(globalX + origin.x * scaleX, globalY + height * scaleY + origin.y * scaleY); // bottom left
 			
+			invertVertices();
+			
 			var dx:Number;
 			var dy:Number;
 			var p:AntPoint = vertices[0];
@@ -1472,6 +1489,42 @@ package ru.antkarlov.anthill
 			
 			bounds.set(minX, minY, maxX - minX, maxY - minY);
 			saveOldPosition();
+		}
+		
+		/**
+		 * Инвертирует вершины если необходимо.
+		 */
+		protected function invertVertices():void
+		{
+			// Если сущность отражена по горизонтали,
+			// то меняем левые и правые вершины местами.
+			if (scaleX < 0)
+			{
+				// top left -> top right
+				_helperPoint.copyFrom(vertices[0]);
+				vertices[0].copyFrom(vertices[1]);
+				vertices[1].copyFrom(_helperPoint);
+				
+				// bottom right -> bottom left
+				_helperPoint.copyFrom(vertices[2]);
+				vertices[2].copyFrom(vertices[3]);
+				vertices[3].copyFrom(_helperPoint);
+			}
+			
+			// Если сущность отражена по вертикали,
+			// то меняем верхние и нижние вершины местами.
+			if (scaleY < 0)
+			{
+				// top left -> bottom left
+				_helperPoint.copyFrom(vertices[0]);
+				vertices[0].copyFrom(vertices[3]);
+				vertices[3].copyFrom(_helperPoint);
+				
+				// top right -> bottom right
+				_helperPoint.copyFrom(vertices[1]);
+				vertices[1].copyFrom(vertices[2]);
+				vertices[2].copyFrom(_helperPoint);
+			}
 		}
 		
 		/**
@@ -1591,10 +1644,10 @@ package ru.antkarlov.anthill
 		/**
 		 * Определяет реагирует ли сущность на позиционирование камеры.
 		 */
-		public function get isScrolled():Boolean { return (scrollFactor.x == 0 && scrollFactor.y == 0) ? false : true; }
+		public function get isScrolled():Boolean { return (scrollFactorX == 0 && scrollFactorY == 0) ? false : true; }
 		public function set isScrolled(value:Boolean):void
 		{
-			scrollFactor.x = scrollFactor.y = (value) ? 1 : 0;
+			scrollFactorX = scrollFactorY = (value) ? 1 : 0;
 		}
 		
 	}
