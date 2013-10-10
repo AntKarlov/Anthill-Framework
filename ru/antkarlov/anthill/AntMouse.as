@@ -218,7 +218,7 @@ package ru.antkarlov.anthill
 			{
 				aResult = new AntPoint();
 			}
-			
+						
 			aResult.x = (_globalScreenPos.x - aCamera.x) / aCamera.zoom;
 			aResult.y = (_globalScreenPos.y - aCamera.y) / aCamera.zoom;
 			return aResult;
@@ -244,8 +244,25 @@ package ru.antkarlov.anthill
 			}
 			
 			getScreenPosition(aCamera, aResult);
-			aResult.x = aResult.x + aCamera.scroll.x * -1;
-			aResult.y = aResult.y + aCamera.scroll.y * -1;
+			
+			var posX:Number = 0;
+			var posY:Number = 0;
+			
+			if (aCamera.zoomStyle == AntCamera.ZOOM_STYLE_CENTER)
+			{
+				posX = aCamera.scroll.x * -1 + (aCamera.width * 0.5);
+				posY = aCamera.scroll.y * -1 + (aCamera.height * 0.5);
+				posX = posX - ((aCamera.width / aCamera.zoom) * 0.5);
+				posY = posY - ((aCamera.height / aCamera.zoom) * 0.5);
+			}
+			else
+			{
+				posX = aCamera.scroll.x * -1;
+				posY = aCamera.scroll.y * -1;
+			}
+			
+			aResult.x += posX;
+			aResult.y += posY;
 			return aResult;
 		}
 		
