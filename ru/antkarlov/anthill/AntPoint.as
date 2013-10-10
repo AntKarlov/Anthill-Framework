@@ -73,7 +73,8 @@ package ru.antkarlov.anthill
 				aPoint = new AntPoint();
 			}
 			
-			aPoint.set(x, y);
+			aPoint.x = x;
+			aPoint.y = y;
 			return aPoint;
 		}
 		
@@ -85,7 +86,8 @@ package ru.antkarlov.anthill
 		 */
 		public function copyFrom(aPoint:AntPoint):AntPoint
 		{
-			set(aPoint.x, aPoint.y);
+			x = aPoint.x;
+			y = aPoint.y;
 			return this;
 		}
 		
