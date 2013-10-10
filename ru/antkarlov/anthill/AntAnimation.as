@@ -233,9 +233,11 @@ package ru.antkarlov.anthill
 		 * @param	aOriginX	 Смещение кадров относительно центра координат по X.
 		 * @param	aOriginY	 Смещение кадров относительно центра координат по Y.
 		 * @param	aFlip	 Определяет необходимость зеркального отражения кадров по горизонтали.
+		 * @param	aSpaceOut	 Рамка вокруг изображения.
+		 * @param	aSpaceIn	 Отступ между кадрами.
 		 */
 		public function makeFromGraphic(aGraphic:Class, aFrameWidth:int = 0, aFrameHeight:int = 0,
-		 	aOriginX:int = 0, aOriginY:int = 0, aFlip:Boolean = false):void
+		 	aOriginX:int = 0, aOriginY:int = 0, aFlip:Boolean = false, aSpaceOut:int = 0, aSpaceIn:int = 0):void
 		{
 			var pixels:BitmapData = (new aGraphic).bitmapData;
 			if (aFlip)
@@ -253,8 +255,8 @@ package ru.antkarlov.anthill
 				aFrameWidth = (aFrameWidth <= 0) ? pixels.width : aFrameWidth;
 				aFrameHeight = (aFrameHeight <= 0) ? pixels.height : aFrameHeight;
 				
-				var numFramesX:int = Math.floor(pixels.width / aFrameWidth);
-				var numFramesY:int = Math.floor(pixels.height / aFrameHeight);
+				var numFramesX:int = Math.floor((pixels.width - aSpaceOut) / (aFrameWidth + aSpaceIn));
+				var numFramesY:int = Math.floor((pixels.height - aSpaceOut) / (aFrameHeight + aSpaceIn));
 				var rect:Rectangle = new Rectangle();
 				rect.x = rect.y = 0;
 				rect.width = aFrameWidth;
@@ -266,8 +268,10 @@ package ru.antkarlov.anthill
 				{
 					rect.y = Math.floor(i / numFramesX);
 					rect.x = i - rect.y * numFramesX;
-					rect.x *= aFrameWidth;
-					rect.y *= aFrameHeight;
+					//rect.x *= aFrameWidth;
+					//rect.y *= aFrameHeight;
+					rect.x = aSpaceOut + aFrameWidth * rect.x + aSpaceIn * rect.x;
+					rect.y = aSpaceOut + aFrameHeight * rect.y + aSpaceIn * rect.y;
 					
 					var bmpData:BitmapData = new BitmapData(aFrameWidth, aFrameHeight, true, 0x00000000);
 					bmpData.copyPixels(pixels, rect, DEST_POINT);
