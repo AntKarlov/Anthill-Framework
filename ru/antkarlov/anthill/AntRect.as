@@ -86,7 +86,10 @@ package ru.antkarlov.anthill
 				aRect = new AntRect();
 			}
 			
-			aRect.set(x, y, width, height);
+			aRect.x = x;
+			aRect.y = y;
+			aRect.width = width;
+			aRect.height = height;
 			return aRect;
 		}
 		
@@ -98,7 +101,10 @@ package ru.antkarlov.anthill
 		 */
 		public function copyFrom(aRect:AntRect):AntRect
 		{
-			set(aRect.x, aRect.y, aRect.width, aRect.height);
+			x = aRect.x;
+			y = aRect.y;
+			width = aRect.width;
+			height = aRect.height;
 			return this;
 		}
 		
