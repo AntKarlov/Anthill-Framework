@@ -357,8 +357,8 @@ package ru.antkarlov.anthill
 		 */
 		public function updatePosition(aParent:AntEntity, aCamera:AntCamera):void
 		{
-			globalX = aParent.globalX + aCamera.scroll.x * aParent.scrollFactor.x + x + origin.x;
-			globalY = aParent.globalY + aCamera.scroll.y * aParent.scrollFactor.y + y + origin.y;
+			globalX = aParent.globalX + aCamera.scroll.x * aParent.scrollFactorX + x + origin.x;
+			globalY = aParent.globalY + aCamera.scroll.y * aParent.scrollFactorY + y + origin.y;
 		}
 		
 		/**
