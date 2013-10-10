@@ -517,11 +517,13 @@ package ru.antkarlov.anthill
 				actor = children[i++] as AntActor;
 				if (actor != null)
 				{
-					actor.scrollFactor.set(aX, aY);
+					actor.scrollFactorX = aX;
+					actor.scrollFactorY = aY;
 				}
 			}
 			
-			scrollFactor.set(aX, aY);
+			scrollFactorX = aX;
+			scrollFactorY = aY;
 		}
 		
 		/**
@@ -812,17 +814,17 @@ package ru.antkarlov.anthill
 				var i:int = 0;
 				for (i = 0; i < _numRows + 1; i++)
 				{
-					p1.x = globalX + aCamera.scroll.x * scrollFactor.x - tileAxisOffset.x;
-					p2.x = globalX + _tileWidth * _numCols + aCamera.scroll.x * scrollFactor.x - tileAxisOffset.x;
-					p1.y = p2.y = globalY + _tileHeight * i + aCamera.scroll.y * scrollFactor.y - tileAxisOffset.y;
+					p1.x = globalX + aCamera.scroll.x * scrollFactorX - tileAxisOffset.x;
+					p2.x = globalX + _tileWidth * _numCols + aCamera.scroll.x * scrollFactorX - tileAxisOffset.x;
+					p1.y = p2.y = globalY + _tileHeight * i + aCamera.scroll.y * scrollFactorY - tileAxisOffset.y;
 					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, AntColor.GRAY);
 				}
 				
 				for (i = 0; i < _numCols + 1; i++)
 				{
-					p1.x = p2.x = globalX + _tileWidth * i + aCamera.scroll.x * scrollFactor.x - tileAxisOffset.x;
-					p1.y = globalY + aCamera.scroll.y * scrollFactor.y - tileAxisOffset.y;
-					p2.y = globalY + _tileHeight * _numRows + aCamera.scroll.y * scrollFactor.y - tileAxisOffset.y;
+					p1.x = p2.x = globalX + _tileWidth * i + aCamera.scroll.x * scrollFactorX - tileAxisOffset.x;
+					p1.y = globalY + aCamera.scroll.y * scrollFactorY - tileAxisOffset.y;
+					p2.y = globalY + _tileHeight * _numRows + aCamera.scroll.y * scrollFactorY - tileAxisOffset.y;
 					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, AntColor.GRAY);
 				}
 			}
@@ -842,8 +844,8 @@ package ru.antkarlov.anthill
 		 */
 		protected function drawQuick(aCamera:AntCamera):void
 		{
-			var dx:Number = aCamera.scroll.x * -1 * scrollFactor.x;
-			var dy:Number = aCamera.scroll.y * -1 * scrollFactor.y;
+			var dx:Number = aCamera.scroll.x * -1 * scrollFactorX;
+			var dy:Number = aCamera.scroll.y * -1 * scrollFactorY;
 			
 			getCoordinates(getIndexByPosition(dx, dy), _topLeft);
 			getCoordinates(getIndexByPosition(dx + aCamera.width, dy + aCamera.height), _bottomRight);
