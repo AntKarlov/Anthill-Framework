@@ -39,6 +39,12 @@ package ru.antkarlov.anthill
 		 */
 		public static const STYLE_VERTICAL:uint = 2;
 		
+		/**
+		 * @private
+		 */
+		public static const ZOOM_STYLE_DEFAULT:String = "styleDefault";
+		public static const ZOOM_STYLE_CENTER:String = "styleCenter";
+		
 		//---------------------------------------
 		// PUBLIC VARIABLES
 		//---------------------------------------
@@ -86,12 +92,6 @@ package ru.antkarlov.anthill
 		 * Основной буфер камеры куда производится отрисовка всех визуальных объектов.
 		 */
 		public var buffer:BitmapData;
-		
-		/**
-		 * Фактор увеличения изображения.
-		 * @default    1
-		 */
-		public var zoom:int;
 		
 		/**
 		 * Прямоугольник задающий границы для перемещения камеры.
@@ -151,6 +151,17 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
+		 * Фактор увеличения изображения.
+		 * @default    1
+		 */
+		protected var _zoom:Number;
+		
+		/**
+		 * @private
+		 */
+		protected var _zoomStyle:String;
+		
+		/**
 		 * Помшник для заливки буфера камеры цветом.
 		 */
 		protected var _flashRect:Rectangle;
@@ -176,7 +187,7 @@ package ru.antkarlov.anthill
 		/**
 		 * @constructor
 		 */
-		public function AntCamera(aX:Number, aY:Number, aWidth:int, aHeight:int, aZoom:int = 1)
+		public function AntCamera(aX:Number, aY:Number, aWidth:int, aHeight:int, aZoom:Number = 1)
 		{
 			super();
 			
@@ -187,16 +198,17 @@ package ru.antkarlov.anthill
 			fillBackground = false;
 			backgroundColor = 0xFF000000;
 			scroll = new AntPoint();
-			zoom = aZoom;
+			_zoom = aZoom;
+			_zoomStyle = ZOOM_STYLE_DEFAULT;
 			bounds = null;
 			
 			buffer = new BitmapData(width, height, true, backgroundColor); 
 			_flashBitmap = new Bitmap(buffer);
-			_flashBitmap.scaleX = _flashBitmap.scaleY = zoom;
+			_flashBitmap.scaleX = _flashBitmap.scaleY = _zoom;
 			_flashBitmap.x = -width * 0.5;
 			_flashBitmap.y = -height * 0.5;
 			
-			screenCenter = new AntPoint(width * 0.5 * zoom, height * 0.5 * zoom);
+			screenCenter = new AntPoint(width * 0.5 * _zoom, height * 0.5 * _zoom);
 			
 			_flashSprite = new Sprite();
 			_flashSprite.x = x + screenCenter.x;
@@ -259,15 +271,27 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Моментальное перемещение камеры к указанной позиции.
+		 * Моментальное перемещение камеры к указанной точке.
 		 * 
 		 * @param	aPoint	 Точка к которой будет перемещена камера.
 		 */
-		public function focusOn(aPoint:AntPoint):void
+		public function focusOnPoint(aPoint:AntPoint):void
 		{
-			aPoint.x += (aPoint.x > 0) ? 0.0000001 : -0.0000001;
-			aPoint.y += (aPoint.y > 0) ? 0.0000001 : -0.0000001;
-			_newPos.set(-(aPoint.x - width) - screenCenter.x, -(aPoint.y - height) - screenCenter.y);
+			focusOn(aPoint.x, aPoint.y);
+		}
+		
+		/**
+		 * Моментальное перемещение камеры к указанным координатам.
+		 * 
+		 * @param	aX	 Новая позиция камеры по горизонтали.
+		 * @param	aY	 Новая позиция камеры по вертикали.
+		 */
+		public function focusOn(aX:Number, aY:Number):void
+		{
+			aX += (aX > 0) ? 0.0000001 : -0.0000001;
+			aY += (aY > 0) ? 0.0000001 : -0.0000001;
+			_newPos.x = -(aX - width) - screenCenter.x;
+			_newPos.y = -(aY - height) - screenCenter.y;
 			
 			if (bounds != null)
 			{
@@ -303,6 +327,16 @@ package ru.antkarlov.anthill
 		 */
 		override public function update():void
 		{
+			if (_flashSprite.visible != visible)
+			{
+				_flashSprite.visible = visible;
+			}
+			
+			if (!exists || !active)
+			{
+				return;
+			}
+			
 			if (target != null)
 			{
 				switch (followStyle)
@@ -382,6 +416,71 @@ package ru.antkarlov.anthill
 			buffer.unlock();
 		}
 		
+		//---------------------------------------
+		// GETTER / SETTERS
+		//---------------------------------------
+		
+		/**
+		 * Определяет сглаживание для буфера камеры.
+		 * @default    false
+		 */
+		public function get smoothing():Boolean { return _flashBitmap.smoothing; }
+		public function set smoothing(aValue:Boolean):void
+		{
+			_flashBitmap.smoothing = aValue;
+		}
+		
+		/**
+		 * Определяет тип приближения камеры.
+		 * @default    ZOOM_STYLE_DEFAULT
+		 */
+		public function get zoomStyle():String { return _zoomStyle; }
+		public function set zoomStyle(aValue:String):void
+		{
+			_zoomStyle = aValue;
+			switch (_zoomStyle)
+			{
+				case ZOOM_STYLE_CENTER :
+					_flashBitmap.x = -width * 0.5 * _zoom;
+					_flashBitmap.y = -height * 0.5 * _zoom;
+				break;
+				
+				default :
+					_flashBitmap.x = -width * 0.5;
+					_flashBitmap.y = -height * 0.5;
+				break;
+			}
+		}
+		
+		/**
+		 * Определяет уровень приближения камеры.
+		 * @default    1
+		 */
+		public function get zoom():Number { return _zoom; }
+		public function set zoom(aValue:Number):void
+		{
+			_zoom = aValue;
+			_flashBitmap.scaleX = _flashBitmap.scaleY = _zoom;
+			
+			if (_zoomStyle == ZOOM_STYLE_CENTER)
+			{
+				_flashBitmap.x = -width * 0.5 * _zoom;
+				_flashBitmap.y = -height * 0.5 * _zoom;
+			}
+		}
+		
+		/**
+		 * Возвращает указатель на Sprite камеры.
+		 */
+		public function get screenSprite():Sprite
+		{
+			return _flashSprite;
+		}
+		
+		//---------------------------------------
+		// PROTECTED METHODS
+		//---------------------------------------
+		
 		/**
 		 * Определяет начало отрисовки сущности использующей маску.
 		 * 
@@ -411,10 +510,6 @@ package ru.antkarlov.anthill
 				_isMasked = false;
 			}
 		}
-		
-		//---------------------------------------
-		// PROTECTED METHODS
-		//---------------------------------------
 		
 		/**
 		 * Ограничивает значение по горизонтали согласно заданным границам.
