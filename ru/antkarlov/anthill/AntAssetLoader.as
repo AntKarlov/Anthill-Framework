@@ -204,9 +204,11 @@ package ru.antkarlov.anthill
 		 * @param	aFrameHeight	 Размер кадра анимации по высоте.
 		 * @param	aOriginX	 Смещение кадров анимации по X относительно нулевой координаты.
 		 * @param	aOriginY	 Смещение кадров анимации по Y относительно нулевой координаты.
+		 * @param	aSpaceOut	 Рамка вокруг изображения.
+		 * @param	aSpaceIn	 Отступ между кадрами.
 		 */
 		public function addGraphic(aGraphicClass:Class, aKey:String = null, aFrameWidth:int = 0, 
-			aFrameHeight:int = 0, aOriginX:int = 0, aOriginY:int = 0):void
+			aFrameHeight:int = 0, aOriginX:int = 0, aOriginY:int = 0, aSpaceOut:int = 0, aSpaceIn:int = 0):void
 		{
 			if (aKey == null)
 			{
@@ -218,7 +220,9 @@ package ru.antkarlov.anthill
 				frameWidth:aFrameWidth,
 				frameHeight:aFrameHeight,
 				originX:aOriginX,
-				originY:aOriginY };
+				originY:aOriginY,
+				spaceOut:aSpaceOut,
+				spaceIn:aSpaceIn };
 			_contentStorage.set(aKey, data);
 			_queue.push(aKey);
 		}
@@ -364,7 +368,9 @@ package ru.antkarlov.anthill
 					
 					case DATA_GRAPHIC :
 						anim = new AntAnimation(aKey);
-						anim.makeFromGraphic(data.graphicClass, data.frameWidth, data.frameHeight, data.originX, data.originY);
+						anim.makeFromGraphic(data.graphicClass, data.frameWidth, 
+							data.frameHeight, data.originX, data.originY, false, 
+							data.spaceOut, data.spaceIn);
 						AntAnimation.toCache(anim);
 					break;
 					
