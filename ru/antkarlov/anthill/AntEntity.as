@@ -212,21 +212,7 @@ package ru.antkarlov.anthill
 		 * При рассчете прямоугольника, дочерние сущности не учитываются.
 		 */
 		public var bounds:AntRect;
-		
-		/**
-		 * Фактор прокручивания сущности по горизонтали. Используется для расчета положения сущности исходя из положения камеры.
-		 * Если фактор прокручивания равен 1, то скорость прокручивания будет равна скорости движения камеры.
-		 * @default    1
-		 */
-		public var scrollFactorX:Number;
-		
-		/**
-		 * Фактор прокручивания сущности по вертикали. Используется для расчета положения сущности исходя из положения камеры.
-		 * Если фактор прокручивания равен 1, то скорость прокручивания будет равна скорости движения камеры.
-		 * @default    1
-		 */
-		public var scrollFactorY:Number;
-		
+				
 		/**
 		 * Объем жизни сущности. Используйте на свое усмотрение.
 		 * Для нанесения урона можно использовать метод <code>hurt(aDamage:Number):Boolean</code>.
@@ -243,6 +229,24 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
+		
+		/**
+		 * Коэффициент смещения сущности по горизонтали относительно смещения камеры.
+		 * Используется для расчета положения сущности исходя из положения камеры.
+		 * Если фактор прокручивания равен 1, то скорость прокручивания будет равна 
+		 * скорости движения камеры.
+		 * @default    1
+		 */
+		protected var _scrollFactorX:Number;
+		
+		/**
+		 * Коэффициент смещения сущности по вертикали относительно смещения камеры.
+		 * Используется для расчета положения сущности исходя из положения камеры.
+		 * Если фактор прокручивания равен 1, то скорость прокручивания будет равна 
+		 * скорости движения камеры.
+		 * @default    1
+		 */
+		protected var _scrollFactorY:Number;
 		
 		/**
 		 * Содержит старое значение положения сущности. 
@@ -348,11 +352,10 @@ package ru.antkarlov.anthill
 			}
 			
 			bounds = new AntRect();
-			scrollFactorX = 1;
-			scrollFactorY = 1;
-            
 			health = 1;
-
+			
+			_scrollFactorX = 1;
+			_scrollFactorY = 1;
 			_oldPosition = new AntPoint(-1, -1);
 			_oldSize = new AntPoint(-1, -1);
 			_oldScale = new AntPoint(-1, -1);
@@ -629,6 +632,8 @@ package ru.antkarlov.anthill
 			// Обновляем положение добавляемой сущности и добавляем указатель на родителя (себя).
 			aEntity.parent = this;
 			aEntity.locate(globalX, globalY, globalAngle);
+			aEntity.scrollFactorX = scrollFactorX;
+			aEntity.scrollFactorY = scrollFactorY;
 			
 			// Ищем пустую ячейку.
 			var i:int = 0;
@@ -1213,39 +1218,23 @@ package ru.antkarlov.anthill
 				aCamera = AntG.getCamera();
 			}
 			
-			/*var offX:Number = aCamera.width * ((aCamera.zoom - 1) * 0.5);
-			var offY:Number = aCamera.height * ((aCamera.zoom - 1) * 0.5);
-			
-			offX += aCamera.scroll.x * -1 * scrollFactorX;
-			offY += aCamera.scroll.y * -1 * scrollFactorY;*/
-			
 			var posX:Number = 0;
 			var posY:Number = 0;
 			
 			if (aCamera.zoomStyle == AntCamera.ZOOM_STYLE_CENTER)
 			{
-				posX = aCamera.scroll.x * -1 * scrollFactorX + (aCamera.width * 0.5);
-				posY = aCamera.scroll.y * -1 * scrollFactorY + (aCamera.height * 0.5);
+				posX = aCamera.scroll.x * -1 * _scrollFactorX + (aCamera.width * 0.5);
+				posY = aCamera.scroll.y * -1 * _scrollFactorY + (aCamera.height * 0.5);
 				posX = posX - ((aCamera.width / aCamera.zoom) * 0.5);
 				posY = posY - ((aCamera.height / aCamera.zoom) * 0.5);
 			}
 			else
 			{
-				posX = aCamera.scroll.x * -1 * scrollFactorX;
-				posY = aCamera.scroll.y * -1 * scrollFactorY;
+				posX = aCamera.scroll.x * -1 * _scrollFactorX;
+				posY = aCamera.scroll.y * -1 * _scrollFactorY;
 			}
 			
 			return bounds.intersects(posX, posY, aCamera.width / aCamera.zoom, aCamera.height / aCamera.zoom);
-			
-			/*return bounds.intersects(aCamera.scaledScrollX * -1 * scrollFactorX,
-				aCamera.scaledScrollY * -1 * scrollFactorY,
-				aCamera.width / aCamera.zoom,
-				aCamera.height / aCamera.zoom);*/
-			
-			/*return bounds.intersects(aCamera.scroll.x * -1 * scrollFactorX, 
-				aCamera.scroll.y * -1 * scrollFactorY, 
-				aCamera.width / aCamera.zoom, 
-				aCamera.height / aCamera.zoom);*/
 		}
 		
 		/**
@@ -1283,8 +1272,8 @@ package ru.antkarlov.anthill
 				aCamera = AntG.getCamera();
 			}
 			
-			aResult.x = aX + aCamera.scroll.x * scrollFactorX;
-			aResult.y = aY + aCamera.scroll.y * scrollFactorY;
+			aResult.x = aX + aCamera.scroll.x * _scrollFactorX;
+			aResult.y = aY + aCamera.scroll.y * _scrollFactorY;
 			return aResult;
 		}
 		
@@ -1626,6 +1615,58 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
+		 * Определяет коэффициент смещения сущности по горизонтали относительно смещения камеры.
+		 * Используется для расчета положения сущности исходя из положения камеры.
+		 * Если фактор прокручивания равен 1, то скорость прокручивания будет равна 
+		 * скорости движения камеры.
+		 * @default    1
+		 */
+		public function get scrollFactorX():Number { return _scrollFactorX; }
+		public function set scrollFactorX(aValue:Number):void
+		{
+			if (_scrollFactorX != aValue)
+			{
+				_scrollFactorX = aValue;
+				var entity:AntEntity;
+				var i:int = 0;
+				while (i < numChildren)
+				{
+					entity = children[i++] as AntEntity;
+					if (entity != null)
+					{
+						entity.scrollFactorX = _scrollFactorX;
+					}
+				}
+			}
+		}
+		
+		/**
+		 * Коэффициент смещения сущности по вертикали относительно смещения камеры.
+		 * Используется для расчета положения сущности исходя из положения камеры.
+		 * Если фактор прокручивания равен 1, то скорость прокручивания будет равна 
+		 * скорости движения камеры.
+		 * @default    1
+		 */
+		public function get scrollFactorY():Number { return _scrollFactorY; }
+		public function set scrollFactorY(aValue:Number):void
+		{
+			if (_scrollFactorY != aValue)
+			{
+				_scrollFactorY = aValue;
+				var entity:AntEntity;
+				var i:int = 0;
+				while (i < numChildren)
+				{
+					entity = children[i++] as AntEntity;
+					if (entity != null)
+					{
+						entity.scrollFactorY = _scrollFactorY;
+					}
+				}
+			}
+		}
+		
+		/**
 		 * Возвращает глубину обработки и рендера для сущности.
 		 */
 		public function get depth():int
@@ -1644,10 +1685,10 @@ package ru.antkarlov.anthill
 		/**
 		 * Определяет реагирует ли сущность на позиционирование камеры.
 		 */
-		public function get isScrolled():Boolean { return (scrollFactorX == 0 && scrollFactorY == 0) ? false : true; }
-		public function set isScrolled(value:Boolean):void
+		public function get isScrolled():Boolean { return (_scrollFactorX == 0 && _scrollFactorY == 0) ? false : true; }
+		public function set isScrolled(aValue:Boolean):void
 		{
-			scrollFactorX = scrollFactorY = (value) ? 1 : 0;
+			scrollFactorX = scrollFactorY = (aValue) ? 1 : 0;
 		}
 		
 	}
