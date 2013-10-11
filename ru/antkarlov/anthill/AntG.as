@@ -350,6 +350,17 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
+		 * Создает камеру по умолчанию.
+		 */
+		public static function createDefaultCamera():void
+		{
+			if (_anthill != null)
+			{
+				_anthill.createDefaultCamera();
+			}
+		}
+		
+		/**
 		 * Добавляет камеру в список для обработки.
 		 * 
 		 * @param	aCamera	 Камера которую необходимо добавить.

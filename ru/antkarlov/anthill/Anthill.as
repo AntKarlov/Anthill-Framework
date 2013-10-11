@@ -209,24 +209,40 @@ package ru.antkarlov.anthill
 			// Если камера не создана состоянием, создаем камеру по умолчанию.
 			if (AntG.camera == null)
 			{
-				if (_defaultCamera == null)
-				{
-					_defaultCamera = new AntCamera(0, 0, AntG.width, AntG.height);
-					_defaultCamera.fillBackground = true;
-				}
-				
-				AntG.addCamera(_defaultCamera);
+				createDefaultCamera();
 			}
 			else if (AntG.camera != null && _defaultCamera != null && AntG.camera != _defaultCamera)
 			{
-				_defaultCamera.destroy();
-				_defaultCamera = null;
+				destroyDefaultCamera();
 			}
 			
 			if (!_isStarted)
 			{
 				start();
 			}
+		}
+		
+		/**
+		 * Создает камеру по умолчанию.
+		 */
+		public function createDefaultCamera():void
+		{
+			if (_defaultCamera == null)
+			{
+				_defaultCamera = new AntCamera(0, 0, AntG.width, AntG.height);
+				_defaultCamera.fillBackground = true;
+			}
+			
+			AntG.addCamera(_defaultCamera);
+		}
+		
+		/**
+		 * Уничтожает камеру по умолчанию.
+		 */
+		public function destroyDefaultCamera():void
+		{
+			_defaultCamera.destroy();
+			_defaultCamera = null;
 		}
 		
 		//---------------------------------------
