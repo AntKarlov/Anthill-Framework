@@ -241,7 +241,7 @@ package ru.antkarlov.anthill
 				_soundTransform.volume = parent.volume;
 				if (_sound != null)
 				{
-					_soundChannel = _sound.play(0, _repeats, _soundTransform);
+					_soundChannel = _sound.play(aPosition, _repeats, _soundTransform);
 					if (_soundChannel != null)
 					{
 						_soundChannel.addEventListener(Event.SOUND_COMPLETE, soundCompleteHandler);
