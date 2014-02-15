@@ -308,14 +308,14 @@ package ru.antkarlov.anthill.debug
 		 */
 		protected function onDebugDrawClick(aButton:AntSysButton):void
 		{
-			if (AntG.debugDrawer != null)
+			if (AntG.debugDraw)
 			{
-				AntG.debugDrawer = null;
+				AntG.debugDraw = false;
 				aButton.kind = AntSysButton.DEBUGDRAW_OFF;
 			}
 			else
 			{
-				AntG.debugDrawer = new AntDrawer();
+				AntG.debugDraw = true;
 				aButton.kind = AntSysButton.DEBUGDRAW_ON;
 			}
 		}
