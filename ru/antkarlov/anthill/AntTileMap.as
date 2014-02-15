@@ -808,8 +808,7 @@ package ru.antkarlov.anthill
 		{
 			var p1:AntPoint = new AntPoint();
 			var p2:AntPoint = new AntPoint();
-			var drawer:AntDrawer = AntG.debugDrawer;
-			if (drawer.showGrid)
+			if (AntDrawer.showGrid)
 			{
 				var i:int = 0;
 				for (i = 0; i < _numRows + 1; i++)
@@ -817,7 +816,7 @@ package ru.antkarlov.anthill
 					p1.x = globalX + aCamera.scroll.x * scrollFactorX - tileAxisOffset.x;
 					p2.x = globalX + _tileWidth * _numCols + aCamera.scroll.x * scrollFactorX - tileAxisOffset.x;
 					p1.y = p2.y = globalY + _tileHeight * i + aCamera.scroll.y * scrollFactorY - tileAxisOffset.y;
-					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, AntColor.GRAY);
+					AntDrawer.drawLine(p1.x, p1.y, p2.x, p2.y, AntColor.GRAY);
 				}
 				
 				for (i = 0; i < _numCols + 1; i++)
@@ -825,7 +824,7 @@ package ru.antkarlov.anthill
 					p1.x = p2.x = globalX + _tileWidth * i + aCamera.scroll.x * scrollFactorX - tileAxisOffset.x;
 					p1.y = globalY + aCamera.scroll.y * scrollFactorY - tileAxisOffset.y;
 					p2.y = globalY + _tileHeight * _numRows + aCamera.scroll.y * scrollFactorY - tileAxisOffset.y;
-					drawer.drawLine(p1.x, p1.y, p2.x, p2.y, AntColor.GRAY);
+					AntDrawer.drawLine(p1.x, p1.y, p2.x, p2.y, AntColor.GRAY);
 				}
 			}
 			
