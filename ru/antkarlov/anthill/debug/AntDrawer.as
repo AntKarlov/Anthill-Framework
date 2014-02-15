@@ -21,29 +21,28 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * Флаг определяющий необходимость рисования осей сущности.
 		 */
-		public var showAxis:Boolean;
+		public static var showAxis:Boolean = true;
 		
 		/**
 		 * Флаг определяющий необходимость рисования краев сущности.
 		 */
-		public var showBorders:Boolean;
+		public static var showBorders:Boolean = true;
 		
 		/**
 		 * Флаг определяющий необходимость рисования занимаемую сущностью область.
 		 */
-		public var showBounds:Boolean;
-		public var showGrid:Boolean;
+		public static var showBounds:Boolean = true;
 		
-		public var buffer:BitmapData;
+		/**
+		 * Флаг определяющий необходимость отрисовки сетки.
+		 */
+		public static var showGrid:Boolean = true;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
-		
-		/**
-		 * Точка помошник определяющая откуда будет нарисована линия.
-		 */
-		protected var _lineFrom:AntPoint;
+		protected static var _lineFrom:AntPoint = new AntPoint();
+		protected static var _canvas:BitmapData = null;
 		
 		//---------------------------------------
 		// CONSTRUCTOR
@@ -55,21 +54,14 @@ package ru.antkarlov.anthill.debug
 		public function AntDrawer()
 		{
 			super();
-			
-			showAxis = true;
-			showBorders = true;
-			showBounds = true;
-			showGrid = true;
-			
-			_lineFrom = new AntPoint();
 		}
 		
 		/**
 		 * @private
 		 */
-		public function destroy():void
+		public static function setCanvas(aCanvas:BitmapData):void
 		{
-			buffer = null;
+			_canvas = aCanvas;
 		}
 		
 		/**
@@ -78,7 +70,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aX	 Координата X.
 		 * @param	aY	 Координата Y.
 		 */
-		public function moveTo(aX:int, aY:int):void
+		public static function moveTo(aX:int, aY:int):void
 		{
 			_lineFrom.set(aX, aY);
 		}
@@ -90,7 +82,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aY	 Координата Y.
 		 * @param	aColor	 Цвет линии.
 		 */
-		public function lineTo(aX:int, aY:int, aColor:uint = 0):void
+		public static function lineTo(aX:int, aY:int, aColor:uint = 0):void
 		{			
 			drawLine(_lineFrom.x, _lineFrom.y, aX, aY, aColor);
 			_lineFrom.set(aX, aY);
@@ -103,11 +95,11 @@ package ru.antkarlov.anthill.debug
 		 * @param	aY	 Координата Y.
 		 * @param	aColor	 Цвет точки.
 		 */
-		public function drawPoint(aX:Number, aY:Number, aColor:uint = 0):void
+		public static function drawPoint(aX:Number, aY:Number, aColor:uint = 0):void
 		{
-			if (buffer != null)
+			if (_canvas != null)
 			{
-				buffer.setPixel(aX, aY, aColor);
+				_canvas.setPixel(aX, aY, aColor);
 			}
 		}
 		
@@ -125,9 +117,9 @@ package ru.antkarlov.anthill.debug
 		 * @param	aY2	 Координата Y точки B.
 		 * @param	aColor	 Цвет линии.
 		 */
-		public function drawLine(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0):void
+		public static function drawLine(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0):void
 		{
-			if (buffer == null)
+			if (_canvas == null)
 			{
 				return;
 			}
@@ -155,14 +147,14 @@ package ru.antkarlov.anthill.debug
 			{
 				for (var i:int = 0; i != longLen; i += inc)
 				{
-					buffer.setPixel(aX1 + i * multDiff, aY1 + i, aColor);
+					_canvas.setPixel(aX1 + i * multDiff, aY1 + i, aColor);
 				}
 			}
 			else
 			{
 				for (i = 0; i != longLen; i += inc)
 				{
-					buffer.setPixel(aX1 + i, aY1 + i * multDiff, aColor);
+					_canvas.setPixel(aX1 + i, aY1 + i * multDiff, aColor);
 				}
 			}
 		}
@@ -176,7 +168,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aHeight	 Высота прямоугольника.
 		 * @param	aColor	 Цвет прямоугольника.
 		 */
-		public function drawRect(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0):void
+		public static function drawRect(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0):void
 		{
 			moveTo(aX, aY);
 			lineTo(aX + aWidth, aY, aColor);
@@ -193,9 +185,9 @@ package ru.antkarlov.anthill.debug
 		 * @param	aRadius	 Радиус круга.
 		 * @param	aColor	 Цвет круга.
 		 */
-		public function drawCircle(aX:int, aY:int, aRadius:int, aColor:uint = 0):void
+		public static function drawCircle(aX:int, aY:int, aRadius:int, aColor:uint = 0):void
 		{
-			if (buffer == null)
+			if (_canvas == null)
 			{
 				return;
 			}
@@ -228,12 +220,12 @@ package ru.antkarlov.anthill.debug
 		/**
 		 * @private
 		 */
-		protected function plotCircle(aX:int, aY:int, cX:int, cY:int, aColor:uint):void
+		protected static function plotCircle(aX:int, aY:int, cX:int, cY:int, aColor:uint):void
 		{
-			buffer.setPixel(cX + aX, cY + aY, aColor);
-			buffer.setPixel(cX + aX, cY - aY, aColor);
-			buffer.setPixel(cX - aX, cY + aY, aColor);
-			buffer.setPixel(cX - aX, cY - aY, aColor);
+			_canvas.setPixel(cX + aX, cY + aY, aColor);
+			_canvas.setPixel(cX + aX, cY - aY, aColor);
+			_canvas.setPixel(cX - aX, cY + aY, aColor);
+			_canvas.setPixel(cX - aX, cY - aY, aColor);
 		}
 		
 		/**
@@ -242,7 +234,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aX	 Положение оси по X.
 		 * @param	aY	 Положение оси по Y.
 		 */
-		public function drawAxis(aX:int, aY:int, aColor:uint = 0):void
+		public static function drawAxis(aX:int, aY:int, aColor:uint = 0):void
 		{
 			drawLine(aX, aY - 2, aX, aY + 3, aColor);
 			drawLine(aX - 2, aY, aX + 3, aY, aColor);
