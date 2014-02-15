@@ -139,7 +139,7 @@ package ru.antkarlov.anthill
 		 * Определяет следует ли при преследовании цели округлять координаты камеры.
 		 * @default    false
 		 */
-		public var roundToIntPosition:Boolean;
+		public var roundPosition:Boolean;
 		
 		/**
 		 * Центр экрана.
@@ -224,7 +224,7 @@ package ru.antkarlov.anthill
 			smoothFactor = 0.25;
 			positionPropertyX = "globalX";
 			positionPropertyY = "globalY";
-			roundToIntPosition = false;
+			roundPosition = false;
 			
 			_isMasked = false;
 			_maskOffset = new AntPoint();
@@ -355,11 +355,11 @@ package ru.antkarlov.anthill
 					break;
 				}
 				
-				if (roundToIntPosition)
+				if (roundPosition)
 				{
 					_newPos.x += (_newPos.x > 0) ? 0.0000001 : -0.0000001;
 					_newPos.y += (_newPos.y > 0) ? 0.0000001 : -0.0000001;
-					_newPos.set(scroll.x - AntMath.ceil(_newPos.x), scroll.y - AntMath.ceil(_newPos.y));
+					_newPos.set(Math.round(scroll.x - _newPos.x), Math.round(scroll.y - _newPos.y));
 				}
 				else
 				{
