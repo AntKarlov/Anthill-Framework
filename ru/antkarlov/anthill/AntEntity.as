@@ -506,38 +506,37 @@ package ru.antkarlov.anthill
 		 */
 		override public function debugDraw(aCamera:AntCamera):void
 		{
-			if (AntG.debugDrawer == null)
+			if (AntG.debugDraw == false)
 			{
 				return;
 			}
 			
 			var i:int = 1;
 			var p:AntPoint = new AntPoint();
-			var drawer:AntDrawer = AntG.debugDrawer;
-			if (drawer.showBorders)
+			if (AntDrawer.showBorders)
 			{
 				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p);
-				drawer.moveTo(p.x, p.y);
+				AntDrawer.moveTo(p.x, p.y);
 				while (i < 4)
 				{
 					toScreenPosition(vertices[i].x, vertices[i].y, aCamera, p);
-					drawer.lineTo(p.x, p.y, AntColor.LIME);
+					AntDrawer.lineTo(p.x, p.y, AntColor.LIME);
 					i++;
 				}
 				toScreenPosition(vertices[0].x, vertices[0].y, aCamera, p);
-				drawer.lineTo(p.x, p.y, AntColor.LIME);
+				AntDrawer.lineTo(p.x, p.y, AntColor.LIME);
 			}
 			
-			if (drawer.showBounds)
+			if (AntDrawer.showBounds)
 			{
 				toScreenPosition(bounds.x, bounds.y, aCamera, p);
-				drawer.drawRect(p.x, p.y, bounds.width, bounds.height, AntColor.FUCHSIA);
+				AntDrawer.drawRect(p.x, p.y, bounds.width, bounds.height, AntColor.FUCHSIA);
 			}
 			
-			if (drawer.showAxis)
+			if (AntDrawer.showAxis)
 			{
 				toScreenPosition(globalX, globalY, aCamera, p);
-				drawer.drawAxis(p.x, p.y, AntColor.AQUA);
+				AntDrawer.drawAxis(p.x, p.y, AntColor.AQUA);
 			}
 			
 			// Отрисовка детей.
@@ -583,7 +582,22 @@ package ru.antkarlov.anthill
 				globalAngle = angle;
 			}
 			
-			updateChildren();
+			// Обновление положение для вложенных сущностей.
+			//updateChildren();
+			if (children != null)
+			{
+				var entity:AntEntity;
+				var i:int = 0;
+				while (i < numChildren)
+				{
+					entity = children[i++] as AntEntity;
+					if (entity != null && entity.exists)
+					{
+						entity.locate(globalX, globalY, globalAngle);
+					}
+				}
+			}
+			
 			updateBounds();
 		}
 		
