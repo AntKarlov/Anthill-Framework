@@ -159,9 +159,9 @@ package ru.antkarlov.anthill
 			flooredX += trimBounds.x;
 			flooredY += trimBounds.y;
 			
-			frames.push(bmpData);
-			offsetX.push(flooredX);
-			offsetY.push(flooredY);
+			frames[0] = bmpData;
+			offsetX[0] = flooredX;
+			offsetY[0] = flooredY;
 			
 			width = (width < trimBounds.width) ? trimBounds.width : width;
 			height = (height < trimBounds.height) ? trimBounds.height : height;
@@ -173,8 +173,9 @@ package ru.antkarlov.anthill
 		 * Создает растровую анимацию из указанного клипа.
 		 * 
 		 * @param	aClip	 Клип из которого необходимо создать растровую анимацию.
+		 * @param	aIndent	 Отступ необходимый для избежания возможного обрезания сглаживаемых объектов.
 		 */
-		public function makeFromMovieClip(aClip:MovieClip):void
+		public function makeFromMovieClip(aClip:MovieClip, aIndent:int = 0):void
 		{
 			totalFrames = aClip.totalFrames;
 			
@@ -200,10 +201,13 @@ package ru.antkarlov.anthill
 				scratchBitmapData.draw(aClip, mtx);
 				
 				var trimBounds:Rectangle = scratchBitmapData.getColorBoundsRect(0xFF000000, 0x00000000, false);
-				trimBounds.x -= 1;
-				trimBounds.y -= 1;
-				trimBounds.width += 2;
-				trimBounds.height += 2;
+				if (aIndent != 0)
+				{
+					trimBounds.x -= aIndent;
+					trimBounds.y -= aIndent;
+					trimBounds.width += aIndent * 2;
+					trimBounds.height += aIndent * 2;
+				}
 				
 				var bmpData:BitmapData = new BitmapData(trimBounds.width, trimBounds.height, true, 0);
 				bmpData.copyPixels(scratchBitmapData, trimBounds, DEST_POINT);
