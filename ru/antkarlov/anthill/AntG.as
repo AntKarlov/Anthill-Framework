@@ -102,6 +102,12 @@ package ru.antkarlov.anthill
 		public static var maxElapsed:Number;
 		
 		/**
+		 * Определяет является ли временной промежуток между кадрами фиксированным.
+		 * @default    false
+		 */
+		public static var fixedElapsed:Boolean;
+		
+		/**
 		 * Массив добавленных камер.
 		 */
 		public static var cameras:Array;
@@ -139,10 +145,10 @@ package ru.antkarlov.anthill
 		public static var debugger:AntDebugger;
 		
 		/**
-		 * Указатель на дебаг отрисовщик.
-		 * @default    null
+		 * Флаг включающий отладочную отрисовку.
+		 * @default    false
 		 */
-		public static var debugDrawer:AntDrawer;
+		public static var debugDraw:Boolean;
 		
 		/**
 		 * Указатель на класс следящий за удалением объектов из памяти.
@@ -278,6 +284,7 @@ package ru.antkarlov.anthill
 			timeScale = 1;
 			elapsed = 0.02;
 			maxElapsed = 0.0333333;
+			fixedElapsed = false;
 			
 			_anthill = aAnthill;
 			_debugMode = true;
@@ -295,7 +302,7 @@ package ru.antkarlov.anthill
 			sounds = new AntSoundManager();
 			
 			debugger = new AntDebugger();
-			debugDrawer = null;
+			debugDraw = false;
 
 			track = AntMemory.track;
 			
