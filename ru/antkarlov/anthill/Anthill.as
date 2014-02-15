@@ -12,6 +12,7 @@ package ru.antkarlov.anthill
 	import flash.ui.Mouse;
 	
 	import ru.antkarlov.anthill.debug.AntPerfomance;
+	import ru.antkarlov.anthill.debug.AntDrawer;
 	
 	public class Anthill extends Sprite
 	{
@@ -260,7 +261,7 @@ package ru.antkarlov.anthill
 			_perfomance.ratingTotal.add(elapsedMs);
 			_elapsed = elapsedMs / 1000;
 			_total = curTime;
-			AntG.elapsed = (_elapsed > AntG.maxElapsed) ? AntG.maxElapsed : _elapsed;
+			AntG.elapsed = (_elapsed > AntG.maxElapsed || AntG.fixedElapsed) ? AntG.maxElapsed : _elapsed;
 			AntG.elapsed *= AntG.timeScale;
 			
 			// Процессинг.
@@ -315,7 +316,6 @@ package ru.antkarlov.anthill
 				cameras = AntG.cameras;
 			}
 			
-			var debugDraw:Boolean = (AntG.debugDrawer != null);
 			var i:int = 0;
 			var n:int = cameras.length;
 			var camera:AntCamera;
@@ -326,9 +326,9 @@ package ru.antkarlov.anthill
 				{
 					camera.update();
 					
-					if (debugDraw)
+					if (AntG.debugDraw)
 					{
-						AntG.debugDrawer.buffer = camera.buffer;
+						AntDrawer.setCanvas(camera.buffer);
 					}
 					
 					camera.beginDraw();
@@ -337,7 +337,7 @@ package ru.antkarlov.anthill
 					if (state != null && state.defGroup.exists && state.defGroup.visible)
 					{
 						state.defGroup.draw(camera);
-						if (debugDraw)
+						if (AntG.debugDraw)
 						{
 							state.defGroup.debugDraw(camera);
 						}
@@ -347,9 +347,9 @@ package ru.antkarlov.anthill
 					AntG.plugins.draw(camera);
 					camera.endDraw();
 					
-					if (debugDraw)
+					if (AntG.debugDraw)
 					{
-						AntG.debugDrawer.buffer = null;
+						AntDrawer.setCanvas(null);
 					}
 				}
 			}
