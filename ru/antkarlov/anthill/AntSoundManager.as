@@ -271,9 +271,9 @@ package ru.antkarlov.anthill
 		 * @param	aRepeats	 Количество повторов воспроизведения звука.
 		 * @return		Возвращает указатель на экземпляр звука.
 		 */
-		public function play(aName:String, aSource:AntEntity = null, aSingle:Boolean = false, aRepeats:int = 1):AntSound
+		public function play(aName:String, aVolume:Number = 1, aSource:AntEntity = null, aSingle:Boolean = false, aRepeats:int = 1):AntSound
 		{
-			if (mute || volume <= 0)
+			if (mute || volume <= 0 || aVolume <= 0)
 			{
 				return null;
 			}
@@ -285,7 +285,7 @@ package ru.antkarlov.anthill
 			
 			var sound:AntSound = recycle(aName);
 			sound.revive();
-			sound.play(aSource, 0, aRepeats);
+			sound.play(aSource, 0, aRepeats, aVolume);
 			return sound;
 		}
 		
