@@ -266,6 +266,7 @@ package ru.antkarlov.anthill
 		 * Запускает воспроизведение звука с указанным именем.
 		 * 
 		 * @param	aName	 Имя звука который необходимо воспроизвести.
+		 * @param	aName	 Громкость воспроизведения. Можно задать ноль, если требуется.
 		 * @param	aSource	 Объект-источник звука.
 		 * @param	aSingle	 Флаг определяющий могут ли быть запущены иные копии данного звука.
 		 * @param	aRepeats	 Количество повторов воспроизведения звука.
@@ -273,7 +274,7 @@ package ru.antkarlov.anthill
 		 */
 		public function play(aName:String, aVolume:Number = 1, aSource:AntEntity = null, aSingle:Boolean = false, aRepeats:int = 1):AntSound
 		{
-			if (mute || volume <= 0 || aVolume <= 0)
+			if (mute || volume <= 0)
 			{
 				return null;
 			}
