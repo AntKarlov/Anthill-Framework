@@ -26,6 +26,7 @@ package ru.antkarlov.anthill
 		 * @default    null
 		 */
 		public var target:Object;
+		public var currentTarget:Object;
 		
 		/**
 		 * Значение глубины колеса при прокрутке.
@@ -411,6 +412,7 @@ package ru.antkarlov.anthill
 		internal function mouseDownHandler(event:MouseEvent):void
 		{
 			target = event.target;
+			currentTarget = event.currentTarget;
 			_current = (_current > 0) ? 1 : 2;
 			eventDown.dispatch();
 		}
