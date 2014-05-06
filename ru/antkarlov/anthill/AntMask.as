@@ -303,7 +303,7 @@ package ru.antkarlov.anthill
 		public function gotoAndStop(aFrame:Number):void
 		{
 			currentFrame = (aFrame <= 0) ? 1 : (aFrame > totalFrames) ? totalFrames : aFrame;
-			goto(currentFrame);
+			switchFrame(currentFrame);
 			stop();
 		}
 		
@@ -315,7 +315,7 @@ package ru.antkarlov.anthill
 		public function gotoAndPlay(aFrame:Number):void
 		{
 			currentFrame = (aFrame <= 0) ? 1 : (aFrame > totalFrames) ? totalFrames : aFrame;
-			goto(currentFrame);
+			switchFrame(currentFrame);
 			play();
 		}
 		
@@ -335,7 +335,7 @@ package ru.antkarlov.anthill
 		public function nextFrame(aUseSpeed:Boolean = false):void
 		{
 			aUseSpeed ? currentFrame += animationSpeed * AntG.timeScale : currentFrame++;
-			goto(currentFrame);
+			switchFrame(currentFrame);
 		}
 		
 		/**
@@ -346,7 +346,7 @@ package ru.antkarlov.anthill
 		public function prevFrame(aUseSpeed:Boolean = false):void
 		{
 			aUseSpeed ? currentFrame -= animationSpeed * AntG.timeScale : currentFrame--;
-			goto(currentFrame);
+			switchFrame(currentFrame);
 		}
 		
 		/**
@@ -462,7 +462,7 @@ package ru.antkarlov.anthill
 		 * 
 		 * @param	aFrame	 Кадр на который необходимо перевести текущую анимацию.
 		 */
-		protected function goto(aFrame:Number):void
+		protected function switchFrame(aFrame:Number):void
 		{
 			var i:int = AntMath.floor(aFrame - 1);
 			i = (i <= 0) ? 0 : (i >= totalFrames - 1) ? totalFrames - 1 : i;

@@ -708,7 +708,7 @@ package ru.antkarlov.anthill
 				status = NORMAL;
 			}
 			
-			goto(status);
+			switchFrame(status);
 			updateLabel();
 		}
 
@@ -817,7 +817,7 @@ package ru.antkarlov.anthill
 		 * 
 		 * @param	aFrame	 Кадр на который необходимо перевести состояние кнопки.
 		 */
-		protected function goto(aFrame:int):void
+		protected function switchFrame(aFrame:int):void
 		{
 			if (_curAnim == null)
 			{
