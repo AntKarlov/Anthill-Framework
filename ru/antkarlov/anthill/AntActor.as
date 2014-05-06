@@ -38,6 +38,12 @@ package ru.antkarlov.anthill
 		public var smoothing:Boolean;
 		
 		/**
+		 * Позволяет при возможности использовать более быстрые методы отрисовки актера.
+		 * @default true
+		 */
+		public var quickDraw:Boolean;
+		
+		/**
 		 * Номер текущего кадра с учетом скорости анимации. Значение может быть дробным.
 		 * @default    1
 		 */
@@ -167,6 +173,7 @@ package ru.antkarlov.anthill
 		{
 			blend = null;
 			smoothing = true;
+			quickDraw = true;
 			currentFrame = 1;
 			totalFrames = 0;
 			reverse = false;
@@ -288,6 +295,7 @@ package ru.antkarlov.anthill
 			{
 				_curAnim = _animations.get(aName);
 				_curAnimName = aName;
+				_prevFrame = -1;
 				currentFrame = 1;
 				totalFrames = _curAnim.totalFrames;
 				resetHelpers();
@@ -398,8 +406,8 @@ package ru.antkarlov.anthill
 			if (res && aPixelFlag)
 			{
 				var absOrigin:AntPoint = new AntPoint(Math.abs(origin.x), Math.abs(origin.y));
-				var dx:int = Math.floor(Math.abs((aX - x) / scaleX + absOrigin.x));
-				var dy:int = Math.floor(Math.abs((aY - y) / scaleY + absOrigin.y));
+				var dx:int = Math.floor((aX - globalX) / scaleX + absOrigin.x);
+				var dy:int = Math.floor((aY - globalY) / scaleY + absOrigin.y);
 				var p:AntPoint = AntMath.rotateDeg(dx, dy, absOrigin.x, absOrigin.y, -globalAngle);
 				res = false;
 				
@@ -433,7 +441,7 @@ package ru.antkarlov.anthill
 		 * 
 		 * @param	aCamera	 Камера в буффер которой необходимо отрисовать актера.
 		 */
-		internal function drawActor(aCamera:AntCamera):void
+		public function drawActor(aCamera:AntCamera):void
 		{
 			NUM_OF_VISIBLE++;
 			
@@ -456,8 +464,8 @@ package ru.antkarlov.anthill
 			_flashRect.width = _pixels.width;
 			_flashRect.height = _pixels.height;
 
-			// Если не применено никаких трансформаций то выполняем простой рендер через copyPixels().
-			if (globalAngle == 0 && scaleX == 1 && scaleY == 1 && blend == null)
+			// Если не применено никаких трансформаций то выполняем быстрый рендер через copyPixels().
+			if (globalAngle == 0 && scaleX == 1 && scaleY == 1 && blend == null && quickDraw)
 			{
 				aCamera.buffer.copyPixels((_buffer != null) ? _buffer : _pixels, _flashRect, _flashPoint, null, null, true);
 			}
@@ -470,7 +478,7 @@ package ru.antkarlov.anthill
 
 				if (globalAngle != 0)
 				{
-					_matrix.rotate(Math.PI * (globalAngle / 180));
+					_matrix.rotate(Math.PI * 2 * (globalAngle / 360));
 				}
 
 				_matrix.translate(_flashPoint.x - origin.x, _flashPoint.y - origin.y);
@@ -579,8 +587,15 @@ package ru.antkarlov.anthill
 		 */
 		protected function animComplete():void
 		{
-			if (!repeat) stop();
-			eventComplete.dispatch(this);
+			if (!repeat)
+			{
+				stop();
+			}
+			
+			if (eventComplete.numListeners > 0)
+			{
+				eventComplete.dispatch(this);
+			}
 		}
 		
 		//---------------------------------------
