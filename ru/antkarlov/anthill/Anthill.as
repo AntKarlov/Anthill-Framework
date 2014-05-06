@@ -226,11 +226,13 @@ package ru.antkarlov.anthill
 		/**
 		 * Создает камеру по умолчанию.
 		 */
-		public function createDefaultCamera():void
+		public function createDefaultCamera(aWidth:int = 0, aHeight:int = 0):void
 		{
 			if (_defaultCamera == null)
 			{
-				_defaultCamera = new AntCamera(0, 0, AntG.width, AntG.height);
+				aWidth = (aWidth == 0) ? AntG.width : aWidth;
+				aHeight = (aHeight == 0) ? AntG.height : aHeight;
+				_defaultCamera = new AntCamera(0, 0, aWidth, aHeight);
 				_defaultCamera.fillBackground = true;
 			}
 			
@@ -334,12 +336,12 @@ package ru.antkarlov.anthill
 					camera.beginDraw();
 					
 					// Отрисовка содержимого для текущего состояния.
-					if (state != null && state.defGroup.exists && state.defGroup.visible)
+					if (state != null)
 					{
-						state.defGroup.draw(camera);
+						state.draw(camera);
 						if (AntG.debugDraw)
 						{
-							state.defGroup.debugDraw(camera);
+							state.debugDraw(camera);
 						}
 					}
 					
@@ -347,7 +349,18 @@ package ru.antkarlov.anthill
 					AntG.plugins.draw(camera);
 					camera.endDraw();
 					
-					if (AntG.debugDraw)
+					if (AntG.debugMode)
+					{
+						if (!AntG.debugDraw)
+						{
+							AntDrawer.setCanvas(camera.buffer);
+						}
+						
+						AntDrawer.drawText(21, AntG.height - 25, AntG.waterMark, 0xFF000000);
+						AntDrawer.drawText(20, AntG.height - 26, AntG.waterMark);
+					}
+					
+					if (AntG.debugDraw || AntG.debugMode)
 					{
 						AntDrawer.setCanvas(null);
 					}
