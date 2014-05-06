@@ -41,7 +41,7 @@ package ru.antkarlov.anthill
 		/**
 		 * Версия обслуживания.
 		 */
-		public static const LIB_MAINTENANCE:uint = 3;
+		public static const LIB_MAINTENANCE:uint = 4;
 		
 		//---------------------------------------
 		// PUBLIC VARIABLES
@@ -149,6 +149,12 @@ package ru.antkarlov.anthill
 		 * @default    false
 		 */
 		public static var debugDraw:Boolean;
+		
+		/**
+		 * Строка всегда отображающася в левом нижнем углу при включенном режиме debugMode.
+		 * @default    Development Build
+		 */
+		public static var waterMark:String = "Development Build";
 		
 		/**
 		 * Указатель на класс следящий за удалением объектов из памяти.
@@ -359,11 +365,11 @@ package ru.antkarlov.anthill
 		/**
 		 * Создает камеру по умолчанию.
 		 */
-		public static function createDefaultCamera():void
+		public static function createDefaultCamera(aWidth:int = 0, aHeight:int = 0):void
 		{
 			if (_anthill != null)
 			{
-				_anthill.createDefaultCamera();
+				_anthill.createDefaultCamera(aWidth, aHeight);
 			}
 		}
 		
