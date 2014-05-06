@@ -273,6 +273,11 @@ package ru.antkarlov.anthill
 		 */
 		public function play(aName:String, aSource:AntEntity = null, aSingle:Boolean = false, aRepeats:int = 1):AntSound
 		{
+			if (aName == null)
+			{
+				return null;
+			}
+			
 			if (mute || volume <= 0)
 			{
 				return null;
