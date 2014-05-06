@@ -104,7 +104,29 @@ package ru.antkarlov.anthill
 		{
 			//
 		}
-
+		
+		/**
+		 * @private
+		 */
+		public function draw(aCamera:AntCamera):void
+		{
+			if (defGroup != null && defGroup.exists && defGroup.visible)
+			{
+				defGroup.draw(aCamera);
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public function debugDraw(aCamera:AntCamera):void
+		{
+			if (defGroup != null && defGroup.exists && defGroup.visible)
+			{
+				defGroup.debugDraw(aCamera);
+			}
+		}
+		
 	}
 
 }
