@@ -2,6 +2,8 @@ package ru.antkarlov.anthill.debug
 {
 	import flash.display.BitmapData;
 	import ru.antkarlov.anthill.*;
+	import flash.geom.Rectangle;
+	import flash.geom.Point;
 	
 	/**
 	 * Отладочный невизуальный класс выполняющий отладочную отрисовку сущностей.
@@ -14,6 +16,9 @@ package ru.antkarlov.anthill.debug
 	 */
 	public class AntDrawer extends Object
 	{
+		[Embed(source="../resources/DebugFont.png")] private static var ImgFont:Class;
+		[Embed(source="../resources/DebugFont.xml", mimeType="application/octet-stream")] private static var XmlFont:Class;
+		
 		//---------------------------------------
 		// PUBLIC VARIABLES
 		//---------------------------------------
@@ -41,8 +46,17 @@ package ru.antkarlov.anthill.debug
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
-		protected static var _lineFrom:AntPoint = new AntPoint();
-		protected static var _canvas:BitmapData = null;
+		private static var _lineFrom:AntPoint = new AntPoint();
+		private static var _canvas:BitmapData = null;
+		
+		/**
+		 * Помошники для отрисовки текста.
+		 */
+		private static var _font:AntDebugFont = new AntDebugFont(ImgFont, XmlFont);
+		private static var _charBitmap:BitmapData;
+		private static var _flashRect:Rectangle = new Rectangle();
+		private static var _flashPointZero:Point = new Point();
+		private static var _flashPoint:Point = new Point();
 		
 		//---------------------------------------
 		// CONSTRUCTOR
@@ -57,7 +71,10 @@ package ru.antkarlov.anthill.debug
 		}
 		
 		/**
-		 * @private
+		 * Устанавливает текущий рабочий холст в который будет выполнятся отрисовка.
+		 * Например: AntDrawer.setCanvas(AntG.getCamera().buffer);
+		 * 
+		 * @param	aCanvas	 Указатель на BitmapData в который будет выполнятся отрисовка.
 		 */
 		public static function setCanvas(aCanvas:BitmapData):void
 		{
@@ -218,7 +235,7 @@ package ru.antkarlov.anthill.debug
 		}
 		
 		/**
-		 * @private
+		 * Помошник для метода drawCircle().
 		 */
 		protected static function plotCircle(aX:int, aY:int, cX:int, cY:int, aColor:uint):void
 		{
@@ -238,6 +255,77 @@ package ru.antkarlov.anthill.debug
 		{
 			drawLine(aX, aY - 2, aX, aY + 3, aColor);
 			drawLine(aX - 2, aY, aX + 3, aY, aColor);
+		}
+		
+		/**
+		 * Выводит текст в указанную позицию.
+		 * 
+		 * @param	aX	 Положение текста по X.
+		 * @param	aY	 Положение текста по Y.
+		 * @param	aText	 Текст который будет отрисован.
+		 * @param	aColor	 Цвет текста.
+		 */
+		public static function drawText(aX:int, aY:int, aText:String, aColor:uint = 0):void
+		{
+			if (_canvas == null)
+			{
+				return;
+			}
+			
+			var tx:int = aX;
+			var ty:int = aY;
+			
+			const n:int = aText.length;
+			var i:int = 0;
+			var char:String;
+			var originalBitmap:BitmapData;
+			while (i < n)
+			{
+				originalBitmap = _font.getFrame(aText.charAt(i));
+				_flashRect.width = originalBitmap.width;
+				_flashRect.height = originalBitmap.height;
+				
+				_font.getPoint(aText.charAt(i), _flashPoint);
+				_flashPoint.x += tx;
+				_flashPoint.y += ty;
+				
+				if (aColor != 0)
+				{
+					if (_charBitmap == null || _charBitmap.width != _flashRect.width || _charBitmap.height != _flashRect.height)
+					{
+						_charBitmap = new BitmapData(_flashRect.width, _flashRect.height, true, 0x00FFFFFF);
+					}
+
+					_charBitmap.copyPixels(originalBitmap, _flashRect, _flashPointZero, null, null, false);
+					for (var dy:int = 0; dy < _flashRect.height; dy++)
+					{
+						for (var dx:int = 0; dx < _flashRect.width; dx++)
+						{
+							if (extractAlpha(_charBitmap.getPixel32(dx, dy)) > 0)
+							{
+								_charBitmap.setPixel(dx, dy, aColor);
+							}
+						}
+					}
+					
+					_canvas.copyPixels(_charBitmap, _flashRect, _flashPoint, null, null, true);
+				}
+				else
+				{
+					_canvas.copyPixels(originalBitmap, _flashRect, _flashPoint, null, null, true);
+				}
+				
+				tx += _flashRect.width + 1;
+				i++;
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		private static function extractAlpha(aColor:uint):int
+		{
+			return (aColor >> 24) & 0xFF;
 		}
 
 	}
