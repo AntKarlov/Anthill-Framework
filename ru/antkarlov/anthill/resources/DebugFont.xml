@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BitmapFont>
+	<Char name=" " x="0" y="0" w="5" h="9"/>
+	<Char name="!" x="10" y="0" w="1" h="9"/>
+	<Char name="&quot;" x="16" y="0" w="3" h="9"/>
+	<Char name="#" x="22" y="0" w="5" h="9"/>
+	<Char name="$" x="29" y="0" w="5" h="9"/>
+	<Char name="%" x="36" y="0" w="5" h="9"/>
+	<Char name="'" x="52" y="0" w="1" h="9"/>
+	<Char name="(" x="58" y="0" w="4" h="9"/>
+	<Char name=")" x="64" y="0" w="4" h="9"/>
+	<Char name="*" x="71" y="0" w="5" h="9"/>
+	<Char name="+" x="78" y="0" w="5" h="9"/>
+	<Char name="," x="87" y="0" w="1" h="9"/>
+	<Char name="-" x="92" y="0" w="5" h="9"/>
+	<Char name="." x="101" y="0" w="1" h="9"/>
+	<Char name="/" x="106" y="0" w="5" h="9"/>
+	
+	<Char name="0" x="1" y="9" w="5" h="9"/>
+	<Char name="1" x="8" y="9" w="5" h="9"/>
+	<Char name="2" x="15" y="9" w="5" h="9"/>
+	<Char name="3" x="22" y="9" w="5" h="9"/>
+	<Char name="4" x="29" y="9" w="5" h="9"/>
+	<Char name="5" x="36" y="9" w="5" h="9"/>
+	<Char name="6" x="43" y="9" w="5" h="9"/>
+	<Char name="7" x="50" y="9" w="5" h="9"/>
+	<Char name="8" x="57" y="9" w="5" h="9"/>
+	<Char name="9" x="64" y="9" w="5" h="9"/>
+	<Char name=":" x="73" y="9" w="1" h="9"/>
+	<Char name=";" x="80" y="9" w="1" h="9"/>
+	<Char name="&lt;" x="86" y="9" w="4" h="9"/>
+	<Char name="=" x="92" y="9" w="5" h="9"/>
+	<Char name="&gt;" x="99" y="9" w="4" h="9"/>
+	<Char name="?" x="106" y="9" w="5" h="9"/>
+	
+	<Char name="@" x="0" y="18" w="6" h="9"/>
+	<Char name="A" x="8" y="18" w="5" h="9"/>
+	<Char name="B" x="15" y="18" w="5" h="9"/>
+	<Char name="C" x="22" y="18" w="5" h="9"/>
+	<Char name="D" x="29" y="18" w="5" h="9"/>
+	<Char name="E" x="36" y="18" w="5" h="9"/>
+	<Char name="F" x="43" y="18" w="5" h="9"/>
+	<Char name="G" x="50" y="18" w="5" h="9"/>
+	<Char name="H" x="57" y="18" w="5" h="9"/>
+	<Char name="I" x="65" y="18" w="3" h="9"/>
+	<Char name="J" x="71" y="18" w="5" h="9"/>
+	<Char name="K" x="78" y="18" w="5" h="9"/>
+	<Char name="L" x="85" y="18" w="5" h="9"/>
+	<Char name="M" x="92" y="18" w="5" h="9"/>
+	<Char name="N" x="99" y="18" w="5" h="9"/>
+	<Char name="O" x="106" y="18" w="5" h="9"/>
+	
+	<Char name="P" x="1" y="27" w="5" h="9"/>
+	<Char name="Q" x="8" y="27" w="5" h="9"/>
+	<Char name="R" x="15" y="27" w="5" h="9"/>
+	<Char name="S" x="22" y="27" w="5" h="9"/>
+	<Char name="T" x="29" y="27" w="5" h="9"/>
+	<Char name="U" x="36" y="27" w="5" h="9"/>
+	<Char name="V" x="43" y="27" w="5" h="9"/>
+	<Char name="W" x="50" y="27" w="5" h="9"/>
+	<Char name="X" x="57" y="27" w="5" h="9"/>
+	<Char name="Y" x="64" y="27" w="5" h="9"/>
+	<Char name="Z" x="71" y="27" w="5" h="9"/>
+	<Char name="[" x="80" y="27" w="3" h="9"/>
+	<Char name="\" x="85" y="27" w="5" h="9"/>
+	<Char name="]" x="92" y="27" w="3" h="9"/>
+	<Char name="^" x="99" y="27" w="5" h="9"/>
+	<Char name="_" x="106" y="27" w="5" h="9"/>
+	
+	<Char name="`" x="1" y="36" w="5" h="9"/>
+	<Char name="a" x="8" y="36" w="5" h="9"/>
+	<Char name="b" x="15" y="36" w="5" h="9"/>
+	<Char name="c" x="22" y="36" w="5" h="9"/>
+	<Char name="d" x="29" y="36" w="5" h="9"/>
+	<Char name="e" x="36" y="36" w="5" h="9"/>
+	<Char name="f" x="43" y="36" w="4" h="9"/>
+	<Char name="g" x="50" y="36" w="5" h="9"/>
+	<Char name="h" x="57" y="36" w="5" h="9"/>
+	<Char name="i" x="66" y="36" w="1" h="9"/>
+	<Char name="j" x="71" y="36" w="5" h="9"/>
+	<Char name="k" x="78" y="36" w="4" h="9"/>
+	<Char name="l" x="87" y="36" w="2" h="9"/>
+	<Char name="m" x="92" y="36" w="5" h="9"/>
+	<Char name="n" x="99" y="36" w="5" h="9"/>
+	<Char name="o" x="106" y="36" w="5" h="9"/>
+	
+	<Char name="p" x="1" y="45" w="5" h="9"/>
+	<Char name="q" x="8" y="45" w="5" h="9"/>
+	<Char name="r" x="15" y="45" w="5" h="9"/>
+	<Char name="s" x="22" y="45" w="5" h="9"/>
+	<Char name="t" x="30" y="45" w="3" h="9"/>
+	<Char name="u" x="36" y="45" w="5" h="9"/>
+	<Char name="v" x="43" y="45" w="5" h="9"/>
+	<Char name="w" x="50" y="45" w="5" h="9"/>
+	<Char name="x" x="57" y="45" w="5" h="9"/>
+	<Char name="y" x="64" y="45" w="5" h="9"/>
+	<Char name="z" x="71" y="45" w="5" h="9"/>
+	<Char name="{" x="80" y="45" w="4" h="9"/>
+	<Char name="|" x="87" y="45" w="1" h="9"/>
+	<Char name="}" x="92" y="45" w="4" h="9"/>
+	<Char name="~" x="99" y="45" w="6" h="9"/>
+	<Char name="«" x="106" y="45" w="5" h="9"/>
+	<Char name="»" x="113" y="45" w="5" h="9"/>
+</BitmapFont>
