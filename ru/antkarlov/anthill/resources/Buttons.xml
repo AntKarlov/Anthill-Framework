@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Buttons>
+	<SubButton kind="Close" x="0" y="0" w="24" h="12"/>
+	<SubButton kind="Console" x="0" y="12" w="24" h="12"/>
+	<SubButton kind="Perfomance" x="0" y="24" w="24" h="12"/>
+	<SubButton kind="Monitor" x="0" y="36" w="24" h="12"/>
+	<SubButton kind="SoundOn" x="0" y="48" w="24" h="12"/>
+	<SubButton kind="SoundOff" x="0" y="60" w="24" h="12"/>
+	<SubButton kind="MusicOn" x="0" y="72" w="24" h="12"/>
+	<SubButton kind="MusicOff" x="0" y="84" w="24" h="12"/>
+	<SubButton kind="DebugdrawOn" x="0" y="96" w="24" h="12"/>
+	<SubButton kind="DebugdrawOff" x="0" y="108" w="24" h="12"/>
+	<SubButton kind="Add" x="0" y="120" w="24" h="12"/>
+	<SubButton kind="Del" x="0" y="132" w="24" h="12"/>
+	<SubButton kind="Clear" x="0" y="144" w="24" h="12"/>
+	<SubButton kind="Exit" x="0" y="156" w="24" h="12"/>
+	<SubButton kind="Cursor" x="0" y="168" w="24" h="12"/>
+	<SubButton kind="MoveUp" x="0" y="180" w="24" h="12"/>
+	<SubButton kind="MoveUpRight" x="0" y="192" w="24" h="12"/>
+	<SubButton kind="MoveRight" x="0" y="204" w="24" h="12"/>
+	<SubButton kind="MoveDownRight" x="0" y="216" w="24" h="12"/>
+	<SubButton kind="MoveDown" x="0" y="228" w="24" h="12"/>
+	<SubButton kind="MoveDownLeft" x="0" y="240" w="24" h="12"/>
+	<SubButton kind="MoveLeft" x="0" y="252" w="24" h="12"/>
+	<SubButton kind="MoveUpLeft" x="0" y="264" w="24" h="12"/>
+	<SubButton kind="Options" x="0" y="276" w="24" h="12"/>
+	<SubButton kind="Pause" x="0" y="288" w="24" h="12"/>
+	<SubButton kind="Play" x="0" y="300" w="24" h="12"/>
+	<SubButton kind="Print" x="0" y="312" w="24" h="12"/>
+	<SubButton kind="Save" x="0" y="324" w="24" h="12"/>
+	<SubButton kind="Load" x="0" y="336" w="24" h="12"/>
+	<SubButton kind="Warning" x="0" y="348" w="24" h="12"/>
+	<SubButton kind="Ant" x="0" y="360" w="24" h="12"/>
+	<SubButton kind="Bug" x="0" y="372" w="24" h="12"/>
+</Buttons>
+
