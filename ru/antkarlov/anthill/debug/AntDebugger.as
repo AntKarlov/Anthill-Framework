@@ -205,7 +205,7 @@ package ru.antkarlov.anthill.debug
 		 * @param	aOnClick	 Указатель на метод обработчик клика по кнопке.
 		 * @return		Возвращает указатель на созданную и добавленную кнопку.
 		 */
-		public function makeButton(aButtonKind:uint, aOnClick:Function, aSystem:Boolean = false):AntSysButton
+		public function makeButton(aButtonKind:String, aOnClick:Function, aSystem:Boolean = false):AntSysButton
 		{
 			return addButton(new AntSysButton(aButtonKind), aOnClick, aSystem);
 		}
