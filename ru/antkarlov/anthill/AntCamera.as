@@ -130,7 +130,7 @@ package ru.antkarlov.anthill
 		public var positionPropertyX:String;
 		
 		/**
-		 * Свойство цели для преследования которое используется для определения его позиции по X.
+		 * Свойство цели для преследования которое используется для определения его позиции по Y.
 		 * @default    "globalY"
 		 */
 		public var positionPropertyY:String;
@@ -176,6 +176,12 @@ package ru.antkarlov.anthill
 		 * Помошник для рассчета новой позиции камеры.
 		 */
 		protected var _newPos:AntPoint;
+		
+		protected var _shaker:Vector.<AntPoint>;
+		protected var _shakerIndex:int;
+		protected var _shakerDelay:Number;
+		protected var _isShake:Boolean;
+		protected var _shakePos:AntPoint;
 		
 		internal var _isMasked:Boolean;
 		internal var _maskOffset:AntPoint;
@@ -226,6 +232,10 @@ package ru.antkarlov.anthill
 			positionPropertyY = "globalY";
 			roundPosition = false;
 			
+			_shaker = new Vector.<AntPoint>();
+			_shakerIndex = 0;
+			_isShake = false;
+			
 			_isMasked = false;
 			_maskOffset = new AntPoint();
 		}
@@ -257,6 +267,37 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		// PUBLIC METHODS
 		//---------------------------------------
+		
+		/**
+		 * @private
+		 */
+		public function shake(aForce:Number = 4, aDuration:int = 4):void
+		{
+			_shaker.length = 0;
+			var r:Number = Math.random();
+			var p:AntPoint;
+			for (var i:int = 0; i < aDuration; i++)
+			{
+				p = new AntPoint();
+				//r = Math.random();
+				if (i % 2 == 0)
+				{
+					p.x = (r > 0.5) ? -aForce * i : aForce * i;
+					p.y = aForce * i;
+				}
+				else
+				{
+					p.x = (r > 0.5) ? aForce * i : -aForce * i;
+					p.y = -aForce * i;
+				}
+				_shaker.push(p);
+			}
+			
+			_shakerDelay = 0;
+			_shakerIndex = _shaker.length-1;
+			_shakePos = _shaker[_shakerIndex];
+			_isShake = true;
+		}
 		
 		/**
 		 * Устанавливает цель за которой будет выполнятся слежение.
@@ -359,12 +400,14 @@ package ru.antkarlov.anthill
 				{
 					_newPos.x += (_newPos.x > 0) ? 0.0000001 : -0.0000001;
 					_newPos.y += (_newPos.y > 0) ? 0.0000001 : -0.0000001;
-					_newPos.set(Math.round(scroll.x - _newPos.x), Math.round(scroll.y - _newPos.y));
+					_newPos.set(scroll.x - AntMath.ceil(_newPos.x), scroll.y - AntMath.ceil(_newPos.y));
 				}
 				else
 				{
 					_newPos.set(scroll.x - _newPos.x, scroll.y - _newPos.y);
 				}
+				
+				updateShaker(_newPos);
 				
 				if (bounds != null)
 				{
@@ -377,8 +420,38 @@ package ru.antkarlov.anthill
 			}
 			else if (bounds != null)
 			{
+				updateShaker(scroll);
+				
 				scroll.x = limitByX(scroll.x);
 				scroll.y = limitByY(scroll.y);
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		private function updateShaker(aSource:AntPoint):void
+		{
+			if (_isShake)
+			{
+				_shakerDelay -= 2 * AntG.elapsed;
+				if (_shakerDelay <= 0)
+				{
+					if (_shakerIndex < 0)
+					{
+						_isShake = false;
+					}
+					else
+					{
+						_shakePos = _shaker[_shakerIndex];
+					}
+
+					_shakerIndex--;
+					_shakerDelay = 0.08;
+				}
+
+				aSource.x = AntMath.lerp(aSource.x + _shakePos.x, aSource.x, 0.5);
+				aSource.y = AntMath.lerp(aSource.y + _shakePos.y, aSource.y, 0.5);
 			}
 		}
 		
@@ -549,6 +622,14 @@ package ru.antkarlov.anthill
 			}
 			
 			return aValue;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get sprite():Sprite
+		{
+			return _flashSprite;
 		}
 
 	}
