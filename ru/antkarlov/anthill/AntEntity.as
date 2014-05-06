@@ -276,7 +276,7 @@ package ru.antkarlov.anthill
 		 * Помошник для сортировки вложенных сущностей. 
 		 * Содержит имя атрибута по которому производится сортировка.
 		 */
-		protected var _sortIndex:String;
+		protected var _sortProperty:String;
 		
 		/**
 		 * Помошник для сортировки вложенных сущностей.
@@ -360,7 +360,7 @@ package ru.antkarlov.anthill
 			_oldSize = new AntPoint(-1, -1);
 			_oldScale = new AntPoint(-1, -1);
 			_oldAngle = -1;
-			_sortIndex = null;
+			_sortProperty = null;
 			_sortOrder = ASCENDING;
 			_helperPoint = new AntPoint();
 		}
@@ -387,7 +387,7 @@ package ru.antkarlov.anthill
 				
 				children.length = 0;
 				numChildren = 0;
-				_sortIndex = null;
+				_sortProperty = null;
 			}
 			
 			if (parent != null)
@@ -611,7 +611,7 @@ package ru.antkarlov.anthill
 		{
 			if (children != null)
 			{
-				_sortIndex = aIndex;
+				_sortProperty = aIndex;
 				_sortOrder = aOrder;
 				children.sort(sortHandler);
 			}
@@ -646,8 +646,6 @@ package ru.antkarlov.anthill
 			// Обновляем положение добавляемой сущности и добавляем указатель на родителя (себя).
 			aEntity.parent = this;
 			aEntity.locate(globalX, globalY, globalAngle);
-			aEntity.scrollFactorX = scrollFactorX;
-			aEntity.scrollFactorY = scrollFactorY;
 			
 			// Ищем пустую ячейку.
 			var i:int = 0;
@@ -1612,11 +1610,11 @@ package ru.antkarlov.anthill
 				return -_sortOrder;
 			}
 			
-			if (aEntity1[_sortIndex] < aEntity2[_sortIndex])
+			if (aEntity1[_sortProperty] < aEntity2[_sortProperty])
 			{
 				return _sortOrder;
 			}
-			else if (aEntity1[_sortIndex] > aEntity2[_sortIndex])
+			else if (aEntity1[_sortProperty] > aEntity2[_sortProperty])
 			{
 				return -_sortOrder;
 			}
