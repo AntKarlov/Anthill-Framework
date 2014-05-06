@@ -8,6 +8,7 @@ package ru.antkarlov.anthill
 	
 	import ru.antkarlov.anthill.signals.AntSignal;
 	import ru.antkarlov.anthill.utils.AntColor;
+	import flash.ui.Mouse;
 	
 	/**
 	 * Кнопка обыкновенная.
@@ -46,9 +47,57 @@ package ru.antkarlov.anthill
 		 */
 		public static var defDownCursorAnim:String;
 		
+		/**
+		 * Определяет имя звука для всех кнопок который будет воспроизводится при клике на кнопку.
+		 * @default    null
+		 */
+		public static var defSoundClick:String;
+		
+		/**
+		 * Определяет имя звука для всех кнопок который будет воспроизводится при наведении на кнопку.
+		 * @default    null
+		 */
+		public static var defSoundOver:String;
+		
+		/**
+		 * Определяет имя звука для всех кнопок который будет воспроизводится при потери фокуса кнопкой.
+		 * @default    null
+		 */
+		public static var defSoundOut:String;
+		
 		//---------------------------------------
 		// PUBLIC VARIABLES
 		//---------------------------------------
+		
+		/**
+		 * Имя звука который воспроизводится при клике на кнопку.
+		 * @default    null
+		 */
+		public var soundClick:String;
+		
+		/**
+		 * Имя звука который воспроизводится при наведении на кнопку.
+		 * @default    null
+		 */
+		public var soundOver:String;
+		
+		/**
+		 * Имя звука который воспроизводится при потери фокуса кнопкой.
+		 * @default    null
+		 */
+		public var soundOut:String;
+		
+		/**
+		 * Определяет возможность использования системных курсоров для кнопок.
+		 * @default    true
+		 */
+		public var useSystemCursor:Boolean;
+		
+		/**
+		 * Указатель на камеру в которую рендерится данная кнопка.
+		 * @default    AntG.getCamera();
+		 */
+		public var camera:AntCamera;
 		
 		/**
 		 * Режим смешивания цветов.
@@ -205,28 +254,13 @@ package ru.antkarlov.anthill
 		protected var _buffer:BitmapData;
 		
 		/**
-		 * Помошник для определения пересечения курсора мышки с кнопкой.
+		 * Помошники для функционирования кнопки.
 		 */
+		protected var _iChangeCursor:Boolean;
 		protected var _point:AntPoint;
-		
-		/**
-		 * Внутренний помошник для отрисовки графического контента.
-		 */
 		protected var _flashRect:Rectangle;
-		
-		/**
-		 * Внутренний помошник для отрисовки графического контента.
-		 */
 		protected var _flashPoint:Point;
-		
-		/**
-		 * Внутренний помошник для отрисовки графического контента.
-		 */
 		protected var _flashPointZero:Point;
-		
-		/**
-		 * Внутренний помошник для отрисовки графического контента.
-		 */
 		protected var _matrix:Matrix;
 		
 		//---------------------------------------
@@ -260,12 +294,20 @@ package ru.antkarlov.anthill
 			_buffer = null;
 			_point = new AntPoint();
 			
+			_iChangeCursor = false;
 			_flashRect = new Rectangle();
 			_flashPoint = new Point();
 			_flashPointZero = new Point();
 			_matrix = new Matrix();
 			
 			super();
+			
+			soundOver = null;
+			soundOut = null;
+			soundClick = null;
+		
+			useSystemCursor = true;
+			camera = AntG.getCamera();
 			
 			eventDown = new AntSignal(AntButton);
 			eventOver = new AntSignal(AntButton);
@@ -278,6 +320,10 @@ package ru.antkarlov.anthill
 			
 			overCursorAnim = defOverCursorAnim;
 			downCursorAnim = defDownCursorAnim;
+			
+			soundClick = defSoundClick;
+			soundOver = defSoundOver;
+			soundOut = defSoundOut;
 		}
 		
 		/**
@@ -435,8 +481,8 @@ package ru.antkarlov.anthill
 			if (res && aPixelFlag)
 			{
 				var absOrigin:AntPoint = new AntPoint(Math.abs(origin.x), Math.abs(origin.y));
-				var dx:int = Math.floor(Math.abs((aX - x) / scaleX + absOrigin.x));
-				var dy:int = Math.floor(Math.abs((aY - y) / scaleY + absOrigin.y));
+				var dx:int = Math.floor((aX - globalX) / scaleX + absOrigin.x);
+				var dy:int = Math.floor((aY - globalY) / scaleY + absOrigin.y);
 				var p:AntPoint = AntMath.rotateDeg(dx, dy, absOrigin.x, absOrigin.y, -globalAngle);
 				res = false;
 				
@@ -484,50 +530,69 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
+		 * Проверяет реальную видимость кнопки на экране. Например, кнопка может быть видима, а сущность
+		 * которая содержит кнопку — скрыта. Проверка выполняется для всей иерархии объектов которые содержат
+		 * данную кнопку.
+		 * 
+		 * @return		Вернет false если кнопка кнопка не видна из-за того что скрыта какая-либо родительская сущность.
+		 */
+		protected function getVisibility():Boolean
+		{
+			var e:AntEntity = parent;
+			while (e != null)
+			{
+				if (!e.visible)
+				{
+					return false
+				}
+				e = e.parent;
+			}
+			
+			return true;
+		}
+		
+		/**
 		 * Обработка логики кнопки.
 		 */
 		protected function updateButton():void
 		{
-			if (cameras == null)
+			if (camera == null)
 			{
-				cameras = AntG.cameras;
+				camera = AntG.getCamera();
 			}
 			
-			var i:int = 0;
-			var n:int = cameras.length;
-			var cam:AntCamera;
-			while (i < n)
+			if (camera != null && visible && getVisibility())
 			{
-				cam = cameras[i] as AntCamera;
-				if (cam != null)
+				(isScrolled) ? AntG.mouse.getWorldPosition(camera, _point) : AntG.mouse.getScreenPosition(camera, _point);
+				if (hitTestPoint(_point))
 				{
-					(isScrolled) ? AntG.mouse.getWorldPosition(cam, _point) : AntG.mouse.getScreenPosition(cam, _point);
-					if (hitTestPoint(_point))
+					onMouseOver();
+					if (AntG.mouse.isPressed())
 					{
-						onMouseOver();
-						if (AntG.mouse.isPressed())
-						{
-							onMouseDown();
-						}
-						else if (AntG.mouse.isReleased())
-						{
-							onMouseUp();
-						}
+						onMouseDown();
 					}
-					else
+					else if (AntG.mouse.isReleased())
 					{
-						if (_over)
-						{
-							onMouseOut();
-						}
-
-						if (_down && AntG.mouse.isReleased())
-						{
-							onMouseUp();
-						}
+						onMouseUp();
 					}
 				}
-				i++;
+				else
+				{
+					if (_over)
+					{
+						onMouseOut();
+					}
+
+					if (_down && AntG.mouse.isReleased())
+					{
+						onMouseUp();
+					}
+				}
+			}
+			else if (_iChangeCursor)
+			{
+				Mouse.cursor = "auto";
+				_iChangeCursor = false;
 			}
 			
 			updateVisualStatus();
@@ -545,10 +610,20 @@ package ru.antkarlov.anthill
 				eventOver.dispatch(this);
 			}
 			
-			if (!_down && overCursorAnim != null)
+			if (!_down)
 			{
-				AntG.mouse.changeCursor(overCursorAnim);
+				if (overCursorAnim != null)
+				{
+					AntG.mouse.changeCursor(overCursorAnim);
+				}
+				else if (useSystemCursor)
+				{
+					Mouse.cursor = "button";
+					_iChangeCursor = true;
+				}
 			}
+			
+			AntG.sounds.play(soundOver);
 		}
 		
 		/**
@@ -564,8 +639,15 @@ package ru.antkarlov.anthill
 				if (!_down)
 				{
 					AntG.mouse.changeCursor();
+					if (useSystemCursor)
+					{
+						Mouse.cursor = "auto";
+						_iChangeCursor = false;
+					}
 				}
 			}
+			
+			AntG.sounds.play(soundOut);
 		}
 		
 		/**
@@ -600,6 +682,7 @@ package ru.antkarlov.anthill
 			{
 				AntG.mouse.changeCursor(overCursorAnim);
 				eventClick.dispatch(this);
+				AntG.sounds.play(soundClick);
 			}
 			else
 			{
