@@ -252,7 +252,7 @@ package ru.antkarlov.anthill.utils
 		 */
 		public function debugDraw(aCamera:AntCamera = null):void
 		{
-			if (AntG.debugDrawer == null)
+			if (AntG.debugDraw == false)
 			{
 				return;
 			}
@@ -262,8 +262,7 @@ package ru.antkarlov.anthill.utils
 				aCamera = AntG.getCamera();
 			}
 			
-			var drawer:AntDrawer = AntG.debugDrawer;
-			drawer.drawRect(x + aCamera.scroll.x, y + aCamera.scroll.y, width, height, AntColor.GRAY);
+			AntDrawer.drawRect(x + aCamera.scroll.x, y + aCamera.scroll.y, width, height, AntColor.GRAY);
 			
 			if (northWest != null)
 			{
