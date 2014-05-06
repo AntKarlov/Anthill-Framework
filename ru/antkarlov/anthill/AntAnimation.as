@@ -209,6 +209,12 @@ package ru.antkarlov.anthill
 					trimBounds.height += aIndent * 2;
 				}
 				
+				if (trimBounds.width == 0 || trimBounds.height == 0)
+				{
+					trimBounds.width = 2;
+					trimBounds.height = 2;
+				}
+				
 				var bmpData:BitmapData = new BitmapData(trimBounds.width, trimBounds.height, true, 0);
 				bmpData.copyPixels(scratchBitmapData, trimBounds, DEST_POINT);
 				
