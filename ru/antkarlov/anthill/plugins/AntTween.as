@@ -555,7 +555,12 @@ package ru.antkarlov.anthill.plugins
 				else
 				{
 					stop();
-					eventComplete.dispatch.apply(this, completeArgs);
+					
+					if (eventComplete.numListeners > 0)
+					{
+						eventComplete.dispatch.apply(this, completeArgs);
+					}
+					
 					if (autoStartOfNextTween && nextTween != null)
 					{
 						nextTween.start();
