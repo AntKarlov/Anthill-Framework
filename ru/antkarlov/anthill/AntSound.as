@@ -225,8 +225,9 @@ package ru.antkarlov.anthill
 		 * @param	aSource	 Источник звука, необходимо указывать для рассчета стерео эффекта.
 		 * @param	aPosition	 Позиция с какого места начинать проигрывание звука.
 		 * @param	aRepeats	 Количество повторов проигрывания.
+		 * @param	aVolume 	 Громкость воспроизведения звука.
 		 */
-		public function play(aSource:AntEntity = null, aPosition:Number = 0, aRepeats:int = 1):void
+		public function play(aSource:AntEntity = null, aPosition:Number = 0, aRepeats:int = 1, aVolume:Number = 1):void
 		{
 			if (parent == null)
 			{
@@ -238,7 +239,7 @@ package ru.antkarlov.anthill
 			
 			if (_source == null)
 			{
-				_soundTransform.volume = parent.volume;
+				_soundTransform.volume = (aVolume != 1) ? aVolume : parent.volume;
 				if (_sound != null)
 				{
 					_soundChannel = _sound.play(aPosition, _repeats, _soundTransform);
