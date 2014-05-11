@@ -2,6 +2,7 @@ package ru.antkarlov.anthill
 {
 	import flash.display.BitmapData;
 	
+	import ru.antkarlov.anthill.signals.*;
 	import ru.antkarlov.anthill.events.*;
 	import ru.antkarlov.anthill.debug.AntDrawer;
 	import ru.antkarlov.anthill.utils.AntColor;
@@ -290,6 +291,13 @@ package ru.antkarlov.anthill
 		protected var _helperPoint:AntPoint;
 		
 		/**
+		 * @private
+		 */
+		protected var _listenerNames:Vector.<String>;
+		protected var _listenerFuncs:Vector.<Function>;
+		protected var _numListeners:int;
+		
+		/**
 		 * Содержит номер объекта если он вложен в другую сущность.
 		 * Номером объекта является его номер в очереди обработки. 
 		 * Номер объекта рассчитывается каждый раз при вызове метода <code>preUpdate()</code>.
@@ -363,6 +371,10 @@ package ru.antkarlov.anthill
 			_sortProperty = null;
 			_sortOrder = ASCENDING;
 			_helperPoint = new AntPoint();
+			
+			_listenerNames = new Vector.<String>();
+			_listenerFuncs = new Vector.<Function>();
+			_numListeners = 0;
 		}
 		
 		/**
@@ -1343,11 +1355,138 @@ package ru.antkarlov.anthill
 		 */
 		public function onEventBubbled(aEvent:IEvent):Boolean
 		{
-			/*
-				Перекройте этот метод чтобы перехватить и обработать всплывающее сообщение.
-			*/
+			if (_numListeners > 0)
+			{
+				var i:int = 0;
+				while (i < _numListeners)
+				{
+					if (_listenerNames[i] == aEvent.name)
+					{
+						(_listenerFuncs[i] as Function).apply(this, [ aEvent ]);
+					}
+					i++;
+				}
+			}
 			
-			return true;
+			return aEvent.bubbles;
+		}
+		
+		/**
+		 * Добавляет слушателя событий.
+		 * 
+		 * @param	aEventName	 Уникальный идентификатор события.
+		 * @param	aFunctionHandler	 Указатель на метод который будет вызван при возникновении события.
+		 */
+		public function addEventListener(aEventName:String, aFunctionHandler:Function):void
+		{
+			if (aEventName == null || aFunctionHandler == null)
+			{
+				throw new Error("AntEntity: EventName and FunctionHandler must not be null.");
+			}
+			
+			if (getEventListenerIndex(aEventName, aFunctionHandler) == -1)
+			{
+				var i:int = 0;
+				while (i < _numListeners)
+				{
+					if (_listenerNames[i] == null)
+					{
+						_listenerNames[i] = aEventName;
+						_listenerFuncs[i] = aFunctionHandler;
+						return;
+					}
+					i++;
+				}
+				
+				_listenerNames.push(aEventName);
+				_listenerFuncs.push(aFunctionHandler);
+				_numListeners++;
+			}
+		}
+		
+		/**
+		 * Удаляет слушателя событий.
+		 * 
+		 * @param	aEventName	 Уникальный идентификатор события.
+		 * @param	aFunctionHandler	 Указатель на метод который вызывался при возникновении события.
+		 * @param	aSplice	 Определяет необходимость удаления места в списке.
+		 */
+		public function removeEventListener(aEventName:String, aFunctionHandler:Function, aSplice:Boolean = false):void
+		{
+			var index:int = getEventListenerIndex(aEventName, aFunctionHandler);
+			if (index >= 0 && index < _numListeners)
+			{
+				_listenerNames[index] = null;
+				_listenerFuncs[index] = null;
+				
+				if (aSplice)
+				{
+					_listenerNames.splice(index, 1);
+					_listenerFuncs.splice(index, 1);
+					_numListeners--;
+				}
+			}
+		}
+		
+		/**
+		 * Удаляет всех слушателей события.
+		 * 
+		 * @param	aEventName	 Если указан уникальный идентификатор события, 
+		 * то будут удалены только те слушатели которые соотвествуют указанному 
+		 * идентификатору, в противном случае будут удалены все подписчики.
+		 */
+		public function clearListeners(aEventName:String = null):void
+		{
+			var i:int = 0;
+			while (i < _numListeners)
+			{
+				if (aEventName == null || _listenerNames[i] == aEventName)
+				{
+					_listenerNames[i] = null;
+					_listenerFuncs[i] = null;
+				}
+				i++;
+			}
+			
+			if (aEventName == null)
+			{
+				_listenerNames.length = 0;
+				_listenerFuncs.length = 0;
+				_numListeners = 0;
+			}
+		}
+		
+		/**
+		 * Возвращает индекс подписчика события в списке.
+		 * 
+		 * @param	aEventName	 Идентификатор события.
+		 * @param	aFunctionHandler	 Указатель на метод который вызывается при возникновении события.
+		 * @return		Возвращает индекс события или -1 если событие не числится в списке.
+		 */
+		public function getEventListenerIndex(aEventName:String, aFunctionHandler:Function):int
+		{
+			var i:int = 0;
+			while (i < _numListeners)
+			{
+				if (_listenerNames[i] == aEventName && _listenerFuncs[i] == aFunctionHandler)
+				{
+					return i;
+				}
+				i++;
+			}
+			
+			return -1;
+		}
+		
+		/**
+		 * Отправляет событие.
+		 * 
+		 * @param	aEvent	 Событие которое необходимо отправить.
+		 */
+		public function dispatchEvent(aEvent:IEvent):void
+		{
+			var signal:AntDeluxeSignal = new AntDeluxeSignal(this, IEvent);
+			signal.dispatch(aEvent);
 		}
 		
 		//---------------------------------------
