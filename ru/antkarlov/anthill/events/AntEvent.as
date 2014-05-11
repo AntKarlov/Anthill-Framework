@@ -26,6 +26,7 @@ package ru.antkarlov.anthill.events
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
+		protected var _name:String;
 		protected var _bubbles:Boolean;
 		protected var _target:Object;
 		protected var _currentTarget:Object;
@@ -34,12 +35,19 @@ package ru.antkarlov.anthill.events
 		//---------------------------------------
 		// CONSTRUCTOR
 		//---------------------------------------
-		public function AntEvent(aBubbles:Boolean = false, aUserData:Object = null)
+		public function AntEvent(aName:String, aBubbles:Boolean = false, aUserData:Object = null)
 		{
 			super();
+			_name = aName;
 			_bubbles = aBubbles;
 			userData = aUserData;
 		}
+		
+		/**
+		 * @private
+		 */
+		public function get name():String { return _name; }
+		public function set name(value:String):void { _name = value; }
 		
 		/**
 		 * @inheritDoc
@@ -70,7 +78,7 @@ package ru.antkarlov.anthill.events
 		 */
 		public function clone():IEvent
 		{
-			var newEvent:AntEvent = new AntEvent(_bubbles);
+			var newEvent:AntEvent = new AntEvent(_name, _bubbles);
 			newEvent.userData = userData;
 			return newEvent;
 		}
