@@ -6,7 +6,6 @@ package ru.antkarlov.anthill
 	import flash.display.StageAlign;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.events.MouseEvent;
 	import flash.events.KeyboardEvent;
 	import flash.utils.getTimer;
 	import flash.ui.Mouse;
@@ -142,13 +141,9 @@ package ru.antkarlov.anthill
 			stage.frameRate = _frameRate;
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, AntG.debugger.console.keyDownHandler);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, AntG.keys.keyDownHandler);
-			stage.addEventListener(KeyboardEvent.KEY_UP, AntG.keys.keyUpHandler);
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, AntG.mouse.mouseDownHandler);
-			stage.addEventListener(MouseEvent.MOUSE_UP, AntG.mouse.mouseUpHandler);
-			stage.addEventListener(MouseEvent.MOUSE_OUT, AntG.mouse.mouseOutHandler);
-			stage.addEventListener(MouseEvent.MOUSE_OVER, AntG.mouse.mouseOverHandler);
-			stage.addEventListener(MouseEvent.MOUSE_WHEEL, AntG.mouse.mouseWheelHandler);
+			
+			AntG.keys.init(stage);
+			AntG.mouse.init(stage);
 			
 			_perfomance.start();
 			
