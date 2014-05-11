@@ -608,6 +608,7 @@ package ru.antkarlov.anthill
 			if (o != _over)
 			{
 				eventOver.dispatch(this);
+				AntG.sounds.play(soundOver);
 			}
 			
 			if (!_down)
@@ -622,8 +623,6 @@ package ru.antkarlov.anthill
 					_iChangeCursor = true;
 				}
 			}
-			
-			AntG.sounds.play(soundOver);
 		}
 		
 		/**
