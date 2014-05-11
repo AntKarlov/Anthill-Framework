@@ -176,6 +176,12 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
+		 * Определяет смещение текстового поля относительно кнопки.
+		 * @default    AntPoint(0, 0);
+		 */
+		protected var _labelPosition:AntPoint;
+		
+		/**
 		 * Определяет наведен ли курсор мышки на кнопку.
 		 * @default    false
 		 */
@@ -275,6 +281,8 @@ package ru.antkarlov.anthill
 			blend = null;
 			smoothing = true;
 			status = NORMAL;
+			
+			_labelPosition = new AntPoint();
 			
 			_over = false;
 			_down = false;
@@ -518,8 +526,8 @@ package ru.antkarlov.anthill
 		{
 			if (label != null)
 			{
-				label.x = width * 0.5 - label.width * 0.5 + origin.x;
-				label.y = height * 0.5 - label.height * 0.5 + origin.y;
+				label.x = width * 0.5 - label.width * 0.5 + origin.x + _labelPosition.x;
+				label.y = height * 0.5 - label.height * 0.5 + origin.y + _labelPosition.y;
 
 				if (_down)
 				{
@@ -840,6 +848,36 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		// GETTER / SETTERS
 		//---------------------------------------
+		
+		/**
+		 * @private
+		 */
+		public function get labelPositionX():Number { return _labelPosition.x; }
+		public function set labelPositionX(aValue:Number):void
+		{
+			_labelPosition.x = aValue;
+			updateLabel();
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get labelPositionY():Number { return _labelPosition.y; }
+		public function set labelPositionY(aValue:Number):void
+		{
+			_labelPosition.y = aValue;
+			updateLabel();
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get labelPosition():AntPoint { return _labelPosition; }
+		public function set labelPosition(aValue:AntPoint):void
+		{
+			_labelPosition.set(aValue.x, aValue.y);
+			updateLabel();
+		}
 		
 		/**
 		 * Определяет текст для текстовой метки у кнопки.
