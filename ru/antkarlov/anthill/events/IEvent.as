@@ -5,6 +5,12 @@ package ru.antkarlov.anthill.events
 	public interface IEvent
 	{
 		/**
+		 * Идентификатор события.
+		 */
+		function get name():String;
+		function set name(value:String):void;
+		
+		/**
 		 * Указатель на объект который произвел событие.
 		 */
 		function get target():Object;
