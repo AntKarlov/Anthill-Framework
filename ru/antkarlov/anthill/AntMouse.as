@@ -1,13 +1,16 @@
 package ru.antkarlov.anthill
 {
+	import flash.events.ContextMenuEvent;
 	import flash.events.MouseEvent;
+	import flash.display.Stage;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	
-	import ru.antkarlov.anthill.signals.AntSignal;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
 	
 	/**
-	 * Класс обработчик событий мыши.
+	 * Класс для перехвата и обработки пользовательских действий с мышки. Экземпляр данного класса
+	 * создается автоматически при инициализации Anthill и доступен через AntG.mouse.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
@@ -16,17 +19,10 @@ package ru.antkarlov.anthill
 	 * @since  20.05.2011
 	 */
 	public class AntMouse extends AntPoint
-	{
+	{		
 		//---------------------------------------
 		// PUBLIC VARIABLES
 		//---------------------------------------
-		
-		/**
-		 * Указатель на объект в который был произведен последний клик мышкой.
-		 * @default    null
-		 */
-		public var target:Object;
-		public var currentTarget:Object;
 		
 		/**
 		 * Значение глубины колеса при прокрутке.
@@ -59,21 +55,51 @@ package ru.antkarlov.anthill
 		public var defCursorAnim:String;
 		
 		/**
-		 * Событие выполняющиеся при нажатии кнопки мыши.
+		 * Левая кнопка мыши.
 		 */
-		public var eventDown:AntSignal;
+		public var leftButton:AntMouseButton;
 		
 		/**
-		 * Событие выполняющиеся при отпускании кнопки мыши.
+		 * Средняя кнопка мыши. По умолчанию кнопка выключена, 
+		 * чтобы активировать обработку кнопки, установите флаг enabled = true.
 		 */
-		public var eventUp:AntSignal;
+		public var middleButton:AntMouseButton;
+		
+		/**
+		 * Правая кнопка мыши. По умолчанию кнопка выключена, 
+		 * чтобы активировать обработку кнопки, установите флаг enabled = true.
+		 * 
+		 * <p><strong>Внимание:</strong> При активации правой кнопки мыши, 
+		 * контекстное меню будет недоступно.</p>
+		 */
+		public var rightButton:AntMouseButton;
+		
+		/**
+		 * Контекстное меню.
+		 */
+		public var contextMenu:ContextMenu;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
 		
 		/**
-		 * @private
+		 * Указатель на stage.
+		 */
+		protected var _stage:Stage;
+		
+		/**
+		 * Заголовки пользоательских пунктов меню.
+		 */
+		protected var _menuCaptions:Vector.<String>;
+		
+		/**
+		 * Указатели на методы перехватчики пользовательских пунктов меню.
+		 */
+		protected var _menuHandlers:Vector.<Function>;
+		
+		/**
+		 * Смещение позиции пользовательского курсора относительно системного.
 		 */
 		protected var _cursorOffset:AntPoint;
 		
@@ -83,29 +109,14 @@ package ru.antkarlov.anthill
 		protected var _globalScreenPos:AntPoint;
 		
 		/**
-		 * @private
+		 * Помошник для обработки прокрутки колесика мышки.
 		 */
-		protected var _current:int = 0;
+		protected var _currentWheel:int;
 		
 		/**
-		 * @private
+		 * Помошник для обработки прокрутки колесика мышки.
 		 */
-		protected var _last:int = 0;
-		
-		/**
-		 * @private
-		 */
-		protected var _out:Boolean = false;
-		
-		/**
-		 * @private
-		 */
-		protected var _currentWheel:int = 0;
-		
-		/**
-		 * @private
-		 */
-		protected var _lastWheel:int = 0;
+		protected var _lastWheel:int;
 		
 		//---------------------------------------
 		// CONSTRUCTOR
@@ -118,33 +129,197 @@ package ru.antkarlov.anthill
 		{
 			super();
 			
+			leftButton = new AntMouseButton(AntMouseButton.LEFT_BUTTON);
+			middleButton = new AntMouseButton(AntMouseButton.MIDDLE_BUTTON);
+			rightButton = new AntMouseButton(AntMouseButton.RIGHT_BUTTON);
+			
 			_cursorOffset = new AntPoint();
 			_globalScreenPos = new AntPoint();
 			
-			target = null;
 			wheelDelta = 0;
 			screenX = 0;
 			screenY = 0;
 			cursor = null;
 			defCursorAnim = null;
-			eventDown = new AntSignal();
-			eventUp = new AntSignal();
+			
+			contextMenu = new ContextMenu();
 		}
-
+		
 		//---------------------------------------
 		// PUBLIC METHODS
 		//---------------------------------------
 		
 		/**
-		 * @private
+		 * Инициализация.
 		 */
-		public function destroy():void
+		public function init(aStage:Stage):void
 		{
-			//
+			_stage = aStage;
+			AntG.anthill.contextMenu = contextMenu;
+			
+			leftButton.init(aStage);
+			middleButton.init(aStage);
+			rightButton.init(aStage);
+			
+			leftButton.enabled = true;
+			
+			_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 		
 		/**
-		 * @private
+		 * Скрывает из контекстного меню стандартные пункты меню.
+		 */
+		public function hideDefaultContextMenu():void
+		{
+			contextMenu.hideBuiltInItems();
+		}
+		
+		/**
+		 * Добавляет пользовательский пункт меню в контекстное меню.
+		 * 
+		 * @param	aCaption	 Текст пункта меню.
+		 * @param	aFunction	 Указатель на метод обработчик при выборе меню.
+		 * @param	aEnabled	 Определяет доступен ли пункт меню для выбора.
+		 */
+		public function addMenuItem(aCaption:String, aFunction:Function, aEnabled:Boolean = true):void
+		{
+			if (_menuCaptions == null)
+			{
+				_menuCaptions = new Vector.<String>();
+				_menuHandlers = new Vector.<Function>();
+			}
+			
+			var item:ContextMenuItem = new ContextMenuItem(aCaption);
+			item.enabled = aEnabled;
+			if (item.enabled)
+			{
+				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onContextMenuItemSelect);
+			}
+			
+			contextMenu.customItems.push(item);
+			_menuCaptions.push(aCaption);
+			_menuHandlers.push(aFunction);
+		}
+		
+		/**
+		 * Удаляет пользовательский пункт меню из контекстного меню.
+		 * 
+		 * @param	aCaption	 Текст пункта меню который необходимо удалить.
+		 */
+		public function removeMenuItem(aCaption:String):void
+		{
+			if (_menuCaptions == null)
+			{
+				return;
+			}
+			
+			var i:int = 0;
+			const n:int = contextMenu.customItems.length;
+			var item:ContextMenuItem;
+			while (i < n)
+			{
+				item = contextMenu.customItems[i] as ContextMenuItem;
+				if (item != null && item.caption == aCaption)
+				{
+					contextMenu.customItems[i] = null;
+					contextMenu.customItems.splice(i, 1);
+					break;
+				}
+				i++;
+			}
+			
+			i = _menuCaptions.indexOf(aCaption);
+			if (i >= 0 && i < _menuCaptions.length)
+			{
+				_menuCaptions[i] = null;
+				_menuHandlers[i] = null;
+				_menuCaptions.splice(i, 1);
+				_menuHandlers.splice(i, 1);
+			}
+		}
+		
+		/**
+		 * Устанавливает доступность указанного пользовательского пункта меню.
+		 * 
+		 * @param	aCaption	 Текст пользовательского пункта меню для которого необходимо установить активность.
+		 * @param	aEnabled	 Определяет доступность пользовательского меню.
+		 */
+		public function enableMenuItem(aCaption:String, aEnabled:Boolean):void
+		{
+			var i:int = 0;
+			const n:int = contextMenu.customItems.length;
+			var item:ContextMenuItem;
+			while (i < n)
+			{
+				item = contextMenu.customItems[i++] as ContextMenuItem;
+				if (item != null)
+				{
+					if (item.caption == aCaption && item.enabled != aEnabled)
+					{
+						if (aEnabled)
+						{
+							item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onContextMenuItemSelect);
+						}
+						else
+						{
+							item.removeEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onContextMenuItemSelect);
+						}
+						
+						item.enabled = aEnabled;
+					}
+				}
+			}
+		}
+		
+		/**
+		 * Удаляет все пользовательские пункты меню из контекстного меню.
+		 */
+		public function clearContextMenu():void
+		{
+			var i:int = 0;
+			var n:int = contextMenu.customItems.length;
+			while (i < n)
+			{
+				contextMenu.customItems[i++] = null;
+			}
+			
+			i = 0;
+			n = _menuCaptions.length;
+			while (i < n)
+			{
+				_menuCaptions[i] = null;
+				_menuHandlers[i] = null;
+				i++;
+			}
+			
+			_menuCaptions.length = 0;
+			_menuHandlers.length = 0;
+			contextMenu.customItems.length = 0;
+		}
+		
+		/**
+		 * Событие обработчик клика по пользовательскому пункту меню.
+		 * 
+		 * @param	aEvent	 Указатель на событие.
+		 */
+		private function onContextMenuItemSelect(aEvent:ContextMenuEvent):void
+		{
+			if (aEvent.target is ContextMenuItem)
+			{
+				var index:int = _menuCaptions.indexOf((aEvent.target as ContextMenuItem).caption);
+				if (index >= 0 && index < _menuCaptions.length)
+				{
+					_menuHandlers[index].apply(this);
+				}
+			}
+		}
+		
+		/**
+		 * Создает пользовательский курсор.
+		 * 
+		 * @param	aAnimName	 Имя анимации в кэше анимаций.
+		 * @param	aOffsetX	 Смещение пользовательского курсора относительно системного по X.
+		 * @param	aOffsetY	 Смещение пользовательского курсора относительно системного по Y.
 		 */
 		public function makeCursor(aAnimName:String, aOffsetX:int = 0, aOffsetY:int = 0):void
 		{
@@ -162,7 +337,7 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * @private
+		 * Показывает пользовательский курсор.
 		 */
 		public function show():void
 		{
@@ -173,7 +348,7 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * @private
+		 * Скрывает пользовательский курсор.
 		 */
 		public function hide():void
 		{
@@ -184,7 +359,9 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * @private
+		 * Переключает анимацию курсора.
+		 * 
+		 * @param	aAnimName	 Имя анимации из кэша анимаций.
 		 */
 		public function changeCursor(aAnimName:String = null):void
 		{
@@ -276,29 +453,8 @@ package ru.antkarlov.anthill
 			_globalScreenPos.y = aY;
 			
 			updateCursor();
-			
-			if (_last == -1 && _current == -1)
-			{
-				_current = 0;
-			}
-			else if (_last == 2 && _current == 2)
-			{
-				_current = 1;
-			}
-			
-			_last = _current;
-			
-			// Обработка колесика мышки.
-			if (AntMath.abs(_lastWheel) == 1 && AntMath.abs(_currentWheel) == 1)
-			{
-				_currentWheel = 0;
-			}
-			else if (AntMath.abs(_lastWheel) == 2 && AntMath.abs(_currentWheel) == 2)
-			{
-				_currentWheel = (_currentWheel < 0) ? _currentWheel + 1 : _currentWheel - 1;
-			}
-			
-			_lastWheel = _currentWheel;
+			updateButtons();
+			updateWheel();
 		}
 		
 		/**
@@ -327,40 +483,42 @@ package ru.antkarlov.anthill
 		 */
 		public function reset():void
 		{
-			_current = 0;
-			_last = 0;
+			leftButton.reset();
+			middleButton.reset();
+			rightButton.reset();
+			
 			_currentWheel = 0;
 			_lastWheel = 0;
 		}
 		
 		/**
-		 * Проверят нажала-ли кнопка мыши. Срабатывает постоянно пока кнопка мыши удерживается.
+		 * Проверят удерживается ли левая кнопка мыши. Срабатывает постоянно пока кнопка мыши удерживается.
 		 * 
 		 * @return		Возвращает true если кнопка мыши нажата.
 		 */
-		public function isDown():Boolean
+		public function isDown():Boolean 
 		{
-			return _current > 0;
+			return leftButton.isDown();
 		}
 		
 		/**
-		 * Проверяет нажата-ли кнопка мыши. Срабатывает только однажды в момент нажатия кнопки мыши.
+		 * Проверяет нажата-ли левая кнопка мыши. Срабатывает только однажды в момент нажатия кнопки мыши.
 		 * 
 		 * @return		Возвращает true если кнопка мыши нажата.
 		 */
 		public function isPressed():Boolean
 		{
-			return _current == 2;
+			return leftButton.isPressed();
 		}
 		
 		/**
-		 * Проверяет отпущена-ли кнопка мышки. Срабатывает только однажды в момент отпускания кнопки мышки.
+		 * Проверяет отпущена-ли левая кнопка мышки. Срабатывает только однажды в момент отпускания кнопки мышки.
 		 * 
 		 * @return		Возвращает true если кнопка мыши отпущена.
 		 */
 		public function isReleased():Boolean
 		{
-			return _current == -1;
+			return leftButton.isReleased();
 		}
 		
 		/**
@@ -383,12 +541,28 @@ package ru.antkarlov.anthill
 			return _currentWheel > 0;
 		}
 		
+		/**
+		 * Определяет объект по которому был произведен клик левой кнопкой мыши.
+		 */
+		public function get target():Object
+		{
+			return leftButton.target;
+		}
+		
+		/**
+		 * Определяет объект по которому был произведен клик левой кнопкой мыши.
+		 */
+		public function get currentTarget():Object
+		{
+			return leftButton.currentTarget;
+		}
+		
 		//---------------------------------------
 		// EVENT HANDLERS
 		//---------------------------------------
 		
 		/**
-		 * @private
+		 * Обработчик курсора.
 		 */
 		protected function updateCursor():void
 		{
@@ -407,51 +581,38 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Обработчик события нажатия кнопки мыши.
+		 * Обработчик кнопок мыши.
 		 */
-		internal function mouseDownHandler(event:MouseEvent):void
+		protected function updateButtons():void
 		{
-			target = event.target;
-			currentTarget = event.currentTarget;
-			_current = (_current > 0) ? 1 : 2;
-			eventDown.dispatch();
+			leftButton.update();
+			middleButton.update();
+			rightButton.update();
 		}
 		
 		/**
-		 * Обработчик соыбтия отпускания кнопки мыши.
+		 * Обработчик вращения колеса мышки.
 		 */
-		internal function mouseUpHandler(event:MouseEvent):void
+		protected function updateWheel():void
 		{
-			_current = (_current > 0) ? -1 : 0;
-			eventUp.dispatch();
-		}
-		
-		/**
-		 * Обработчик события выхода мышки за пределы сцены.
-		 */
-		internal function mouseOutHandler(event:MouseEvent):void
-		{
-			/*
-				TODO 
-			*/
-		}
-		
-		/**
-		 * Обработчик события возвращаения мышки в пределы сцены.
-		 */
-		internal function mouseOverHandler(event:MouseEvent):void
-		{
-			/*
-				TODO 
-			*/
+			if (Math.abs(_lastWheel) == 1 && Math.abs(_currentWheel) == 1)
+			{
+				_currentWheel = 0;
+			}
+			else if (Math.abs(_lastWheel) == 2 && Math.abs(_currentWheel) == 2)
+			{
+				_currentWheel = (_currentWheel < 0) ? _currentWheel + 1 : _currentWheel - 1;
+			}
+			
+			_lastWheel = _currentWheel;
 		}
 		
 		/**
 		 * Обработчик события вращения колеса мышки.
 		 */
-		internal function mouseWheelHandler(event:MouseEvent):void
+		protected function onMouseWheel(aEvent:MouseEvent):void
 		{
-			wheelDelta = event.delta;
+			wheelDelta = aEvent.delta;
 			if (wheelDelta > 0)
 			{
 				_currentWheel = (_currentWheel > 0) ? 1 : 2;
