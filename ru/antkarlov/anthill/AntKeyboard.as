@@ -1,6 +1,7 @@
 package ru.antkarlov.anthill
 {
 	import flash.events.KeyboardEvent;
+	import flash.display.Stage;
 	import flash.utils.*;
 	
 	/**
@@ -249,6 +250,15 @@ package ru.antkarlov.anthill
 		//---------------------------------------
 		
 		/**
+		 * @private
+		 */
+		public function init(aStage:Stage):void
+		{
+			aStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			aStage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		}
+		
+		/**
 		 * Проверяет нажата ли указанная клавиша.
 		 * 
 		 * @param	aKey	 Имя клавиши которую нужно проверить.
@@ -256,7 +266,7 @@ package ru.antkarlov.anthill
 		 */
 		public function isDown(aKey:String):Boolean
 		{
-			return this[aKey];
+			return (this.hasOwnProperty(aKey)) ? this[aKey] : false;
 		}
 		
 		/**
@@ -280,15 +290,13 @@ package ru.antkarlov.anthill
 			var o:Object;
 			for (var i:int = 0; i < 256; i++)
 			{
-				if (_map[i] == null) 
+				if (_map[i] != null) 
 				{
-					continue;
-				}
-				
-				o = _map[i];
-				if (o != null && o.current == true)
-				{
-					return true;
+					o = _map[i];
+					if (o != null && o.current == true)
+					{
+						return true;
+					}
 				}
 			}
 			
@@ -315,21 +323,19 @@ package ru.antkarlov.anthill
 			for (var i:int = 0; i < 256; i++)
 			{
 				o = _map[i];
-				if (o == null)
+				if (o != null)
 				{
-					continue;
+					if (o.last == -1 && o.current == -1)
+					{
+						o.current = 0;
+					}
+					else if (o.last == 2 && o.current == 2)
+					{
+						o.current = 1;
+					}
+					
+					o.last = o.current;
 				}
-				
-				if (o.last == -1 && o.current == -1)
-				{
-					o.current = 0;
-				}
-				else if (o.last == 2 && o.current == 2)
-				{
-					o.current = 1;
-				}
-				
-				o.last = o.current;
 			}
 		}
 		
@@ -341,26 +347,25 @@ package ru.antkarlov.anthill
 			var o:Object;
 			for (var i:int = 0; i < 256; i++)
 			{
-				if (_map[i] == null) 
+				if (_map[i] != null) 
 				{
-					continue;
-				}
-				
-				o = _map[i];
-				if (o != null)
-				{
-					if (this.hasOwnProperty(o.name))
+					o = _map[i];
+					if (o != null)
 					{
-						this[o.name] = false;
+						if (this.hasOwnProperty(o.name))
+						{
+							this[o.name] = false;
+						}
+						o.current = 0;
+						o.last = 0;
 					}
-					o.current = 0;
-					o.last = 0;
 				}
 			}
 		}
 		
 		/**
 		 * Регистрирует методы на нажатие определенной клавиши (hotkey).
+		 * 
 		 * <p>Примечание: На одну клавишу может быть зарегистрирован только один метод,
 		 * в противном случае уже существующий метод будет перезаписан новым.</p>
 		 * 
@@ -396,42 +401,37 @@ package ru.antkarlov.anthill
 		/**
 		 * Обработчик нажатия клавиши.
 		 */
-		public function keyDownHandler(event:KeyboardEvent):void
+		public function onKeyDown(aEvent:KeyboardEvent):void
 		{
-			var o:Object = _map[event.keyCode];
-			if (o == null)
+			var o:Object = _map[aEvent.keyCode];
+			if (o != null)
 			{
-				return
-			}
-			
-			o.current = (o.current > 0) ? 1 : 2;
-			this[o.name] = true;
-			
-			if (_functions.containsKey(o.name))
-			{
-				_functions[o.name]();
+				o.current = (o.current > 0) ? 1 : 2;
+				if (this.hasOwnProperty(o.name))
+				{
+					this[o.name] = true;
+				}
+				
+				if (_functions.containsKey(o.name))
+				{
+					(_functions[o.name] as Function).apply(this);
+				}
 			}
 		}
 		
 		/**
 		 * Обработчик отпускания клавиши.
 		 */
-		public function keyUpHandler(event:KeyboardEvent):void
+		public function onKeyUp(aEvent:KeyboardEvent):void
 		{
-			var o:Object = _map[event.keyCode];
-			if (o == null)
-			{
-				return;
-			}
-			
-			try
+			var o:Object = _map[aEvent.keyCode];
+			if (o != null)
 			{
 				o.current = (o.current > 0) ? -1 : 0;
-				this[o.name] = false;
-			}
-			catch(error:Error)
-			{
-				
+				if (this.hasOwnProperty(o.name))
+				{
+					this[o.name] = false;
+				}
 			}
 		}
 		
