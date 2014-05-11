@@ -266,12 +266,13 @@ package ru.antkarlov.anthill
 		 * Запускает воспроизведение звука с указанным именем.
 		 * 
 		 * @param	aName	 Имя звука который необходимо воспроизвести.
+		 * @param	aVolume	 Громкость воспроизведения. Можно задать ноль, если требуется.
 		 * @param	aSource	 Объект-источник звука.
 		 * @param	aSingle	 Флаг определяющий могут ли быть запущены иные копии данного звука.
 		 * @param	aRepeats	 Количество повторов воспроизведения звука.
 		 * @return		Возвращает указатель на экземпляр звука.
 		 */
-		public function play(aName:String, aSource:AntEntity = null, aSingle:Boolean = false, aRepeats:int = 1):AntSound
+		public function play(aName:String, aVolume:Number = 1, aSource:AntEntity = null, aSingle:Boolean = false, aRepeats:int = 1):AntSound
 		{
 			if (aName == null)
 			{
@@ -290,7 +291,7 @@ package ru.antkarlov.anthill
 			
 			var sound:AntSound = recycle(aName);
 			sound.revive();
-			sound.play(aSource, 0, aRepeats);
+			sound.play(aSource, 0, aRepeats, aVolume);
 			return sound;
 		}
 		
