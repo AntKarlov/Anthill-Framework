@@ -1,7 +1,8 @@
 package ru.antkarlov.anthill
 {
 	import ru.antkarlov.anthill.signals.AntSignal;
-	
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.ByteArray;
 	import flash.utils.setTimeout;
