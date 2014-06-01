@@ -1,0 +1,18 @@
+<project name="anthill" basedir="../" default="build">
+
+    <property name="AIR_SDK_HOME" location="D:/work/programs/AIRSDK" />
+    <property name="deploy.dir" location="bin" />
+    <property name="src.dir" location="ru" />
+
+    <taskdef resource="flexTasks.tasks" classpath="${AIR_SDK_HOME}/ant/lib/flexTasks.jar" />
+
+    <target name="build" description="Builds the library (.swc file)">
+        <!-- compile anthill.swc -->
+        <mkdir dir="${deploy.dir}" />
+        <compc output="${deploy.dir}/${ant.project.name}.swc">
+            <include-sources dir="${src.dir}" includes="*" />
+            <load-config filename="${AIR_SDK_HOME}/frameworks/air-config.xml" />
+        </compc>
+    </target>
+
+</project>
