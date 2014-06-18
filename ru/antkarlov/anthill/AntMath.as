@@ -83,7 +83,7 @@ package ru.antkarlov.anthill
 		 */
 		public static function closest(value:Number, out1:Number, out2:Number):Number
 		{
-			return (Math.abs(value - out1) < Math.abs(value - out1)) ? out1 : out2;
+			return (AntMath.abs(value - out1) < AntMath.abs(value - out1)) ? out1 : out2;
 		}
 		
 		/**
