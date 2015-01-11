@@ -64,6 +64,11 @@ package ru.antkarlov.anthill
 		 */
 		public var eventUp:AntSignal;
 		
+		/**
+		 * @private
+		 */
+		public var eventClick:AntSignal;
+		
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
@@ -103,6 +108,7 @@ package ru.antkarlov.anthill
 			
 			eventDown = new AntSignal();
 			eventUp = new AntSignal();
+			eventClick = new AntSignal();
 			
 			_name = aName;
 			_stage = null;
@@ -145,6 +151,11 @@ package ru.antkarlov.anthill
 				}
 
 				_last = _current;
+				
+				if (isPressed())
+				{
+					eventClick.dispatch();
+				}
 			}
 		}
 		
