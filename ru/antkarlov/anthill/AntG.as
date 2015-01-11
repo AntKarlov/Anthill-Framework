@@ -154,7 +154,8 @@ package ru.antkarlov.anthill
 		 * Строка всегда отображающася в левом нижнем углу при включенном режиме debugMode.
 		 * @default    Development Build
 		 */
-		public static var waterMark:String = "Development Build";
+		public static var waterMark:Vector.<String> = new <String>[ "Development Build" ];
+		public static var waterMarkPosition:AntPoint;
 		
 		/**
 		 * Указатель на класс следящий за удалением объектов из памяти.
