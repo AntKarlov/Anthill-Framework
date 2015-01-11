@@ -24,6 +24,8 @@ package ru.antkarlov.anthill.utils
 		public static function formatNumber(aValue:*, aMaxDecimals:int = 2, 
 			aForceDecimals:Boolean = true, aSiStyle:Boolean = false):String
 		{
+			aForceDecimals = (aMaxDecimals == 0) ? false : aForceDecimals;
+			
 			var i:int = 0;
 			var inc:Number = Math.pow(10, aMaxDecimals);
 			var str:String = String(Math.round(inc * Number(aValue)) / inc);
@@ -93,6 +95,32 @@ package ru.antkarlov.anthill.utils
 			}
 
 			return res;
+		}
+		
+		/**
+		 * @private
+		 */
+		public static function formatSize(aSize:Number):String
+		{
+			if (aSize >= 1073741824)
+			{
+				aSize = aSize / 1073741824;
+				return aSize.toFixed(2) + " Gb";
+			}
+			else if (aSize >= 1048576)
+			{
+				aSize = aSize / 1048576;
+				return aSize.toFixed(2) + " Mb";
+			}
+			else if (aSize >= 1024)
+			{
+				aSize = aSize / 1024;
+				return aSize.toFixed(2) + " Kb";
+			}
+			else
+			{
+				return aSize.toFixed(0) + " B";
+			}
 		}
 
 	}
