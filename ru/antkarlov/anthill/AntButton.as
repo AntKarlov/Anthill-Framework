@@ -433,8 +433,10 @@ package ru.antkarlov.anthill
 			{
 				aName = aAnim.name;
 			}
-
+			
+			AntAnimation.useAnimation(aAnim.name);
 			_animations.set(aName, aAnim);
+			
 			if (aSwitch)
 			{
 				switchAnimation(aName);
@@ -451,7 +453,7 @@ package ru.antkarlov.anthill
 		 */
 		public function addAnimationFromCache(aKey:String, aName:String = null, aSwitch:Boolean = true):void
 		{
-			addAnimation(AntAnimation.fromCache(aKey), aName, aSwitch);
+			addAnimation(AntAnimation.getFromCache(aKey), aName, aSwitch);
 		}
 		
 		/**
@@ -477,6 +479,34 @@ package ru.antkarlov.anthill
 			else
 			{
 				throw new Error("Missing button animation \"" + aName +"\".");
+			}
+		}
+		
+		/**
+		 * Удаляет анимацию с указанным именем.
+		 * 
+		 * @param	aName	 Локальное имя анимации которую необходимо удалить.
+		 */
+		public function removeAnimation(aName:String):void
+		{
+			if (_animations.containsKey(aName))
+			{
+				var anim:AntAnimation = _animations.remove(aName) as AntAnimation;
+				if (anim != null)
+				{
+					AntAnimation.unuseAnimation(anim.name);
+				}
+			}
+		}
+		
+		/**
+		 * Удаляет все анимации.
+		 */
+		public function clearAnimations():void
+		{
+			for (var animName:String in _animations)
+			{
+				removeAnimation(animName);
 			}
 		}
 		
@@ -513,6 +543,20 @@ package ru.antkarlov.anthill
 		override public function hitTestPoint(aPoint:AntPoint, aPixelFlag:Boolean = false):Boolean
 		{
 			return hitTest(aPoint.x, aPoint.y, aPixelFlag);
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function kill():void
+		{
+			if (useSystemCursor && _iChangeCursor)
+			{
+				Mouse.cursor = "auto";
+				_iChangeCursor = false;
+			}
+			
+			super.kill();
 		}
 		
 		//---------------------------------------
