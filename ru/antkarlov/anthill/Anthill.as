@@ -351,8 +351,7 @@ package ru.antkarlov.anthill
 							AntDrawer.setCanvas(camera.buffer);
 						}
 						
-						AntDrawer.drawText(21, AntG.height - 25, AntG.waterMark, 0xFF000000);
-						AntDrawer.drawText(20, AntG.height - 26, AntG.waterMark);
+						drawWaterMark();
 					}
 					
 					if (AntG.debugDraw || AntG.debugMode)
@@ -363,6 +362,32 @@ package ru.antkarlov.anthill
 			}
 			
 			AntG.mouse.draw();
+		}
+		
+		/**
+		 * @private
+		 */
+		private function drawWaterMark():void
+		{
+			var dx:int = AntG.height - 25;
+			var dy:int = 20;
+			
+			if (AntG.waterMarkPosition != null)
+			{
+				dx = AntG.waterMarkPosition.x;
+				dy = AntG.waterMarkPosition.y;
+			}
+			
+			var str:String;
+			const n:int = AntG.waterMark.length;
+			for (var i:int = 0; i < n; i++)
+			{
+				str = AntG.waterMark[i];
+				AntDrawer.drawText(dx + 1, dy + 1, str, 0xFF000000);
+				AntDrawer.drawText(dx, dy, str);
+				dy += 12;
+			}
+			
 		}
 
 	}
