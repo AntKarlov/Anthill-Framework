@@ -1,16 +1,11 @@
 package ru.antkarlov.anthill.debug
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.Sprite;
-	import flash.text.AntiAliasType;
-	import flash.text.GridFitType;
 	import flash.text.TextField;
-	import flash.text.TextFormat;
-	import flash.events.MouseEvent;
 	import flash.ui.Mouse;
 	
 	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.utils.AntFormat;
 	
 	/**
 	 * Объеденяет в себе все классы использующиеся для отладки игры.
@@ -68,14 +63,14 @@ package ru.antkarlov.anthill.debug
 			super();
 			
 			console = new AntConsole(this, 10, 24);
-			perfomance = new AntPerfomance(this, 180, 224);
-			monitor = new AntMonitor(this, 10, 224);
+			perfomance = new AntPerfomance(this, 204, 214);
+			monitor = new AntMonitor(this, 10, 214);
 			
 			_currentPosition = AntG.width;
 			_addedButtons = null;
 			
 			makeButton(AntSysButton.CLOSE, onCloseClick, true);
-			addSeparator();			
+			addSeparator();
 			makeButton(AntSysButton.MONITOR, onMonitorClick, true);
 			makeButton(AntSysButton.PERFOMANCE, onPerfomanceClick, true);
 			makeButton(AntSysButton.CONSOLE, onConsoleClick, true);
@@ -86,20 +81,10 @@ package ru.antkarlov.anthill.debug
 			
 			_sysPosition = _currentPosition;
 			
-			_tfTitle = new TextField();
-			_tfTitle.x = 2;
-			_tfTitle.y -= 2;
+			var str:String = AntFormat.formatString("{0} {1}.{2}.{3}", AntG.LIB_NAME, AntG.LIB_MAJOR_VERSION, AntG.LIB_MINOR_VERSION, AntG.LIB_MAINTENANCE);
+			_tfTitle = AntTextHelper.makeLabel(this, 2, -2, str);
 			_tfTitle.width = AntG.width - AntG.width * 0.5;
 			_tfTitle.height = 14;
-			_tfTitle.multiline = true;
-			_tfTitle.wordWrap = true;
-			_tfTitle.embedFonts = true;
-			_tfTitle.selectable = false;
-			_tfTitle.antiAliasType = AntiAliasType.NORMAL;
-			_tfTitle.gridFitType = GridFitType.PIXEL;
-			_tfTitle.defaultTextFormat = new TextFormat(AntWindow.FONT_NAME, AntWindow.FONT_SIZE, 0xffffff);
-			_tfTitle.text = AntG.LIB_NAME + " " + AntG.LIB_MAJOR_VERSION.toString() + "." + AntG.LIB_MINOR_VERSION + "." + AntG.LIB_MAINTENANCE;
-			addChild(_tfTitle);
 			
 			visible = false;
 			draw();
