@@ -5,6 +5,7 @@ package ru.antkarlov.anthill
 	import flash.geom.Rectangle;
 	import flash.geom.Point;
 	import flash.geom.Matrix;
+	import flash.sampler.getSize;
 	
 	import ru.antkarlov.anthill.signals.AntSignal;
 	import ru.antkarlov.anthill.utils.AntColor;
@@ -462,6 +463,7 @@ package ru.antkarlov.anthill
 		public function drawActor(aCamera:AntCamera):void
 		{
 			NUM_OF_VISIBLE++;
+			BUFFERS_SIZE += memSize;
 			
 			// Если нет текущего кадра или объект не попадает в камеру.
 			if (_pixels == null || !onScreen(aCamera))
@@ -829,6 +831,14 @@ package ru.antkarlov.anthill
 			return _buffer;
 		}
 		
+		/**
+		 * @private
+		 */
+		public function get memSize():int
+		{
+			return (_buffer != null) ? getSize(_buffer) : 0;
+		}
+			
 	}
 
 }
