@@ -5,6 +5,15 @@ package ru.antkarlov.anthill.ants
 	import ru.antkarlov.anthill.signals.AntSignal;
 	import ru.antkarlov.anthill.AntCamera;
 	
+	/**
+	 * Description
+	 * 
+	 * @langversion ActionScript 3
+	 * @playerversion Flash 9.0.0
+	 * 
+	 * @author Anton Karlov
+	 * @since  12.01.2015
+	 */
 	public class AntCore extends Object implements IPlugin
 	{
 		public var eventUpdateComplete:AntSignal;
@@ -55,6 +64,7 @@ package ru.antkarlov.anthill.ants
 				if (_objectNames[aObject.name])
 				{
 					throw new Error("Object with name \"" + aObject.name + "\" is already uses by other object.");
+					return;
 				}
 				
 				_objectNames[aObject.name] = aObject;
@@ -260,6 +270,30 @@ package ru.antkarlov.anthill.ants
 		/**
 		 * @private
 		 */
+		public function pauseSystem(aSystemClass:Class):void
+		{
+			var sys:AntSystem = getSystem(aSystemClass) as AntSystem;
+			if (sys != null)
+			{
+				sys.pause();
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public function resumeSystem(aSystemClass:Class):void
+		{
+			var sys:AntSystem = getSystem(aSystemClass) as AntSystem;
+			if (sys != null)
+			{
+				sys.resume();
+			}
+		}
+		
+		/**
+		 * @private
+		 */
 		public function getNodes(aNodeClass:Class):AntNodeList
 		{
 			if (_families[aNodeClass])
@@ -399,7 +433,7 @@ package ru.antkarlov.anthill.ants
 			while (i < _numSystems)
 			{
 				system = _systems[i++] as AntSystem;
-				if (system != null)
+				if (system != null && !system.isPaused)
 				{
 					system.update();
 				}
