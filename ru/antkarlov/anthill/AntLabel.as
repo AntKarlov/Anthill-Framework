@@ -12,6 +12,7 @@ package ru.antkarlov.anthill
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormatAlign;
 	import flash.filters.GlowFilter;
+	import flash.sampler.getSize;
 	
 	import ru.antkarlov.anthill.debug.AntDrawer;
 	
@@ -383,6 +384,7 @@ package ru.antkarlov.anthill
 		protected function drawText(aCamera:AntCamera):void
 		{
 			NUM_OF_VISIBLE++;
+			BUFFERS_SIZE += memSize;
 			
 			if (_buffer == null || !onScreen(aCamera))
 			{
@@ -621,6 +623,14 @@ package ru.antkarlov.anthill
 		public function get numLines():int
 		{
 			return _textField.numLines;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get memSize():int
+		{
+			return (_buffer != null) ? getSize(_buffer) : 0;
 		}
 		
 	}
