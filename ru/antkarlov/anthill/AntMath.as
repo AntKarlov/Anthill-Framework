@@ -31,10 +31,10 @@ package ru.antkarlov.anthill
 		 * @param	value	 Значение которое необходимо округлить.
 		 * @return		Округленное значение.
 		 */
-		public static function floor(value:Number):Number
+		public static function floor(aValue:Number):Number
 		{
-			var n:Number = int(value);
-			return (value > 0) ? (n) : ((n != value) ? n - 1 : n);
+			var n:Number = int(aValue);
+			return (aValue > 0) ? (n) : ((n != aValue) ? n - 1 : n);
 		}
 		
 		/**
@@ -43,47 +43,47 @@ package ru.antkarlov.anthill
 		 * @param	value	 Значение которое необходимо округлить.
 		 * @return		Округленное значение.
 		 */
-		public static function ceil(value:Number):Number
+		public static function ceil(aValue:Number):Number
 		{
-			var n:Number = int(value);
-			return (value > 0) ? ((n != value) ? n + 1 : n) : n;
+			var n:Number = int(aValue);
+			return (aValue > 0) ? ((n != aValue) ? n + 1 : n) : n;
 		}
 		
 		/**
 		 * Убирает минус у отрицательных значений, позитивные значения остаются без изменений.
 		 * 
-		 * @param	value	 Значение для которого необходимо убрать минус.
+		 * @param	aValue	 Значение для которого необходимо убрать минус.
 		 * @return		Позитивное значение.
 		 */
-		public static function abs(value:Number):Number
+		public static function abs(aValue:Number):Number
 		{
-			return (value < 0) ? value * -1 : value;
+			return (aValue < 0) ? aValue * -1 : aValue;
 		}
 		
 		/**
 		 * Проверяет вхождение значение в заданный диапазон.
 		 * 
-		 * @param	value	 Значение вхождение которого необходимо проверить.
+		 * @param	aValue	 Значение вхождение которого необходимо проверить.
 		 * @param	aLower	 Наименьшее значение диапазона.
 		 * @param	aUpper	 Наибольшоее значение диапазона.
 		 * @return		Возвращает true если указанное значение в заданном диапазоне.
 		 */
-		public static function range(value:Number, aLower:Number, aUpper:Number):Boolean
+		public static function range(aValue:Number, aLower:Number, aUpper:Number):Boolean
 		{
-			return ((value > aLower) && (value < aUpper));
+			return ((aValue > aLower) && (aValue < aUpper));
 		}
 		
 		/**
 		 * Возрващает ближайшее значение к заданному.
 		 * 
-		 * @param	value	 Заданное значение.
-		 * @param	out1	 Первое возможно ближайшее значение.
-		 * @param	out2	 Второе возможно ближайшее значение.
+		 * @param	aValue	 Заданное значение.
+		 * @param	aOut1	 Первое возможно ближайшее значение.
+		 * @param	aOut2	 Второе возможно ближайшее значение.
 		 * @return		Возвращает ближайшее из out1 и out2 к value.
 		 */
-		public static function closest(value:Number, out1:Number, out2:Number):Number
+		public static function closest(aValue:Number, aOut1:Number, aOut2:Number):Number
 		{
-			return (Math.abs(value - out1) < Math.abs(value - out1)) ? out1 : out2;
+			return (Math.abs(aValue - aOut1) < Math.abs(aValue - aOut2)) ? aOut1 : aOut2;
 		}
 		
 		/**
@@ -139,36 +139,33 @@ package ru.antkarlov.anthill
 		/**
 		 * Переводит указанное значение из одного диапазона в другой.
 		 * 
-		 * @param	value	 Значение которое необходимо перевести.
-		 * @param	aLower	 Наименьшее значение первого диапазона.
-		 * @param	aUpper	 Наибольшее значение первого диапазона.
-		 * @param	bLower	 Наименьшее значение второго диапазона.
-		 * @param	bUpper	 Наибольшее значение второго диапазона.
+		 * @param	aValue	 Значение которое необходимо перевести.
+		 * @param	aLower1	 Наименьшее значение первого диапазона.
+		 * @param	aUpper1	 Наибольшее значение первого диапазона.
+		 * @param	aLower2	 Наименьшее значение второго диапазона.
+		 * @param	aUpper2	 Наибольшее значение второго диапазона.
 		 * @return		Новое значение.
 		 */
-		public static function remap(value:Number, aLower:Number, aUpper:Number, bLower:Number, bUpper:Number):Number
+		public static function remap(aValue:Number, aLower1:Number, aUpper1:Number, aLower2:Number, aUpper2:Number):Number
 		{
-			return bLower + (bUpper - bLower) * (value - aLower) / (aUpper - aLower);
+			return aLower2 + (aUpper2 - aLower2) * (aValue - aLower1) / (aUpper1 - aLower1);
 		}
 		
 		/**
 		 * Ограничивает указанное значение заданным диапазоном.
 		 * 
-		 * @param	value	 Значение которое необходимо ограничить.
+		 * @param	aValue	 Значение которое необходимо ограничить.
 		 * @param	aLower	 Наименьшее значение диапазона.
 		 * @param	aUpper	 Наибольшее значение диапазона.
 		 * @return		Если значение меньше или больше заданного диапазона, то будет возвращена граница диапазона.
 		 */
-		public static function trimToRange(value:Number, aLower:Number, aUpper:Number):Number
+		public static function trimToRange(aValue:Number, aLower:Number, aUpper:Number):Number
 		{
-			return (value > aUpper) ? aUpper : (value < aLower) ? aLower : value;
+			return (aValue > aUpper) ? aUpper : (aValue < aLower) ? aLower : aValue;
 		}
 		
 		/**
 		 * Возрващает значение из заданного диапазона с заданным коэффицентом.
-		 * <p>Например: 
-		 * <code>if (aCoef == 0.0) return aLower;
-		 * if (aCoef == 1.0) return aUpper;</code></p>
 		 * 
 		 * @param	aLower	 Наименьшее значение диапазона.
 		 * @param	aUpper	 Наибольшее значение диапазона.
@@ -256,53 +253,53 @@ package ru.antkarlov.anthill
 		/**
 		 * Рассчитывает дистанцию между указанными точками.
 		 * 
-		 * @param	x1	 Координата X первой точки.
-		 * @param	y1	 Координата Y первой точки.
-		 * @param	x2	 Координата X второй точки.
-		 * @param	y2	 Коордианат Y второй точки.
+		 * @param	aX1	 Координата X первой точки.
+		 * @param	aY1	 Координата Y первой точки.
+		 * @param	aX2	 Координата X второй точки.
+		 * @param	aY2	 Коордианат Y второй точки.
 		 * @return		Возрвщает дистанцию между точками.
 		 */
-		public static function distance(x1:Number, y1:Number, x2:Number, y2:Number):Number
+		public static function distance(aX1:Number, aY1:Number, aX2:Number, aY2:Number):Number
 		{
-			var dx:Number = x2 - x1;
-			var dy:Number = y2 - y1;
+			var dx:Number = aX2 - aX1;
+			var dy:Number = aY2 - aY1;
 			return Math.sqrt(dx * dx + dy * dy);
 		}
 		
 		/**
 		 * Рассчитывает угол между двумя точками в радианах.
 		 * 
-		 * @param	x1	 Координата X первой точки.
-		 * @param	y1	 Координата Y первой точки.
-		 * @param	x2	 Координата X второй точки.
-		 * @param	y2	 Коордианат Y второй точки.
+		 * @param	aX1	 Координата X первой точки.
+		 * @param	aY1	 Координата Y первой точки.
+		 * @param	aX2	 Координата X второй точки.
+		 * @param	aY2	 Коордианат Y второй точки.
 		 * @param	norm	 Если true, то угол будет нормализован.
 		 * @return		Возвращает угол между двумя точками в радианах.
 		 */
-		public static function angle(x1:Number, y1:Number, x2:Number, y2:Number, norm:Boolean = true):Number
+		public static function angle(aX1:Number, aY1:Number, aX2:Number, aY2:Number, aNorm:Boolean = true):Number
 		{
-			var dx:Number = x2 - x1;
-			var dy:Number = y2 - y1;
+			var dx:Number = aX2 - aX1;
+			var dy:Number = aY2 - aY1;
 			var angle:Number = Math.atan2(dy, dx);
-			return (norm) ? normAngle(angle) : angle;
+			return (aNorm) ? normAngle(angle) : angle;
 		}
 		
 		/**
 		 * Рассчитывает угол между двумя точками в градусах.
 		 * 
-		 * @param	x1	 Координата X первой точки.
-		 * @param	y1	 Координата Y первой точки.
-		 * @param	x2	 Координата X второй точки.
-		 * @param	y2	 Коордианат Y второй точки.
+		 * @param	aX1	 Координата X первой точки.
+		 * @param	aY1	 Координата Y первой точки.
+		 * @param	aX2	 Координата X второй точки.
+		 * @param	aY2	 Коордианат Y второй точки.
 		 * @param	norm	 Если true, то угол будет нормализован.
 		 * @return		Возвращает угол между двумя точками в градусах.
 		 */
-		public static function angleDeg(x1:Number, y1:Number, x2:Number, y2:Number, norm:Boolean = true):Number
+		public static function angleDeg(aX1:Number, aY1:Number, aX2:Number, aY2:Number, aNorm:Boolean = true):Number
 		{
-			var dx:Number = x2 - x1;
-			var dy:Number = y2 - y1;
+			var dx:Number = aX2 - aX1;
+			var dy:Number = aY2 - aY1;
 			var angle:Number = Math.atan2(dy, dx) / Math.PI * 180;
-			return (norm) ? normAngleDeg(angle) : angle;
+			return (aNorm) ? normAngleDeg(angle) : angle;
 		}
 		
 		/**
