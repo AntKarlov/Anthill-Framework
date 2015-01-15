@@ -1,86 +1,69 @@
 package ru.antkarlov.anthill.debug
 {
-	import flash.text.AntiAliasType;
-	import flash.text.GridFitType;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
-	import flash.display.*;
-	import flash.events.*;
-	import flash.system.System;
-	import flash.ui.*;
+	import flash.display.Sprite;
 	import flash.utils.getTimer;
+	import flash.system.System;
 	
-	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.utils.AntFormat;
 	import ru.antkarlov.anthill.utils.AntRating;
+	import ru.antkarlov.anthill.AntAnimation;
+	import ru.antkarlov.anthill.AntBasic;
 	
 	/**
 	 * Отладочный класс собирающий и демонстрирующий статистику производительности игры.
-	 * <p>За основу взят <a href="http://lostinactionscript.com/2008/10/06/as3-swf-profiler/">SWFProfiler</a></p>
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0
 	 * 
 	 * @author Anton Karlov
-	 * @since  22.11.2011
+	 * @since  14.01.2015
 	 */
 	public class AntPerfomance extends AntWindow
 	{
-		//---------------------------------------
-		// PUBLIC VARIABLES
-		//---------------------------------------
-		public var minFps:Number;
-		public var maxFps:Number;
-		public var minMem:Number;
-		public var maxMem:Number;
-		public var history:int = 60;
-		public var fpsList:Array = [];
-		public var memList:Array = [];
-		
 		public var ratingPlugins:AntRating = new AntRating(30);
 		public var ratingUpdate:AntRating = new AntRating(30);
 		public var ratingRender:AntRating = new AntRating(30);
 		public var ratingTotal:AntRating = new AntRating(30);
 		
-		//---------------------------------------
-		// PRIVATE VARIABLES
-		//---------------------------------------
+		private var _isStarted:Boolean;
+		
 		private var _itvTime:int;
 		private var _initTime:int;
 		private var _currentTime:int;
 		private var _frameCount:int;
 		private var _totalCount:int;
 		
-		private var _isStarted:Boolean = false;
+		private var _fpsChart:AntChart;
+		private var _msChart:AntChart;
+		private var _memChart:AntChart;
 		
-		private var _tfMaxFps:TextField;
-		private var _tfMinFps:TextField;
-		private var _tfMaxMem:TextField;
-		private var _tfMinMem:TextField;
-		private var _tfInfo:TextField;
-		private var _tfRating:TextField;
+		private var _currentFPSView:AntCounterView;
+		private var _frameTimeView:AntCounterView;
+		private var _playTimeView:AntCounterView;
+		private var _currentMemView:AntCounterView;
 		
-		private var _fpsBox:Shape;
-		private var _memBox:Shape;
-		private var _display:Shape;
+		private var _fpsUpper:AntRatingView;
+		private var _fpsLower:AntRatingView;
+		private var _memUpper:AntRatingView;
+		private var _memLower:AntRatingView;
 		
-		//---------------------------------------
-		// CONSTRUCTOR
-		//---------------------------------------
+		private var _fpsUpperValue:Number;
+		private var _fpsLowerValue:Number;
+		private var _memUpperValue:Number;
+		private var _memLowerValue:Number;
 		
 		/**
 		 * @constructor
 		 */
 		public function AntPerfomance(aParent:Sprite, aX:Number, aY:Number)
 		{
-			super(aParent, aX, aY, 448, 170);
+			super(aParent, aX, aY, 424, 128);
+			_isStarted = false;
 			
-			create();
-			draw();
-			
-			minFps = Number.MAX_VALUE;
-			maxFps = Number.MIN_VALUE;
-			minMem = Number.MAX_VALUE;
-			maxMem = Number.MIN_VALUE;
+			_fpsUpperValue = 0;
+			_fpsLowerValue = 100;
+			_memUpperValue = 0;
+			_memLowerValue = 9999;
 		}
 		
 		//---------------------------------------
@@ -116,29 +99,69 @@ package ru.antkarlov.anthill.debug
 			if (_isStarted)
 			{
 				_currentTime = getTimer();
-
 				_frameCount++;
 				_totalCount++;
 
 				if (intervalTime >= 1)
 				{
-					(visible) ? updateDisplay() : updateMinMax();
-					fpsList.unshift(currentFps);
-					memList.unshift(currentMem);
-
-					if (fpsList.length > history)
-					{
-						fpsList.pop();
-					}
-
-					if (memList.length > history)
-					{
-						memList.pop();
-					}
-
+					updateDisplay();
+					
+					_fpsUpperValue = (_fpsUpperValue < currentFps) ? currentFps : _fpsUpperValue;
+					_fpsLowerValue = (_fpsLowerValue > currentFps) ? currentFps : _fpsLowerValue;
+					
+					_memUpperValue = (_memUpperValue < currentMem) ? currentMem : _memUpperValue;
+					_memLowerValue = (_memLowerValue > currentMem) ? currentMem : _memLowerValue;
+					
 					_itvTime = _currentTime;
 					_frameCount = 0;
 				}
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		private function updateDisplay(aForce:Boolean = false):void
+		{
+			_fpsChart.beginUpdate();
+			_fpsChart.update("current", currentFps);
+			_fpsChart.update("average", averageFps);
+			_fpsChart.endUpdate(visible || aForce);
+			
+			var all:int = ratingTotal.average();
+			var upd:int = ratingUpdate.average();
+			var rnd:int = ratingRender.average();
+			var plg:int = ratingPlugins.average();
+			var ant:int = upd + rnd + plg;
+			
+			_msChart.beginUpdate();
+			_msChart.update("update", upd);
+			_msChart.update("render", rnd);
+			_msChart.update("plugins", plg);
+			_msChart.update("flash", all - ant);
+			_msChart.endUpdate(visible || aForce);
+			
+			var animCache:Number = AntAnimation.getCacheSize();
+			var buffers:Number = AntBasic.BUFFERS_SIZE;
+			var other:Number = System.totalMemory - (animCache + buffers);
+			
+			_memChart.beginUpdate();
+			_memChart.update("anim. cache", (animCache / 1024) / 1024);
+			_memChart.update("buffers", (buffers / 1024) / 1024);
+			_memChart.update("other", (other / 1024) / 1024);
+			_memChart.endUpdate(visible || aForce);
+			
+			if (visible || aForce)
+			{
+				_currentFPSView.text = currentFps.toFixed(1);
+				_frameTimeView.text = ratingTotal.average().toFixed(0);
+				_playTimeView.text = AntFormat.formatTime(_currentTime);
+				_currentMemView.text = currentMem.toFixed(1);
+				
+				_fpsUpper.value = _fpsUpperValue;
+				_fpsLower.value = _fpsLowerValue;
+				_memUpper.value = _memUpperValue;
+				_memLower.value = _memLowerValue;
 			}
 		}
 		
@@ -147,7 +170,7 @@ package ru.antkarlov.anthill.debug
 		 */
 		override public function show():void
 		{
-			redrawDisplay();
+			updateDisplay(true);
 			super.show();
 		}
 		
@@ -163,171 +186,36 @@ package ru.antkarlov.anthill.debug
 			super.create();
 			title = "Perfomance";
 			
-			_tfMaxFps = makeLabel(2, 15, _fGray);
-			addChild(_tfMaxFps);
+			_fpsChart = new AntChart(this, 6, 38);
+			_fpsChart.add("current", AntChart.C_GREEN, true, 1);
+			_fpsChart.add("average", AntChart.C_BLUE, true, 1);
 			
-			_tfMinFps = makeLabel(2, 52, _fGray);
-			addChild(_tfMinFps);
+			_msChart = new AntChart(this, 6 + _fpsChart.bufferWidth + 4, 38);
+			_msChart.add("update", AntChart.C_BLUE, true);
+			_msChart.add("render", AntChart.C_GREEN, true);
+			_msChart.add("plugins", AntChart.C_YELLOW, true);
+			_msChart.add("flash", AntChart.C_ORANGE, true);
 			
-			_tfMaxMem = makeLabel(2, 78, _fGray);
-			addChild(_tfMaxMem);
+			_memChart = new AntChart(this, 6 + _fpsChart.bufferWidth + _msChart.bufferWidth + 8, 38);
+			_memChart.add("anim. cache", AntChart.C_BLUE, true, 1);
+			_memChart.add("buffers", AntChart.C_GREEN, true, 1);
+			_memChart.add("other", AntChart.C_YELLOW, true, 1);
 			
-			_tfMinMem = makeLabel(2, 115, _fGray);
-			addChild(_tfMinMem);
+			_currentFPSView = new AntCounterView(this, _fpsChart.x, 18, "Frame Rate", "fps");
+			_frameTimeView = new AntCounterView(this, _msChart.x, 18, "Frame Time", "ms");
+			_playTimeView = new AntCounterView(this, _msChart.x + 80, 18, "Play Time");
+			_currentMemView = new AntCounterView(this, _memChart.x, 18, "Memory", "Mb");
 			
-			_tfInfo = makeLabel(57, 132, _fGray);
-			_tfInfo.width = _width;
-			addChild(_tfInfo);
+			_fpsUpper = new AntRatingView(this, _fpsChart.x + 85, 18, "fps");
+			_fpsLower = new AntRatingView(this, _fpsChart.x + 85, 27, "fps");
+			_fpsLower.value = _fpsLowerValue;
 			
-			_tfRating = makeLabel(57, 146, _fGray);
-			_tfRating.width = _width;
-			addChild(_tfRating);
+			_memUpper = new AntRatingView(this, _memChart.x + 85, 18, "mb");
+			_memUpper.reverseColors = true;
 			
-			_display = new Shape();
-			_display.y = 10;
-			addChild(_display);
-			
-			_fpsBox = new Shape();
-			_fpsBox.x = 60;
-			_fpsBox.y = 65;
-			addChild(_fpsBox);
-			
-			_memBox = new Shape();
-			_memBox.x = 60;
-			_memBox.y = 128;
-			addChild(_memBox);
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		override protected function draw():void
-		{
-			super.draw();
-
-			_display.graphics.clear();
-			_display.graphics.beginFill(0x000000, 0.5);
-			_display.graphics.lineStyle(1, 0x5e5f5f, 1);
-
-			_display.graphics.moveTo(60, 55);
-			_display.graphics.lineTo(60, 10);
-			_display.graphics.moveTo(60, 55);
-			_display.graphics.lineTo(_width - 7, 55);
-
-			_display.graphics.moveTo(60, 118);
-			_display.graphics.lineTo(60, 73);
-			_display.graphics.moveTo(60, 118);
-			_display.graphics.lineTo(_width - 7, 118);
-			_display.graphics.endFill();
-		}
-		
-		/**
-		 * Обновление значений в окне производительности.
-		 */
-		protected function updateDisplay():void
-		{
-			updateMinMax();
-			redrawDisplay();
-		}
-		
-		/**
-		 * Сбор статистики о производительности.
-		 */
-		protected function updateMinMax():void
-		{
-			minFps = Math.min(currentFps, minFps);
-			maxFps = Math.max(currentFps, maxFps);
-				
-			minMem = Math.min(currentMem, minMem);
-			maxMem = Math.max(currentMem, maxMem);
-		}
-		
-		/**
-		 * Перерисовка графиков и значений в окне производительности.
-		 */
-		protected function redrawDisplay():void
-		{
-			if (runningTime >= 1)
-			{
-				_tfMinFps.text = minFps.toFixed(1) + " fps";
-				_tfMaxFps.text = maxFps.toFixed(1) + " fps";
-				_tfMinMem.text = minMem.toFixed(1) + " mb";
-				_tfMaxMem.text = maxMem.toFixed(1) + " mb";
-			}
-			
-			_tfInfo.text = "";
-			appendText(_tfInfo, "Current ", _fGray);
-			appendText(_tfInfo, currentFps.toFixed(1), _fWhite);
-			appendText(_tfInfo, " fps : Average ", _fGray);
-			appendText(_tfInfo, averageFps.toFixed(1), _fWhite);
-			appendText(_tfInfo, " fps : Memory Used ", _fGray);
-			appendText(_tfInfo, currentMem.toFixed(1), _fWhite);
-			appendText(_tfInfo, " mb", _fGray);
-			
-			var tot:uint = ratingTotal.average();
-			var upd:uint = ratingUpdate.average();
-			var rnd:uint = ratingRender.average();
-			var box:uint = ratingPlugins.average();
-			var ant:uint = upd + rnd + box;
-			
-			_tfRating.text = "";
-			appendText(_tfRating, "Upd ", _fGray);
-			appendText(_tfRating, upd.toString(), _fWhite);
-			appendText(_tfRating, " ms : Rnd ", _fGray);
-			appendText(_tfRating, rnd.toString(), _fWhite);
-			appendText(_tfRating, " ms : Plg ", _fGray);
-			appendText(_tfRating, box.toString(), _fWhite);
-			appendText(_tfRating, " ms : Flash ", _fGray);
-			appendText(_tfRating, (tot - ant).toString(), _fWhite);
-			appendText(_tfRating, " ms : Total ", _fGray);
-			appendText(_tfRating, tot.toString(), _fWhite);
-			appendText(_tfRating, " ms", _fGray);
-
-			var vec:Graphics = _fpsBox.graphics;
-			vec.clear();
-			vec.lineStyle(1, 0x96ff00, 1);
-
-			var i:int = 0;
-			var len:int = fpsList.length;
-			var height:int = 45;
-			var width:int = _width - 67;
-			var inc:Number = width / (history - 1);
-			var rateRange:Number = maxFps - minFps;
-			var value:Number;
-
-			for (i = 0; i < len; i++)
-			{
-				value = (fpsList[i] - minFps) / rateRange;
-				(i == 0) ? vec.moveTo(0, -value * height) : vec.lineTo(i * inc, -value * height);
-			}
-
-			vec = _memBox.graphics;
-			vec.clear();
-			vec.lineStyle(1, 0x009cff, 1);
-
-			i = 0;
-			len = memList.length;
-			rateRange = maxMem - minMem;
-			for (i = 0; i < len; i++)
-			{
-				value = (memList[i] - minMem) / rateRange;
-				(i == 0) ? vec.moveTo(0, -value * height) :	vec.lineTo(i * inc, -value * height);
-			}
-		}
-		
-		/**
-		 * Применение форматированного текста к указанному текстовому полю.
-		 * 
-		 * @param	textField	 Поле в которое будет добавлен текст.
-		 * @param	text	 Добавляемый текст.
-		 * @param	textFormat	 Текстовое форматирование для добавляемого текста.
-		 */
-		private function appendText(aTextField:TextField, aText:String, aTextFormat:TextFormat):void
-		{
-			var startIndex:int = aTextField.text.length;
-			aTextField.appendText(aText);
-			var endIndex:int = aTextField.text.length;
-			aTextField.setTextFormat(aTextFormat, startIndex, endIndex);
+			_memLower = new AntRatingView(this, _memChart.x + 85, 27, "mb");
+			_memLower.reverseColors = true;
+			_memLower.value = _memLowerValue;
 		}
 		
 		//---------------------------------------
@@ -355,7 +243,7 @@ package ru.antkarlov.anthill.debug
 		 */
 		public function get currentMem():Number
 		{
-			return (System.totalMemory / 1024) / 1000;
+			return (System.totalMemory / 1024) / 1024;
 		}
 
 		/**
@@ -373,7 +261,7 @@ package ru.antkarlov.anthill.debug
 		{
 			return (_currentTime - _itvTime) / 1000;
 		}
-		
+	
 	}
 
 }
