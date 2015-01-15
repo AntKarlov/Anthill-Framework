@@ -122,6 +122,36 @@ package ru.antkarlov.anthill.utils
 				return aSize.toFixed(0) + " B";
 			}
 		}
+		
+		/**
+		 * @private
+		 */
+		public static function formatTime(aValue:int, aShowMS:Boolean = false):String
+		{
+			var hours:int = aValue / (1000 * 60 * 60);
+			var minutes:int = (aValue % (1000 * 60 * 60)) / (1000 * 60);
+			var seconds:int = ((aValue % (1000 * 60 * 60)) % (1000 * 60)) / 1000;
+			var ms:int = aValue % 10;
+			
+			var zeroHour:String = (hours < 10) ? "0" : "";
+			var zeroSec:String = (seconds < 10) ? "0" : "";
+			var zeroMin:String = (minutes < 10) ? "0" : "";
+			
+			if (aShowMS)
+			{
+				return formatString("{0}:{1}:{2}.{3}", 
+					zeroHour + hours.toString(), 
+					zeroMin + minutes.toString(), 
+					zeroSec + seconds.toString(), ms);
+			}
+			else
+			{
+				return formatString("{0}:{1}:{2}",
+					zeroHour + hours.toString(),
+					zeroMin + minutes.toString(),
+					zeroSec + seconds.toString());
+			}
+		}
 
 	}
 
