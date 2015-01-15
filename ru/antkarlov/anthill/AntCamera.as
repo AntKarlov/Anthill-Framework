@@ -1,10 +1,11 @@
 package ru.antkarlov.anthill
 {
 	import flash.display.Sprite;
-	import flash.geom.Rectangle;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import flash.sampler.getSize;
 
 	/**
 	 * Реализует рендеринг всех визуальных сущностей.
@@ -634,6 +635,14 @@ package ru.antkarlov.anthill
 		public function get sprite():Sprite
 		{
 			return _flashSprite;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get memSize():int
+		{
+			return getSize(buffer);
 		}
 
 	}
