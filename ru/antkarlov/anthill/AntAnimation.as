@@ -6,7 +6,7 @@ package ru.antkarlov.anthill
 	import flash.geom.Point;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
-	import flash.sampler.*;
+	import flash.sampler.getSize;
 	import ru.antkarlov.anthill.utils.AntFormat;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
@@ -481,7 +481,7 @@ package ru.antkarlov.anthill
 			var i:int = _removedNames.indexOf(aKey);
 			if (i >= 0 && i < _removedNames.length)
 			{
-				var anim:AntAnimation;
+				var anim:AntAnimation = null;
 				var clipClass:Class = getDefinitionByName(aKey) as Class;
 				if (clipClass != null)
 				{
@@ -489,10 +489,10 @@ package ru.antkarlov.anthill
 					anim = new AntAnimation(aKey);
 					anim.makeFromMovieClip(clip);
 					//trace("Restored:", anim.name);
-					return anim;
 				}
 				
 				_removedNames.splice(i, 1);
+				return anim;
 			}
 			
 			return null;
@@ -680,21 +680,26 @@ package ru.antkarlov.anthill
 		/**
 		 * Отладочный метод для получения информации о состоянии кэша анимаций.
 		 */
-		public static function getCacheStats():Array
+		public static function getCacheStats(aIgnoreStatic:Boolean = true):Array
 		{
 			var name:String;
 			var res:Array = [];
 			const n:int = _usedNames.length;
+			var fString:Function = AntFormat.formatString;
 			for (var i:int = 0; i < n; i++)
 			{
 				name = _usedNames[i];
 				if (_removedNames.indexOf(name) > -1)
 				{
-					res[res.length] = AntFormat.formatString("{0} - numOfUses: {1}", name, _usedCount[i]);
+					res.push(fString("{0} (del)", name));
 				}
-				else
+				else if (isStatic(name) && !aIgnoreStatic)
 				{
-					res[res.length] = AntFormat.formatString("{0} - Removed!", name);
+					res.push(fString("{0} (static)", name));
+				}
+				else if (!isStatic(name))
+				{
+					res.push(fString("{0} ({1})", name, _usedCount[i]));
 				}
 			}
 			
