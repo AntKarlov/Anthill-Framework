@@ -48,6 +48,7 @@ package ru.antkarlov.anthill.debug
 		//---------------------------------------
 		private static var _lineFrom:AntPoint = new AntPoint();
 		private static var _canvas:BitmapData = null;
+		private static var _isTransparent:Boolean;
 		
 		/**
 		 * Помошники для отрисовки текста.
@@ -75,10 +76,12 @@ package ru.antkarlov.anthill.debug
 		 * Например: AntDrawer.setCanvas(AntG.getCamera().buffer);
 		 * 
 		 * @param	aCanvas	 Указатель на BitmapData в который будет выполнятся отрисовка.
+		 * @param	aIsTransparent	Определяет наличие Alpha канала у буфера.
 		 */
-		public static function setCanvas(aCanvas:BitmapData):void
+		public static function setCanvas(aCanvas:BitmapData, aIsTransparent:Boolean = false):void
 		{
 			_canvas = aCanvas;
+			_isTransparent = aIsTransparent;
 		}
 		
 		/**
@@ -116,7 +119,7 @@ package ru.antkarlov.anthill.debug
 		{
 			if (_canvas != null)
 			{
-				_canvas.setPixel(aX, aY, aColor);
+				(_isTransparent) ? _canvas.setPixel32(aX, aY, aColor) : _canvas.setPixel(aX, aY, aColor);
 			}
 		}
 		
@@ -136,11 +139,6 @@ package ru.antkarlov.anthill.debug
 		 */
 		public static function drawLine(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0):void
 		{
-			if (_canvas == null)
-			{
-				return;
-			}
-			
 			var shortLen:int = aY2 - aY1;
 			var longLen:int = aX2 - aX1;
 
@@ -164,14 +162,14 @@ package ru.antkarlov.anthill.debug
 			{
 				for (var i:int = 0; i != longLen; i += inc)
 				{
-					_canvas.setPixel(aX1 + i * multDiff, aY1 + i, aColor);
+					drawPoint(aX1 + i * multDiff, aY1 + i, aColor);
 				}
 			}
 			else
 			{
 				for (i = 0; i != longLen; i += inc)
 				{
-					_canvas.setPixel(aX1 + i, aY1 + i * multDiff, aColor);
+					drawPoint(aX1 + i, aY1 + i * multDiff, aColor);
 				}
 			}
 		}
@@ -192,6 +190,40 @@ package ru.antkarlov.anthill.debug
 			lineTo(aX + aWidth, aY + aHeight, aColor);
 			lineTo(aX, aY + aHeight, aColor);
 			lineTo(aX, aY, aColor);
+		}
+		
+		/**
+		 * Рисует прямоугольник с заливкой.
+		 * 
+		 * @param	aX	Положение прямоугольника по X.
+		 * @param	aY	 Положение прямоугольника по Y.
+		 * @param	aWidth	 Ширина прямоугольника.
+		 * @param	aHeight	 Высота прямоугольника.
+		 * @param	aColor	 Цвет прямоугольника.
+		 */
+		public static function fillRect(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0):void
+		{
+			if (_canvas != null)
+			{
+				_flashRect.x = aX;
+				_flashRect.y = aY;
+				_flashRect.width = aWidth;
+				_flashRect.height = aHeight;
+				
+				if (_flashRect.width < 0)
+				{
+					_flashRect.width *= -1;
+					_flashRect.x -= _flashRect.width;
+				}
+				
+				if (_flashRect.height < 0)
+				{
+					_flashRect.height *= -1;
+					_flashRect.y -= _flashRect.height;
+				}
+
+				_canvas.fillRect(_flashRect, aColor);
+			}
 		}
 		
 		/**
@@ -239,10 +271,10 @@ package ru.antkarlov.anthill.debug
 		 */
 		protected static function plotCircle(aX:int, aY:int, cX:int, cY:int, aColor:uint):void
 		{
-			_canvas.setPixel(cX + aX, cY + aY, aColor);
-			_canvas.setPixel(cX + aX, cY - aY, aColor);
-			_canvas.setPixel(cX - aX, cY + aY, aColor);
-			_canvas.setPixel(cX - aX, cY - aY, aColor);
+			drawPoint(cX + aX, cY + aY, aColor);
+			drawPoint(cX + aX, cY - aY, aColor);
+			drawPoint(cX - aX, cY + aY, aColor);
+			drawPoint(cX - aX, cY - aY, aColor);
 		}
 		
 		/**
