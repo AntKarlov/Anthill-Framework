@@ -314,6 +314,8 @@ package ru.antkarlov.anthill.debug
 			while (i < n)
 			{
 				originalBitmap = _font.getFrame(aText.charAt(i));
+				_flashRect.x = 0;
+				_flashRect.y = 0;
 				_flashRect.width = originalBitmap.width;
 				_flashRect.height = originalBitmap.height;
 				
@@ -358,6 +360,22 @@ package ru.antkarlov.anthill.debug
 		private static function extractAlpha(aColor:uint):int
 		{
 			return (aColor >> 24) & 0xFF;
+		}
+		
+		/**
+		 * @private
+		 */
+		public static function get canvas():BitmapData
+		{
+			return _canvas;
+		}
+		
+		/**
+		 * @private
+		 */
+		public static function get isTransparent():Boolean
+		{
+			return _isTransparent;
 		}
 
 	}
