@@ -170,7 +170,8 @@ package ru.antkarlov.anthill.debug
 					_value = aValue;
 					updateAsLower();
 				}
-				else if (aValue > _value)
+				
+				if (aValue > _value)
 				{
 					_value = aValue;
 					updateAsUpper();
