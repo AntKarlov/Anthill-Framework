@@ -317,7 +317,7 @@ package ru.antkarlov.anthill
 			}
 			
 			var i:int = 0;
-			var n:int = cameras.length;
+			const n:int = cameras.length;
 			var camera:AntCamera;
 			while (i < n)
 			{
