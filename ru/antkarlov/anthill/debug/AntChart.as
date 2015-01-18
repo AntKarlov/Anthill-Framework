@@ -267,8 +267,8 @@ package ru.antkarlov.anthill.debug
 				updateRange();
 				
 				AntDrawer.setCanvas(_buffer, true);
-				
 				_buffer.lock();
+				
 				AntDrawer.fillRect(0, 0, _bufferWidth, _bufferHeight, C_TRANSPARENT);
 				AntDrawer.drawRect(2, 2, _graphWidth - 5, _graphHeight - 5, C_GRAY);
 				
