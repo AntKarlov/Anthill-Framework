@@ -26,6 +26,7 @@ package ru.antkarlov.anthill.debug
 		public var ratingTotal:AntRating = new AntRating(30);
 		
 		private var _isStarted:Boolean;
+		private var _isFirstTick:Boolean;
 		
 		private var _itvTime:int;
 		private var _initTime:int;
@@ -59,10 +60,11 @@ package ru.antkarlov.anthill.debug
 		{
 			super(aParent, aX, aY, 424, 128);
 			_isStarted = false;
+			_isFirstTick = true;
 			
-			_fpsUpperValue = 0;
-			_fpsLowerValue = 100;
-			_memUpperValue = 0;
+			_fpsUpperValue = -9999;
+			_fpsLowerValue = 9999;
+			_memUpperValue = -9999;
 			_memLowerValue = 9999;
 		}
 		
@@ -104,14 +106,29 @@ package ru.antkarlov.anthill.debug
 
 				if (intervalTime >= 1)
 				{
-					updateDisplay();
+					updateDisplay(_isFirstTick);
 					
-					_fpsUpperValue = (_fpsUpperValue < currentFps) ? currentFps : _fpsUpperValue;
-					_fpsLowerValue = (_fpsLowerValue > currentFps) ? currentFps : _fpsLowerValue;
+					if (_fpsUpperValue < currentFps)
+					{
+						_fpsUpperValue = currentFps;
+					}
 					
-					_memUpperValue = (_memUpperValue < currentMem) ? currentMem : _memUpperValue;
-					_memLowerValue = (_memLowerValue > currentMem) ? currentMem : _memLowerValue;
+					if (_fpsLowerValue > currentFps)
+					{
+						_fpsLowerValue = currentFps;
+					}
 					
+					if (_memUpperValue < currentMem)
+					{
+						_memUpperValue = currentMem;
+					}
+					
+					if (_memLowerValue > currentMem)
+					{
+						_memLowerValue = currentMem;
+					}
+					
+					_isFirstTick = false;
 					_itvTime = _currentTime;
 					_frameCount = 0;
 				}
