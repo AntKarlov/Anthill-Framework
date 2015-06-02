@@ -219,7 +219,7 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
-		 * Обработчик соыбтия отпускания кнопки мыши.
+		 * Обработчик события отпускания кнопки мыши.
 		 */
 		protected function onMouseUp(aEvent:MouseEvent):void
 		{
