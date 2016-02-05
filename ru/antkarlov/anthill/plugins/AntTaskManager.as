@@ -427,8 +427,8 @@ package ru.antkarlov.anthill.plugins
 		{
 			if (_isPaused != value)
 			{
-				_isPaused = aValue;
-				(_isPaused) ? AntG.plugins.remove(this) : AntG.plugins.add(this);
+				_isPaused = value;
+				(_isPaused) ? AntG.plugins.pause(this) : AntG.plugins.resume(this);
 			}
 		}
 		
