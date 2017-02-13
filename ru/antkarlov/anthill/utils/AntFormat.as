@@ -24,6 +24,8 @@ package ru.antkarlov.anthill.utils
 		public static function formatNumber(aValue:*, aMaxDecimals:int = 2, 
 			aForceDecimals:Boolean = true, aSiStyle:Boolean = false):String
 		{
+			aForceDecimals = (aMaxDecimals == 0) ? false : aForceDecimals;
+			
 			var i:int = 0;
 			var inc:Number = Math.pow(10, aMaxDecimals);
 			var str:String = String(Math.round(inc * Number(aValue)) / inc);
@@ -93,6 +95,62 @@ package ru.antkarlov.anthill.utils
 			}
 
 			return res;
+		}
+		
+		/**
+		 * @private
+		 */
+		public static function formatSize(aSize:Number):String
+		{
+			if (aSize >= 1073741824)
+			{
+				aSize = aSize / 1073741824;
+				return aSize.toFixed(2) + " Gb";
+			}
+			else if (aSize >= 1048576)
+			{
+				aSize = aSize / 1048576;
+				return aSize.toFixed(2) + " Mb";
+			}
+			else if (aSize >= 1024)
+			{
+				aSize = aSize / 1024;
+				return aSize.toFixed(2) + " Kb";
+			}
+			else
+			{
+				return aSize.toFixed(0) + " B";
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public static function formatTime(aValue:int, aShowMS:Boolean = false):String
+		{
+			var hours:int = aValue / (1000 * 60 * 60);
+			var minutes:int = (aValue % (1000 * 60 * 60)) / (1000 * 60);
+			var seconds:int = ((aValue % (1000 * 60 * 60)) % (1000 * 60)) / 1000;
+			var ms:int = aValue % 10;
+			
+			var zeroHour:String = (hours < 10) ? "0" : "";
+			var zeroSec:String = (seconds < 10) ? "0" : "";
+			var zeroMin:String = (minutes < 10) ? "0" : "";
+			
+			if (aShowMS)
+			{
+				return formatString("{0}:{1}:{2}.{3}", 
+					zeroHour + hours.toString(), 
+					zeroMin + minutes.toString(), 
+					zeroSec + seconds.toString(), ms);
+			}
+			else
+			{
+				return formatString("{0}:{1}:{2}",
+					zeroHour + hours.toString(),
+					zeroMin + minutes.toString(),
+					zeroSec + seconds.toString());
+			}
 		}
 
 	}

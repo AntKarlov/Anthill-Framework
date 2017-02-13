@@ -862,6 +862,11 @@ package ru.antkarlov.anthill
 				tile = tiles[getIndex(_curPoint.x, _curPoint.y)] as AntActor;
 				if (tile != null && tile.exists && tile.visible)
 				{
+					if (tile.isPlaying)
+					{
+						tile.update();
+					}
+					
 					tile.updateBounds();
 					tile.drawActor(aCamera);
 				}

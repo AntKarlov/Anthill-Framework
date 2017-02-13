@@ -10,7 +10,8 @@ package ru.antkarlov.anthill.debug
 	import XML;
 	
 	/**
-	 * Description
+	 * Простая системная кнопка.
+	 * Используется только в отладочных инструментах для Anthill.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0

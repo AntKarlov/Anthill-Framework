@@ -5,10 +5,11 @@ package ru.antkarlov.anthill
 	import flash.geom.Rectangle;
 	import flash.geom.Point;
 	import flash.geom.Matrix;
+	import flash.ui.Mouse;
+	import flash.sampler.getSize;
 	
 	import ru.antkarlov.anthill.signals.AntSignal;
 	import ru.antkarlov.anthill.utils.AntColor;
-	import flash.ui.Mouse;
 	
 	/**
 	 * Кнопка обыкновенная.
@@ -151,7 +152,7 @@ package ru.antkarlov.anthill
 		 * Указатель на текстовую метку кнопки.
 		 * @default    null
 		 */
-		public var label:AntLabel;
+		private var _label:AntEntity;
 		
 		/**
 		 * Смещение текстовой метки при нажатии.
@@ -170,6 +171,8 @@ package ru.antkarlov.anthill
 		 * @default    null
 		 */
 		public var downCursorAnim:String;
+		
+		public var enabled:Boolean;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -329,6 +332,8 @@ package ru.antkarlov.anthill
 			overCursorAnim = defOverCursorAnim;
 			downCursorAnim = defDownCursorAnim;
 			
+			enabled = true;
+			
 			soundClick = defSoundClick;
 			soundOver = defSoundOver;
 			soundOut = defSoundOut;
@@ -433,8 +438,10 @@ package ru.antkarlov.anthill
 			{
 				aName = aAnim.name;
 			}
-
+			
+			AntAnimation.useAnimation(aAnim.name);
 			_animations.set(aName, aAnim);
+			
 			if (aSwitch)
 			{
 				switchAnimation(aName);
@@ -451,7 +458,7 @@ package ru.antkarlov.anthill
 		 */
 		public function addAnimationFromCache(aKey:String, aName:String = null, aSwitch:Boolean = true):void
 		{
-			addAnimation(AntAnimation.fromCache(aKey), aName, aSwitch);
+			addAnimation(AntAnimation.getFromCache(aKey), aName, aSwitch);
 		}
 		
 		/**
@@ -477,6 +484,34 @@ package ru.antkarlov.anthill
 			else
 			{
 				throw new Error("Missing button animation \"" + aName +"\".");
+			}
+		}
+		
+		/**
+		 * Удаляет анимацию с указанным именем.
+		 * 
+		 * @param	aName	 Локальное имя анимации которую необходимо удалить.
+		 */
+		public function removeAnimation(aName:String):void
+		{
+			if (_animations.containsKey(aName))
+			{
+				var anim:AntAnimation = _animations.remove(aName) as AntAnimation;
+				if (anim != null)
+				{
+					AntAnimation.unuseAnimation(anim.name);
+				}
+			}
+		}
+		
+		/**
+		 * Удаляет все анимации.
+		 */
+		public function clearAnimations():void
+		{
+			for (var animName:String in _animations)
+			{
+				removeAnimation(animName);
 			}
 		}
 		
@@ -513,6 +548,20 @@ package ru.antkarlov.anthill
 		override public function hitTestPoint(aPoint:AntPoint, aPixelFlag:Boolean = false):Boolean
 		{
 			return hitTest(aPoint.x, aPoint.y, aPixelFlag);
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function kill():void
+		{
+			if (useSystemCursor && _iChangeCursor)
+			{
+				Mouse.cursor = "auto";
+				_iChangeCursor = false;
+			}
+			
+			super.kill();
 		}
 		
 		//---------------------------------------
@@ -569,7 +618,7 @@ package ru.antkarlov.anthill
 				camera = AntG.getCamera();
 			}
 			
-			if (camera != null && visible && getVisibility())
+			if (camera != null && visible && getVisibility() && enabled)
 			{
 				(isScrolled) ? AntG.mouse.getWorldPosition(camera, _point) : AntG.mouse.getScreenPosition(camera, _point);
 				if (hitTestPoint(_point))
@@ -625,7 +674,8 @@ package ru.antkarlov.anthill
 				{
 					AntG.mouse.changeCursor(overCursorAnim);
 				}
-				else if (useSystemCursor)
+				
+				if (useSystemCursor)
 				{
 					Mouse.cursor = "button";
 					_iChangeCursor = true;
@@ -687,9 +737,9 @@ package ru.antkarlov.anthill
 			
 			if (_over && o)
 			{
-				AntG.mouse.changeCursor(overCursorAnim);
 				eventClick.dispatch(this);
 				AntG.sounds.play(soundClick);
+				AntG.mouse.changeCursor((getVisibility() ? overCursorAnim : null));				
 			}
 			else
 			{
@@ -727,6 +777,7 @@ package ru.antkarlov.anthill
 		protected function drawButton(aCamera:AntCamera):void
 		{
 			NUM_OF_VISIBLE++;
+			BUFFERS_SIZE += memSize;
 			
 			// Если нет текущего кадра или объект не попадает в камеру.
 			if (_pixels == null || !onScreen(aCamera))
@@ -880,14 +931,32 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
+		 * @private
+		 */
+		public function get label():AntEntity { return _label; }
+		public function set label(aValue:AntEntity):void
+		{
+			if (_label != aValue)
+			{
+				if (_label != null)
+				{
+					remove(_label);
+				}
+			
+				_label = aValue;
+				add(_label);
+			}
+		}
+		
+		/**
 		 * Определяет текст для текстовой метки у кнопки.
 		 */
-		public function get text():String { return (label != null) ? label.text : ""; }
+		public function get text():String { return (label != null && label.hasOwnProperty("text")) ? label["text"] : ""; }
 		public function set text(value:String):void
 		{
-			if (label != null)
+			if (label != null && label.hasOwnProperty("text"))
 			{
-				label.text = value;
+				label["text"] = value;
 				updateLabel();
 			}
 		}
@@ -993,6 +1062,14 @@ package ru.antkarlov.anthill
 				
 				calcFrame(status - 1);
 			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get memSize():int
+		{
+			return (_buffer != null) ? getSize(_buffer) : 0;
 		}
 
 	}

@@ -1,7 +1,5 @@
 package ru.antkarlov.anthill.debug
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.text.AntiAliasType;
 	import flash.text.GridFitType;
@@ -12,8 +10,6 @@ package ru.antkarlov.anthill.debug
 	import flash.utils.*;
 	
 	import ru.antkarlov.anthill.*;
-	import flash.events.MouseEvent;
-	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.text.TextFieldAutoSize;
 	
@@ -474,7 +470,7 @@ package ru.antkarlov.anthill.debug
 					}
 					else
 					{
-						str = " - ";
+						str = "- ";
 					}
 					
 					log("  " + value + " " + str + desc);

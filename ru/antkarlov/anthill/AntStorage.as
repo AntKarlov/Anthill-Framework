@@ -120,6 +120,24 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
+		 * @private
+		 */
+		public function getAllKeys(aResult:Array = null):Array
+		{
+			if (aResult == null)
+			{
+				aResult = [];
+			}
+			
+			for (var key:String in this)
+			{
+				aResult[aResult.length] = key;
+			}
+			
+			return aResult;
+		}
+		
+		/**
 		 * Очищает хранилище.
 		 */
 		public function clear():void

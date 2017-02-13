@@ -48,6 +48,7 @@ package ru.antkarlov.anthill.debug
 		//---------------------------------------
 		private static var _lineFrom:AntPoint = new AntPoint();
 		private static var _canvas:BitmapData = null;
+		private static var _isTransparent:Boolean;
 		
 		/**
 		 * Помошники для отрисовки текста.
@@ -75,10 +76,12 @@ package ru.antkarlov.anthill.debug
 		 * Например: AntDrawer.setCanvas(AntG.getCamera().buffer);
 		 * 
 		 * @param	aCanvas	 Указатель на BitmapData в который будет выполнятся отрисовка.
+		 * @param	aIsTransparent	Определяет наличие Alpha канала у буфера.
 		 */
-		public static function setCanvas(aCanvas:BitmapData):void
+		public static function setCanvas(aCanvas:BitmapData, aIsTransparent:Boolean = false):void
 		{
 			_canvas = aCanvas;
+			_isTransparent = aIsTransparent;
 		}
 		
 		/**
@@ -116,7 +119,7 @@ package ru.antkarlov.anthill.debug
 		{
 			if (_canvas != null)
 			{
-				_canvas.setPixel(aX, aY, aColor);
+				(_isTransparent) ? _canvas.setPixel32(aX, aY, aColor) : _canvas.setPixel(aX, aY, aColor);
 			}
 		}
 		
@@ -136,11 +139,6 @@ package ru.antkarlov.anthill.debug
 		 */
 		public static function drawLine(aX1:int, aY1:int, aX2:int, aY2:int, aColor:uint = 0):void
 		{
-			if (_canvas == null)
-			{
-				return;
-			}
-			
 			var shortLen:int = aY2 - aY1;
 			var longLen:int = aX2 - aX1;
 
@@ -164,14 +162,14 @@ package ru.antkarlov.anthill.debug
 			{
 				for (var i:int = 0; i != longLen; i += inc)
 				{
-					_canvas.setPixel(aX1 + i * multDiff, aY1 + i, aColor);
+					drawPoint(aX1 + i * multDiff, aY1 + i, aColor);
 				}
 			}
 			else
 			{
 				for (i = 0; i != longLen; i += inc)
 				{
-					_canvas.setPixel(aX1 + i, aY1 + i * multDiff, aColor);
+					drawPoint(aX1 + i, aY1 + i * multDiff, aColor);
 				}
 			}
 		}
@@ -192,6 +190,40 @@ package ru.antkarlov.anthill.debug
 			lineTo(aX + aWidth, aY + aHeight, aColor);
 			lineTo(aX, aY + aHeight, aColor);
 			lineTo(aX, aY, aColor);
+		}
+		
+		/**
+		 * Рисует прямоугольник с заливкой.
+		 * 
+		 * @param	aX	Положение прямоугольника по X.
+		 * @param	aY	 Положение прямоугольника по Y.
+		 * @param	aWidth	 Ширина прямоугольника.
+		 * @param	aHeight	 Высота прямоугольника.
+		 * @param	aColor	 Цвет прямоугольника.
+		 */
+		public static function fillRect(aX:int, aY:int, aWidth:int, aHeight:int, aColor:uint = 0):void
+		{
+			if (_canvas != null)
+			{
+				_flashRect.x = aX;
+				_flashRect.y = aY;
+				_flashRect.width = aWidth;
+				_flashRect.height = aHeight;
+				
+				if (_flashRect.width < 0)
+				{
+					_flashRect.width *= -1;
+					_flashRect.x -= _flashRect.width;
+				}
+				
+				if (_flashRect.height < 0)
+				{
+					_flashRect.height *= -1;
+					_flashRect.y -= _flashRect.height;
+				}
+
+				_canvas.fillRect(_flashRect, aColor);
+			}
 		}
 		
 		/**
@@ -239,10 +271,10 @@ package ru.antkarlov.anthill.debug
 		 */
 		protected static function plotCircle(aX:int, aY:int, cX:int, cY:int, aColor:uint):void
 		{
-			_canvas.setPixel(cX + aX, cY + aY, aColor);
-			_canvas.setPixel(cX + aX, cY - aY, aColor);
-			_canvas.setPixel(cX - aX, cY + aY, aColor);
-			_canvas.setPixel(cX - aX, cY - aY, aColor);
+			drawPoint(cX + aX, cY + aY, aColor);
+			drawPoint(cX + aX, cY - aY, aColor);
+			drawPoint(cX - aX, cY + aY, aColor);
+			drawPoint(cX - aX, cY - aY, aColor);
 		}
 		
 		/**
@@ -282,40 +314,46 @@ package ru.antkarlov.anthill.debug
 			while (i < n)
 			{
 				originalBitmap = _font.getFrame(aText.charAt(i));
-				_flashRect.width = originalBitmap.width;
-				_flashRect.height = originalBitmap.height;
-				
-				_font.getPoint(aText.charAt(i), _flashPoint);
-				_flashPoint.x += tx;
-				_flashPoint.y += ty;
-				
-				if (aColor != 0)
+				if (originalBitmap != null)
 				{
-					if (_charBitmap == null || _charBitmap.width != _flashRect.width || _charBitmap.height != _flashRect.height)
+					_flashRect.x = 0;
+					_flashRect.y = 0;
+					_flashRect.width = originalBitmap.width;
+					_flashRect.height = originalBitmap.height;
+				
+					_font.getPoint(aText.charAt(i), _flashPoint);
+					_flashPoint.x += tx;
+					_flashPoint.y += ty;
+				
+					if (aColor != 0)
 					{
-						_charBitmap = new BitmapData(_flashRect.width, _flashRect.height, true, 0x00FFFFFF);
-					}
-
-					_charBitmap.copyPixels(originalBitmap, _flashRect, _flashPointZero, null, null, false);
-					for (var dy:int = 0; dy < _flashRect.height; dy++)
-					{
-						for (var dx:int = 0; dx < _flashRect.width; dx++)
+						if (_charBitmap == null || _charBitmap.width != _flashRect.width || _charBitmap.height != _flashRect.height)
 						{
-							if (extractAlpha(_charBitmap.getPixel32(dx, dy)) > 0)
+							_charBitmap = new BitmapData(_flashRect.width, _flashRect.height, true, 0x00FFFFFF);
+						}
+
+						_charBitmap.copyPixels(originalBitmap, _flashRect, _flashPointZero, null, null, false);
+						for (var dy:int = 0; dy < _flashRect.height; dy++)
+						{
+							for (var dx:int = 0; dx < _flashRect.width; dx++)
 							{
-								_charBitmap.setPixel(dx, dy, aColor);
+								if (extractAlpha(_charBitmap.getPixel32(dx, dy)) > 0)
+								{
+									_charBitmap.setPixel(dx, dy, aColor);
+								}
 							}
 						}
-					}
 					
-					_canvas.copyPixels(_charBitmap, _flashRect, _flashPoint, null, null, true);
-				}
-				else
-				{
-					_canvas.copyPixels(originalBitmap, _flashRect, _flashPoint, null, null, true);
+						_canvas.copyPixels(_charBitmap, _flashRect, _flashPoint, null, null, true);
+					}
+					else
+					{
+						_canvas.copyPixels(originalBitmap, _flashRect, _flashPoint, null, null, true);
+					}
+				
+					tx += _flashRect.width + 1;
 				}
 				
-				tx += _flashRect.width + 1;
 				i++;
 			}
 		}
@@ -326,6 +364,22 @@ package ru.antkarlov.anthill.debug
 		private static function extractAlpha(aColor:uint):int
 		{
 			return (aColor >> 24) & 0xFF;
+		}
+		
+		/**
+		 * @private
+		 */
+		public static function get canvas():BitmapData
+		{
+			return _canvas;
+		}
+		
+		/**
+		 * @private
+		 */
+		public static function get isTransparent():Boolean
+		{
+			return _isTransparent;
 		}
 
 	}

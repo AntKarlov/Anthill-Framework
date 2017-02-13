@@ -21,7 +21,9 @@ package ru.antkarlov.anthill
 		
 		// Обычное подключение шрифта с кирилицой.
 		[Embed(source= "resources/iFlash706.ttf",fontFamily="system",embedAsCFF="false",
-			unicodeRange="U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E,U+0400-U+04CE,U+2000-U+206F,U+20A0-U+20CF,U+2100-U+2183")] protected var junk:String;
+			unicodeRange="U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E,U+0400-U+04CE,U+2000-U+206F,U+20A0-U+20CF,U+2100-U+2183")] protected var junk1:String;
+		[Embed(source= "resources/iFlash502.ttf",fontFamily="systemSmall",embedAsCFF="false",
+			unicodeRange="U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E,U+0400-U+04CE,U+2000-U+206F,U+20A0-U+20CF,U+2100-U+2183")] protected var junk2:String;
 		//*/
 		
 		//Flex v3.x SDK
@@ -136,7 +138,8 @@ package ru.antkarlov.anthill
 			AntG.init(this);
 			_perfomance = AntG.debugger.perfomance;
 			
-			stage.scaleMode = StageScaleMode.NO_SCALE;
+			//stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.frameRate = _frameRate;
 			
@@ -307,6 +310,7 @@ package ru.antkarlov.anthill
 		{
 			AntBasic.NUM_OF_VISIBLE = 0;
 			AntBasic.NUM_ON_SCREEN = 0;
+			AntBasic.BUFFERS_SIZE = 0;
 			
 			if (cameras == null)
 			{
@@ -314,7 +318,7 @@ package ru.antkarlov.anthill
 			}
 			
 			var i:int = 0;
-			var n:int = cameras.length;
+			const n:int = cameras.length;
 			var camera:AntCamera;
 			while (i < n)
 			{
@@ -351,18 +355,45 @@ package ru.antkarlov.anthill
 							AntDrawer.setCanvas(camera.buffer);
 						}
 						
-						AntDrawer.drawText(21, AntG.height - 25, AntG.waterMark, 0xFF000000);
-						AntDrawer.drawText(20, AntG.height - 26, AntG.waterMark);
+						drawWaterMark();
 					}
 					
 					if (AntG.debugDraw || AntG.debugMode)
 					{
 						AntDrawer.setCanvas(null);
 					}
+					
+					AntBasic.BUFFERS_SIZE += camera.memSize;
 				}
 			}
 			
 			AntG.mouse.draw();
+		}
+		
+		/**
+		 * @private
+		 */
+		private function drawWaterMark():void
+		{
+			var dx:int = AntG.height - 25;
+			var dy:int = 20;
+			
+			if (AntG.waterMarkPosition != null)
+			{
+				dx = AntG.waterMarkPosition.x;
+				dy = AntG.waterMarkPosition.y;
+			}
+			
+			var str:String;
+			const n:int = AntG.waterMark.length;
+			for (var i:int = 0; i < n; i++)
+			{
+				str = AntG.waterMark[i];
+				AntDrawer.drawText(dx + 1, dy + 1, str, 0xFF000000);
+				AntDrawer.drawText(dx, dy, str);
+				dy += 12;
+			}
+			
 		}
 
 	}

@@ -64,6 +64,11 @@ package ru.antkarlov.anthill
 		 */
 		public var eventUp:AntSignal;
 		
+		/**
+		 * @private
+		 */
+		public var eventClick:AntSignal;
+		
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
@@ -103,6 +108,7 @@ package ru.antkarlov.anthill
 			
 			eventDown = new AntSignal();
 			eventUp = new AntSignal();
+			eventClick = new AntSignal();
 			
 			_name = aName;
 			_stage = null;
@@ -145,6 +151,11 @@ package ru.antkarlov.anthill
 				}
 
 				_last = _current;
+				
+				if (isPressed())
+				{
+					eventClick.dispatch();
+				}
 			}
 		}
 		
@@ -211,11 +222,7 @@ package ru.antkarlov.anthill
 			target = aEvent.target;
 			currentTarget = aEvent.currentTarget;
 			_current = (_current > 0) ? 1 : 2;
-			
-			if (eventDown.numListeners > 0)
-			{
-				eventDown.dispatch();
-			}
+			eventDown.dispatch();
 		}
 		
 		/**
@@ -224,11 +231,7 @@ package ru.antkarlov.anthill
 		protected function onMouseUp(aEvent:MouseEvent):void
 		{
 			_current = (_current > 0) ? -1 : 0;
-			
-			if (eventUp.numListeners > 0)
-			{
-				eventUp.dispatch();
-			}
+			eventUp.dispatch();
 		}
 	
 	}

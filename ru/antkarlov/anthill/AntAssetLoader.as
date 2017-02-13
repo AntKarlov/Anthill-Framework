@@ -1,8 +1,7 @@
 package ru.antkarlov.anthill
 {
 	import ru.antkarlov.anthill.signals.AntSignal;
-	import flash.display.MovieClip;
-	import flash.display.Sprite;
+	
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.ByteArray;
 	import flash.utils.setTimeout;
@@ -75,12 +74,22 @@ package ru.antkarlov.anthill
 		
 		/**
 		 * Количество обрабатываемых активов за один шаг.
-		 * Чем больше количество, тем быстрее будет завершена загрузка активов.
+		 * 
+		 * <p>Чем больше количество, тем быстрее будет завершена загрузка активов.
 		 * Но при большом количестве возрастает и задержка, что в случае 
-		 * обработки больших данных может вызвать подвисание приложения.
-		 * @default    10
+		 * обработки больших данных может вызвать подвисание приложения.</p>
+		 * 
+		 * @default 10
 		 */
 		public var countPerStep:int;
+		
+		/**
+		 * Флаг определающий являются ли создаваемые анимации статичными. Статичные анимации
+		 * не подлежат обычному удалению (только принудительное, см.класс AntAnimation).
+		 * 
+		 * @default true
+		 */
+		public var markAsStatic:Boolean;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -112,6 +121,7 @@ package ru.antkarlov.anthill
 			eventProcess = new AntSignal(AntAssetLoader, Number);
 			eventComplete = new AntSignal(AntAssetLoader);
 			countPerStep = 10;
+			markAsStatic = true;
 		}
 		
 		/**
@@ -306,6 +316,22 @@ package ru.antkarlov.anthill
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		public function get currentQueue():int
+		{
+			return _index;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get totalQueue():int
+		{
+			return _queue.length;
+		}
+		
 		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------
@@ -355,14 +381,14 @@ package ru.antkarlov.anthill
 						var sprite:Sprite = new (data.graphicClass as Class);
 						anim = new AntAnimation(aKey);
 						anim.makeFromSprite(sprite);
-						AntAnimation.toCache(anim);
+						AntAnimation.addToCache(anim, null, markAsStatic);
 					break;
 					
 					case DATA_CLIP :
 						var clip:MovieClip = new (data.graphicClass as Class);
 						anim = new AntAnimation(aKey);
 						anim.makeFromMovieClip(clip);
-						AntAnimation.toCache(anim);
+						AntAnimation.addToCache(anim, null, markAsStatic);
 					break;
 					
 					case DATA_GRAPHIC :
@@ -370,7 +396,7 @@ package ru.antkarlov.anthill
 						anim.makeFromGraphic(data.graphicClass, data.frameWidth, 
 							data.frameHeight, data.originX, data.originY, false, 
 							data.spaceOut, data.spaceIn);
-						AntAnimation.toCache(anim);
+						AntAnimation.addToCache(anim, null, markAsStatic);
 					break;
 					
 					case DATA_ATLAS :
@@ -385,7 +411,7 @@ package ru.antkarlov.anthill
 						if (atlas != null)
 						{
 							anim = atlas.makeAnimation(data.framePrefix, aKey, data.originX, data.originY);
-							AntAnimation.toCache(anim);
+							AntAnimation.addToCache(anim, null, markAsStatic);
 						}
 						else
 						{

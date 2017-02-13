@@ -1,10 +1,11 @@
 package ru.antkarlov.anthill
 {
 	import flash.display.Sprite;
-	import flash.geom.Rectangle;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import flash.sampler.getSize;
 
 	/**
 	 * Реализует рендеринг всех визуальных сущностей.
@@ -396,17 +397,7 @@ package ru.antkarlov.anthill
 					break;
 				}
 				
-				if (roundPosition)
-				{
-					_newPos.x += (_newPos.x > 0) ? 0.0000001 : -0.0000001;
-					_newPos.y += (_newPos.y > 0) ? 0.0000001 : -0.0000001;
-					_newPos.set(scroll.x - AntMath.ceil(_newPos.x), scroll.y - AntMath.ceil(_newPos.y));
-				}
-				else
-				{
-					_newPos.set(scroll.x - _newPos.x, scroll.y - _newPos.y);
-				}
-				
+				_newPos.set(scroll.x - _newPos.x, scroll.y - _newPos.y);
 				updateShaker(_newPos);
 				
 				if (bounds != null)
@@ -415,8 +406,16 @@ package ru.antkarlov.anthill
 					_newPos.y = limitByY(_newPos.y);
 				}
 				
-				scroll.x = _newPos.x;
-				scroll.y = _newPos.y;
+				if (roundPosition)
+				{
+					scroll.x = Math.round(_newPos.x);
+					scroll.y = Math.round(_newPos.y);
+				}
+				else
+				{
+					scroll.x = _newPos.x;
+					scroll.y = _newPos.y;
+				}
 			}
 			else if (bounds != null)
 			{
@@ -424,6 +423,12 @@ package ru.antkarlov.anthill
 				
 				scroll.x = limitByX(scroll.x);
 				scroll.y = limitByY(scroll.y);
+				
+				if (roundPosition)
+				{
+					scroll.x = Math.round(scroll.x);
+					scroll.y = Math.round(scroll.y);
+				}
 			}
 		}
 		
@@ -630,6 +635,14 @@ package ru.antkarlov.anthill
 		public function get sprite():Sprite
 		{
 			return _flashSprite;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get memSize():int
+		{
+			return getSize(buffer);
 		}
 
 	}

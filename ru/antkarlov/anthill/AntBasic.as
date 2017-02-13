@@ -74,19 +74,30 @@ package ru.antkarlov.anthill
 		 * Используется для автоматического подсчета активных объектов. 
 		 * Доступ к значению осуществляется через <code>AntG.numOfActive</code>.
 		 */
-		static internal var NUM_OF_ACTIVE:int = 0;
+		static public var NUM_OF_ACTIVE:int = 0;
 		
 		/**
 		 * Используется для автоматического подсчета видимых объектов. 
 		 * Доступ к значению осуществляется через <code>AntG.numOfVisible</code>.
 		 */
-		static internal var NUM_OF_VISIBLE:int = 0;
+		static public var NUM_OF_VISIBLE:int = 0;
 		
 		/**
 		 * Используется для автоматического подсчета количества объектов видимых камерами.
 		 * Доступ к значению осуществляется через <code>AntG.numOnScreen</code>.
 		 */
-		static internal var NUM_ON_SCREEN:int = 0;
+		static public var NUM_ON_SCREEN:int = 0;
+		
+		/**
+		 * @private
+		 */
+		static public var BUFFERS_SIZE:int = 0;
+		
+		/*
+			TODO Размер буфферов считается в drawActor, поэтому когда объект
+			не видим для камеры, то он не учитывается. Так же не все буфферы учитываются,
+			например для AntTileMap все буфферы игнорируются при подсчете.
+		*/
 		
 		//---------------------------------------
 		// CONSTRUCTOR

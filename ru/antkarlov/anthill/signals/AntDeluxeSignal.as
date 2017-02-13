@@ -153,6 +153,7 @@ package ru.antkarlov.anthill.signals
 			}
 			
 			// Реализуем всплывающее событие если это возможно.
+			(target as IBubbleEventHandler).onEventBubbled(event);
 			if (event != null && event.bubbles)
 			{
 				var currentTarget:Object = target;

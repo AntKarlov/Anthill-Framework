@@ -212,7 +212,9 @@ package ru.antkarlov.anthill
 				aName = aAnim.name;
 			}
 			
+			AntAnimation.useAnimation(aAnim.name);
 			_animations.set(aName, aAnim);
+			
 			if (aSwitch)
 			{
 				switchAnimation(aName);
@@ -229,7 +231,7 @@ package ru.antkarlov.anthill
 		 */
 		public function addAnimationFromCache(aKey:String, aName:String = null, aSwitch:Boolean = true):void
 		{
-			addAnimation(AntAnimation.fromCache(aKey), aName, aSwitch);
+			addAnimation(AntAnimation.getFromCache(aKey), aName, aSwitch);
 		}
 		
 		/**
@@ -267,16 +269,23 @@ package ru.antkarlov.anthill
 		{
 			if (_animations.containsKey(aName))
 			{
-				_animations.remove(aName);
+				var anim:AntAnimation = _animations.remove(aName) as AntAnimation;
+				if (anim != null)
+				{
+					AntAnimation.unuseAnimation(anim.name);
+				}
 			}
 		}
 		
 		/**
-		 * Удаляет все анимации из актера.
+		 * Удаляет все анимации.
 		 */
 		public function clearAnimations():void
 		{
-			_animations.clear();
+			for (var animName:String in _animations)
+			{
+				removeAnimation(animName);
+			}
 		}
 		
 		/**

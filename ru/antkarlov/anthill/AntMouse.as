@@ -330,6 +330,11 @@ package ru.antkarlov.anthill
 				cursor.isScrolled = false;
 				switchAnim = true;
 				defCursorAnim = aAnimName;
+				
+				if (AntG.useSystemCursor)
+				{
+					hide();
+				}
 			}
 			
 			cursor.addAnimationFromCache(aAnimName, null, switchAnim);
@@ -555,6 +560,14 @@ package ru.antkarlov.anthill
 		public function get currentTarget():Object
 		{
 			return leftButton.currentTarget;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get cursorAnim():String
+		{
+			return (cursor != null) ? cursor.currentAnimation : null;
 		}
 		
 		//---------------------------------------

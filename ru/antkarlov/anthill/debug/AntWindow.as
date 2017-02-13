@@ -144,6 +144,7 @@ package ru.antkarlov.anthill.debug
 		 * 
 		 * @param	value	 Текстовый заголовок окна.
 		 */
+		public function get title():String { return _tfTitle.text; }
 		public function set title(value:String):void
 		{
 			_tfTitle.text = value;
@@ -187,6 +188,16 @@ package ru.antkarlov.anthill.debug
 		}
 		
 		/**
+		 * @private
+		 */
+		protected function makeTextFormat(aFontName:String, aFontColor:uint, aAling:String = "left", aFontSize:int = 8):TextFormat
+		{
+			var tf:TextFormat = new TextFormat(aFontName, aFontSize, aFontColor);
+			tf.align = aAling;
+			return tf;
+		}
+		
+		/**
 		 * Устанавливает обработчики для работы окна.
 		 */
 		protected function addHandlers():void
@@ -213,18 +224,9 @@ package ru.antkarlov.anthill.debug
 			_fWhite = new TextFormat(FONT_NAME, FONT_SIZE, 0xffffff);
 			_fButton = new TextFormat(FONT_NAME, FONT_SIZE, 0xc7a863);
 			
-			_tfTitle = new TextField();
-			_tfTitle.x = 2;
-			_tfTitle.y -= 2;
+			_tfTitle = makeLabel(2, -2, _fWhite);
 			_tfTitle.width = 100;
 			_tfTitle.height = 14;
-			_tfTitle.multiline = false;
-			_tfTitle.wordWrap = false;
-			_tfTitle.embedFonts = true;
-			_tfTitle.selectable = false;
-			_tfTitle.antiAliasType = AntiAliasType.NORMAL;
-			_tfTitle.gridFitType = GridFitType.PIXEL;
-			_tfTitle.defaultTextFormat = _fWhite;
 			_tfTitle.text = "Noname";
 			addChild(_tfTitle);
 			
@@ -245,10 +247,12 @@ package ru.antkarlov.anthill.debug
 		{
 			graphics.clear();
 			graphics.beginFill(0x000000, 0.7);
+			graphics.lineStyle(1, 0x000000, 1, true);
 			graphics.drawRect(0, 0, _width, _height);
 			graphics.endFill();
 		    
 			graphics.beginFill(0x000000, 0.9);
+			graphics.lineStyle(1, 0x000000, 1, true);
 			graphics.drawRect(0, 0, _width, 14);
 			graphics.endFill();
 			

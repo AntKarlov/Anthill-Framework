@@ -1,13 +1,10 @@
 package ru.antkarlov.anthill.debug
 {
-	import flash.text.AntiAliasType;
-	import flash.text.GridFitType;
 	import flash.text.TextField;
-	import flash.text.TextFormat;
 	import flash.display.Sprite;
-	import flash.events.MouseEvent;
 	
-	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.AntStorage;
+	import ru.antkarlov.anthill.AntG;
 	
 	/**
 	 * Отладочный класс позволяющий мониторить какие-либо значения. Используется для слежения за 
@@ -48,7 +45,7 @@ package ru.antkarlov.anthill.debug
 			_prevHeight = -1;
 			_canRedraw = true;
 			
-			create();
+			//create();
 			updateDisplay(true);
 		}
 		

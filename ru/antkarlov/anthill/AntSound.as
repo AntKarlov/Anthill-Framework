@@ -179,8 +179,11 @@ package ru.antkarlov.anthill
 		{
 			kill();
 			
-			eventComplete.destroy();
-			eventComplete = null;
+			if (eventComplete != null)
+			{
+				eventComplete.destroy();
+				eventComplete = null;
+			}
 			
 			if (parent != null)
 			{

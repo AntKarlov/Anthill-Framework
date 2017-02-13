@@ -1505,7 +1505,7 @@ package ru.antkarlov.anthill
 				while (i < numChildren)
 				{
 					entity = children[i++] as AntEntity;
-					if (entity != null && entity.exists)
+					if (entity != null && entity.exists && entity.alive)
 					{
 						/*
 							HINT Если сущность двигается и использует updateMotion то после рассчета новой позиции

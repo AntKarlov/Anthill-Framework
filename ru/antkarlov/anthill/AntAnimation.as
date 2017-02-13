@@ -6,7 +6,10 @@ package ru.antkarlov.anthill
 	import flash.geom.Point;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
-	
+	import flash.sampler.getSize;
+	import ru.antkarlov.anthill.utils.AntFormat;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
 	
 	/**
 	 * Данный класс используется для растеризации векторных клипов и для последующего их хранения в памяти.
@@ -15,7 +18,7 @@ package ru.antkarlov.anthill
 	 * реализован кэш анимаций который позволяет хранить уникальные экземпляры анимаций для многократного одновременного
 	 * использования.</p>
 	 * 
-	 * <p>Класс реализован на основе класса от Scmorr (http://flashgameblogs.ru/blog/actionscript/667.html).</p>
+	 * <p>Класс реализован на основе класса от Scmorr (http://gamedevblogs.ru/blog/actionscript/667.html).</p>
 	 * 
 	 * @see	AntActor Класс для воспроизведения и рендера анимаций.
 	 * 
@@ -175,7 +178,7 @@ package ru.antkarlov.anthill
 		 * @param	aClip	 Клип из которого необходимо создать растровую анимацию.
 		 * @param	aIndent	 Отступ необходимый для избежания возможного обрезания сглаживаемых объектов.
 		 */
-		public function makeFromMovieClip(aClip:MovieClip, aIndent:int = 0):void
+		public function makeFromMovieClip(aClip:MovieClip, aIndent:int = 2):void
 		{
 			totalFrames = aClip.totalFrames;
 			
@@ -354,6 +357,21 @@ package ru.antkarlov.anthill
 			return newAnim;
 		}
 		
+		/**
+		 * @private
+		 */
+		public function get memSize():int
+		{
+			var totalSize:int = 0;
+			const n:int = frames.length;
+			for (var i:int = 0; i < n; i++)
+			{
+				totalSize += getSize(frames[i]);
+			}
+			
+			return totalSize;
+		}
+		
 		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------
@@ -387,7 +405,140 @@ package ru.antkarlov.anthill
 		/**
 		 * Кэш анимаций.
 		 */
-		protected static var _animationCache:AntStorage = new AntStorage();
+		protected static var _animations:AntStorage = new AntStorage();
+		
+		/**
+		 * Списки хранят имя и количество использований для каждой из анимаций.
+		 */
+		protected static var _usedNames:Vector.<String> = new Vector.<String>();
+		protected static var _usedCount:Vector.<int> = new Vector.<int>();
+		
+		/**
+		 * Список временно удаленных анимаций доступных для восстановления при необходимости.
+		 */
+		protected static var _removedNames:Vector.<String> = new Vector.<String>();
+		
+		/**
+		 * Список статических анимаций которые никогда не освобождаются.
+		 */
+		protected static var _staticNames:Vector.<String> = new Vector.<String>();
+		
+		/**
+		 * Отмечает указанную анимацию как используемую кем-либо
+		 * (увеличивает счетчик использований).
+		 * 
+		 * @param aKey Ключевое имя анимации.
+		 */
+		public static function useAnimation(aKey:String):void
+		{
+			var i:int = _usedNames.indexOf(aKey);
+			if (i >= 0 && i < _usedNames.length)
+			{
+				_usedCount[i]++;
+			}
+			else
+			{
+				_usedNames[_usedNames.length] = aKey;
+				_usedCount[_usedCount.length] = 1;
+			}
+		}
+		
+		/**
+		 * Отмечает указанную анимацию как неиспользуемую кем-либо
+		 * (уменьшает счетчик использований).
+		 * 
+		 * @param aKey Ключевое имя анимации.
+		 */
+		public static function unuseAnimation(aKey:String):void
+		{
+			var i:int = _usedNames.indexOf(aKey);
+			if (i >= 0 && i < _usedNames.length)
+			{
+				var n:int = _usedCount[i] - 1;
+				n = (n >= 0) ? n : 0;
+				_usedCount[i] = n;
+			}
+		}
+		
+		/**
+		 * Определяет является ли указанная анимация используемой кем-либо.
+		 * 
+		 * @param aKey Ключевое имя анимации.
+		 */
+		public static function isUsed(aKey:String):Boolean
+		{
+			var i:int = _usedNames.indexOf(aKey);
+			return (i >= 0 && i < _usedNames.length && _usedCount[i] > 0);
+		}
+		
+		/**
+		 * Восстанавливает ранее удаленную анимацию.
+		 * 
+		 * @param aKey Ключевое имя анимации.
+		 */
+		public static function restoreAnimation(aKey:String):AntAnimation
+		{
+			var i:int = _removedNames.indexOf(aKey);
+			if (i >= 0 && i < _removedNames.length)
+			{
+				var anim:AntAnimation = null;
+				var clipClass:Class = getDefinitionByName(aKey) as Class;
+				if (clipClass != null)
+				{
+					var clip:MovieClip = new clipClass();
+					anim = new AntAnimation(aKey);
+					anim.makeFromMovieClip(clip);
+					//trace("Restored:", anim.name);
+				}
+				
+				_removedNames.splice(i, 1);
+				return anim;
+			}
+			
+			return null;
+		}
+		
+		/**
+		 * Определяет является ли указанная анимация статической. Статические анимации
+		 * не могут быть удалены из кэша как неиспользуемые.
+		 * 
+		 * @param aKey Ключевое имя анимации.
+		 */
+		public static function isStatic(aKey:String):Boolean
+		{
+			var i:int = _staticNames.indexOf(aKey);
+			return (i >= 0 && i < _staticNames.length);
+		}
+		
+		/**
+		 * Добавляет анимацию в список не обработанных анимаций (не кэшированных).
+		 * Анимация добалвенная таким образом в кэш, будет растерезирована на лету
+		 * по мере необходимости.
+		 * 
+		 * @param aClass Класс анимации.
+		 */
+		public static function addNonCachedAnimation(aClass:Class):void
+		{
+			var key:String = getQualifiedClassName(aClass);
+			_removedNames[_removedNames.length] = key;
+		}
+		
+		/**
+		 * Добавляет список анимаций в список необработанных анимаций (не кэшированных).
+		 * Анимации добавленные таким образом в кэш, будут растерезированы на лету по
+		 * мере необходимости.
+		 * 
+		 * @param aList Список классов анимаций.
+		 */
+		public static function addNonCachedAnimations(aList:Vector.<Class>):void
+		{
+			var i:int = 0;
+			const n:int = aList.length;
+			while (i < n)
+			{
+				addNonCachedAnimation(aList[i++]);
+			}
+		}
 		
 		/**
 		 * Помещает анимацию в кэш.
@@ -395,10 +546,42 @@ package ru.antkarlov.anthill
 		 * @param	aAnim	 Анимация которую необходимо поместить в кэш.
 		 * @param	aKey	 Имя под которой анимация будет доступна в кэше. Если имя не указана, то будет использовано имя из анимации.
 		 */
-		public static function toCache(aAnim:AntAnimation, aKey:String = null):AntAnimation
+		public static function addToCache(aAnim:AntAnimation, aKey:String = null, aIsStatic:Boolean = false):AntAnimation
 		{
-			_animationCache.set((aKey == null) ? aAnim.name : aKey, aAnim);
+			var key:String = (aKey == null) ? aAnim.name : aKey;
+			_animations.set(key, aAnim);
+			
+			if (aIsStatic)
+			{
+				_staticNames[_staticNames.length] = key;
+			}
+			
 			return aAnim;
+		}
+		
+		/**
+		 * Маркирует указанную анимацию как статичную (неподлежащию удалению).
+		 * 
+		 * <p>Статичную анимацию можно удалить только методом removeFromCache() с флагом aForce равным true,
+		 * либо предварительно снять флаг isStatic при помощи данного метода.</p>
+		 * 
+		 * @param	aKey	Имя анимации которую необходимо сделать статичной.
+		 * @param	aIsStatic	Значение устанавливаемого флага.
+		 */
+		public static function markAnimationAsStatic(aKey:String, aIsStatic:Boolean):void
+		{
+			if (!aIsStatic)
+			{
+				var i:int = _staticNames.indexOf(aKey);
+				if (i >= 0 && i < _staticNames.length)
+				{
+					_staticNames.splice(i, 1);
+				}
+			}
+			else
+			{
+				_staticNames[_staticNames.length] = aKey;
+			}
 		}
 		
 		/**
@@ -406,47 +589,121 @@ package ru.antkarlov.anthill
 		 * 
 		 * @param	aKey	 Имя анимации которую необходимо извлечь из кэша.
 		 */
-		public static function fromCache(aKey:String):AntAnimation
+		public static function getFromCache(aKey:String):AntAnimation
 		{
-			if (!_animationCache.containsKey(aKey))
+			if (!_animations.containsKey(aKey))
 			{
-				throw new Error("AntAnimation: Missing animation \'" + aKey + "\'.");
+				var anim:AntAnimation = restoreAnimation(aKey);
+				if (anim == null)
+				{
+					throw new Error("AntAnimation: Missing animation \'" + aKey + "\'.");
+					return null;
+				}
+				else
+				{
+					return addToCache(anim, aKey);
+				}
 			}
-
-			return _animationCache.get(aKey) as AntAnimation;
+			
+			return _animations.get(aKey) as AntAnimation;
 		}
 		
 		/**
 		 * Удаляет анимацию из кэша анимаций.
 		 * 
 		 * @param	aKey	 Имя анимации которую необходимо удалить.
+		 * @param	aForce	Задает принудительное удаление не смотря на возможное использование удаляемой анимации.
+		 * @return Возвращает true если анимация была успешно удалена из кэша.
 		 */
-		public static function removeFromCache(aKey:String):void
+		public static function removeFromCache(aKey:String, aForce:Boolean = false):Boolean
 		{
-			if (_animationCache.containsKey(aKey))
+			if (_animations.containsKey(aKey))
 			{
-				(_animationCache.get(aKey) as AntAnimation).destroy();
-				_animationCache.remove(aKey);
+				if (aForce || (!isUsed(aKey) && !isStatic(aKey)))
+				{
+					(_animations.remove(aKey) as AntAnimation).destroy();
+					_removedNames[_removedNames.length] = aKey;
+					return true;
+				}
 			}
+			
+			return false;
 		}
 		
 		/**
 		 * Удаляет все анимации из кэша анимаций.
+		 * 
+		 * @param	aForce	Задает принудительную очистку кэша не смотря на возможное использование анимаций.
+		 * @return Возвращает количество удаленных анимаций.
 		 */
-		public function clearCache():void
+		public static function clearCache(aForce:Boolean = false):int
 		{
-			var anim:AntAnimation;
-			for (var value:* in _animationCache)
+			var count:int = 0;
+			for (var animName:String in _animations)
 			{
-				if (_animationCache[value] != null)
+				if (removeFromCache(animName))
 				{
-					anim = _animationCache.remove(value) as AntAnimation;
+					count++;
+				}
+			}
+			
+			return count;
+		}
+		
+		/**
+		 * Считает общий объем памяти занимаемый кэшем анимации в байтах.
+		 * 
+		 * <p>Чтобы преобразовать результат в Мб используйте метод:
+		 * trace(AntFormat.formatSize(cs) + " Мб");</p>
+		 * 
+		 * @return Общий размер занимаемый анимациями в памяти.
+		 */
+		public static function getCacheSize():int
+		{
+			var totalSize:int = 0;
+			var anim:AntAnimation;
+			for (var p:String in _animations)
+			{
+				if (_animations[p] != null)
+				{
+					anim = _animations.get(p) as AntAnimation;
 					if (anim != null)
 					{
-						anim.destroy();
+						totalSize += anim.memSize;
 					}
 				}
 			}
+			
+			return totalSize;
+		}
+		
+		/**
+		 * Отладочный метод для получения информации о состоянии кэша анимаций.
+		 */
+		public static function getCacheStats(aIgnoreStatic:Boolean = true):Array
+		{
+			var name:String;
+			var res:Array = [];
+			const n:int = _usedNames.length;
+			var fString:Function = AntFormat.formatString;
+			for (var i:int = 0; i < n; i++)
+			{
+				name = _usedNames[i];
+				if (_removedNames.indexOf(name) > -1)
+				{
+					res.push(fString("{0} (del)", name));
+				}
+				else if (isStatic(name) && !aIgnoreStatic)
+				{
+					res.push(fString("{0} (static)", name));
+				}
+				else if (!isStatic(name))
+				{
+					res.push(fString("{0} ({1})", name, _usedCount[i]));
+				}
+			}
+			
+			return res;
 		}
 
 	}
