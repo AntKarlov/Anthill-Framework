@@ -316,6 +316,22 @@ package ru.antkarlov.anthill
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		public function get currentQueue():int
+		{
+			return _index;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function get totalQueue():int
+		{
+			return _queue.length;
+		}
+		
 		//---------------------------------------
 		// PROTECTED METHODS
 		//---------------------------------------

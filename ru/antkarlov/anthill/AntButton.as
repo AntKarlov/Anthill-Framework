@@ -152,7 +152,7 @@ package ru.antkarlov.anthill
 		 * Указатель на текстовую метку кнопки.
 		 * @default    null
 		 */
-		public var label:AntLabel;
+		private var _label:AntEntity;
 		
 		/**
 		 * Смещение текстовой метки при нажатии.
@@ -171,6 +171,8 @@ package ru.antkarlov.anthill
 		 * @default    null
 		 */
 		public var downCursorAnim:String;
+		
+		public var enabled:Boolean;
 		
 		//---------------------------------------
 		// PROTECTED VARIABLES
@@ -329,6 +331,8 @@ package ru.antkarlov.anthill
 			
 			overCursorAnim = defOverCursorAnim;
 			downCursorAnim = defDownCursorAnim;
+			
+			enabled = true;
 			
 			soundClick = defSoundClick;
 			soundOver = defSoundOver;
@@ -614,7 +618,7 @@ package ru.antkarlov.anthill
 				camera = AntG.getCamera();
 			}
 			
-			if (camera != null && visible && getVisibility())
+			if (camera != null && visible && getVisibility() && enabled)
 			{
 				(isScrolled) ? AntG.mouse.getWorldPosition(camera, _point) : AntG.mouse.getScreenPosition(camera, _point);
 				if (hitTestPoint(_point))
@@ -670,7 +674,8 @@ package ru.antkarlov.anthill
 				{
 					AntG.mouse.changeCursor(overCursorAnim);
 				}
-				else if (useSystemCursor)
+				
+				if (useSystemCursor)
 				{
 					Mouse.cursor = "button";
 					_iChangeCursor = true;
@@ -732,9 +737,9 @@ package ru.antkarlov.anthill
 			
 			if (_over && o)
 			{
-				AntG.mouse.changeCursor(overCursorAnim);
 				eventClick.dispatch(this);
 				AntG.sounds.play(soundClick);
+				AntG.mouse.changeCursor((getVisibility() ? overCursorAnim : null));				
 			}
 			else
 			{
@@ -926,14 +931,32 @@ package ru.antkarlov.anthill
 		}
 		
 		/**
+		 * @private
+		 */
+		public function get label():AntEntity { return _label; }
+		public function set label(aValue:AntEntity):void
+		{
+			if (_label != aValue)
+			{
+				if (_label != null)
+				{
+					remove(_label);
+				}
+			
+				_label = aValue;
+				add(_label);
+			}
+		}
+		
+		/**
 		 * Определяет текст для текстовой метки у кнопки.
 		 */
-		public function get text():String { return (label != null) ? label.text : ""; }
+		public function get text():String { return (label != null && label.hasOwnProperty("text")) ? label["text"] : ""; }
 		public function set text(value:String):void
 		{
-			if (label != null)
+			if (label != null && label.hasOwnProperty("text"))
 			{
-				label.text = value;
+				label["text"] = value;
 				updateLabel();
 			}
 		}

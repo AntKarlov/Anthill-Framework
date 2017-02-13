@@ -721,7 +721,10 @@ package ru.antkarlov.anthill
 					}
 				}
 				
-				calcFrame(roundFrame(currentFrame));
+				if (_curAnim != null)
+				{
+					calcFrame(roundFrame(currentFrame));
+				}
 			}
 		}
 		
@@ -755,8 +758,11 @@ package ru.antkarlov.anthill
 						_buffer = null;
 					}
 				}
-
-				calcFrame(roundFrame(currentFrame));
+				
+				if (_curAnim != null)
+				{
+					calcFrame(roundFrame(currentFrame));
+				}
 			}
 		}
 		
@@ -812,7 +818,10 @@ package ru.antkarlov.anthill
 				_strokeCanvas = null;
 			}
 			
-			calcFrame(roundFrame(currentFrame));
+			if (_curAnim != null)
+			{
+				calcFrame(roundFrame(currentFrame));
+			}
 		}
 		
 		/**

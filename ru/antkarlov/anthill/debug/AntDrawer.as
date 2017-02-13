@@ -314,42 +314,46 @@ package ru.antkarlov.anthill.debug
 			while (i < n)
 			{
 				originalBitmap = _font.getFrame(aText.charAt(i));
-				_flashRect.x = 0;
-				_flashRect.y = 0;
-				_flashRect.width = originalBitmap.width;
-				_flashRect.height = originalBitmap.height;
-				
-				_font.getPoint(aText.charAt(i), _flashPoint);
-				_flashPoint.x += tx;
-				_flashPoint.y += ty;
-				
-				if (aColor != 0)
+				if (originalBitmap != null)
 				{
-					if (_charBitmap == null || _charBitmap.width != _flashRect.width || _charBitmap.height != _flashRect.height)
+					_flashRect.x = 0;
+					_flashRect.y = 0;
+					_flashRect.width = originalBitmap.width;
+					_flashRect.height = originalBitmap.height;
+				
+					_font.getPoint(aText.charAt(i), _flashPoint);
+					_flashPoint.x += tx;
+					_flashPoint.y += ty;
+				
+					if (aColor != 0)
 					{
-						_charBitmap = new BitmapData(_flashRect.width, _flashRect.height, true, 0x00FFFFFF);
-					}
-
-					_charBitmap.copyPixels(originalBitmap, _flashRect, _flashPointZero, null, null, false);
-					for (var dy:int = 0; dy < _flashRect.height; dy++)
-					{
-						for (var dx:int = 0; dx < _flashRect.width; dx++)
+						if (_charBitmap == null || _charBitmap.width != _flashRect.width || _charBitmap.height != _flashRect.height)
 						{
-							if (extractAlpha(_charBitmap.getPixel32(dx, dy)) > 0)
+							_charBitmap = new BitmapData(_flashRect.width, _flashRect.height, true, 0x00FFFFFF);
+						}
+
+						_charBitmap.copyPixels(originalBitmap, _flashRect, _flashPointZero, null, null, false);
+						for (var dy:int = 0; dy < _flashRect.height; dy++)
+						{
+							for (var dx:int = 0; dx < _flashRect.width; dx++)
 							{
-								_charBitmap.setPixel(dx, dy, aColor);
+								if (extractAlpha(_charBitmap.getPixel32(dx, dy)) > 0)
+								{
+									_charBitmap.setPixel(dx, dy, aColor);
+								}
 							}
 						}
-					}
 					
-					_canvas.copyPixels(_charBitmap, _flashRect, _flashPoint, null, null, true);
-				}
-				else
-				{
-					_canvas.copyPixels(originalBitmap, _flashRect, _flashPoint, null, null, true);
+						_canvas.copyPixels(_charBitmap, _flashRect, _flashPoint, null, null, true);
+					}
+					else
+					{
+						_canvas.copyPixels(originalBitmap, _flashRect, _flashPoint, null, null, true);
+					}
+				
+					tx += _flashRect.width + 1;
 				}
 				
-				tx += _flashRect.width + 1;
 				i++;
 			}
 		}

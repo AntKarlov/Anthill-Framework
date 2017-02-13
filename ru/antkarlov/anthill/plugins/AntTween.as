@@ -240,13 +240,13 @@ package ru.antkarlov.anthill.plugins
 		/**
 		 * @constructor
 		 */
-		public function AntTween(aTarget:Object, aTime:Number, aTransition:Object = "linear")
+		public function AntTween(aTarget:Object, aTime:Number, aTransition:Object = "linear", aAutoCaching:Boolean = false)
 		{
 			super();
 			_isStarted = false;
 			_tag = null;
 			autoStartOfNextTween = true;
-			autocaching = true;
+			autocaching = aAutoCaching;
 			autocachingReset = true;
 			reset(aTarget, aTime, aTransition);
 		}

@@ -138,7 +138,8 @@ package ru.antkarlov.anthill
 			AntG.init(this);
 			_perfomance = AntG.debugger.perfomance;
 			
-			stage.scaleMode = StageScaleMode.NO_SCALE;
+			//stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.frameRate = _frameRate;
 			

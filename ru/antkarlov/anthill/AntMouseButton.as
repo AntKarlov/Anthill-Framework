@@ -222,11 +222,7 @@ package ru.antkarlov.anthill
 			target = aEvent.target;
 			currentTarget = aEvent.currentTarget;
 			_current = (_current > 0) ? 1 : 2;
-			
-			if (eventDown.numListeners > 0)
-			{
-				eventDown.dispatch();
-			}
+			eventDown.dispatch();
 		}
 		
 		/**
@@ -235,11 +231,7 @@ package ru.antkarlov.anthill
 		protected function onMouseUp(aEvent:MouseEvent):void
 		{
 			_current = (_current > 0) ? -1 : 0;
-			
-			if (eventUp.numListeners > 0)
-			{
-				eventUp.dispatch();
-			}
+			eventUp.dispatch();
 		}
 	
 	}

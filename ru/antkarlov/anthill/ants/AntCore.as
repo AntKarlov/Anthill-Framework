@@ -16,6 +16,8 @@ package ru.antkarlov.anthill.ants
 	 */
 	public class AntCore extends Object implements IPlugin
 	{
+		public var eventSystemAdded:AntSignal;
+		public var eventSystemRemoved:AntSignal;
 		public var eventUpdateComplete:AntSignal;
 		public var familyClass:Class = AntFamily;
 		
@@ -40,6 +42,8 @@ package ru.antkarlov.anthill.ants
 		{
 			super();
 			
+			eventSystemAdded = new AntSignal(AntSystem);
+			eventSystemRemoved = new AntSignal(AntSystem);
 			eventUpdateComplete = new AntSignal();
 			
 			_objects = [];
@@ -169,6 +173,7 @@ package ru.antkarlov.anthill.ants
 				_numSystems++;
 				
 				updatePriority();
+				eventSystemAdded.dispatch(aSystem);
 			}
 		}
 		
@@ -188,6 +193,7 @@ package ru.antkarlov.anthill.ants
 				}
 				
 				aSystem.removeFromCore(this);
+				eventSystemRemoved.dispatch(aSystem);
 			}
 		}
 		

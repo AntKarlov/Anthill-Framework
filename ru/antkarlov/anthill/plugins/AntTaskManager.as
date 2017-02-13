@@ -324,7 +324,7 @@ package ru.antkarlov.anthill.plugins
 		{
 			if (_isStarted)
 			{
-				AntG.plugins.remove(this);
+				AntG.plugins.add(this);
 				_isStarted = false;
 			}
 		}
@@ -425,10 +425,21 @@ package ru.antkarlov.anthill.plugins
 		 */
 		public function set pause(value:Boolean):void
 		{
-			if (_isPaused != value)
+			if (value && !_isPaused)
 			{
-				_isPaused = value;
-				(_isPaused) ? AntG.plugins.pause(this) : AntG.plugins.resume(this);
+				if (_isStarted)
+				{
+					AntG.plugins.remove(this);
+				}
+				_isPaused = true;
+			}
+			else
+			{
+				if (_isStarted)
+				{
+					AntG.plugins.add(this);
+				}
+				_isPaused = false;
 			}
 		}
 		

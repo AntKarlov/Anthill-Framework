@@ -69,11 +69,16 @@ package ru.antkarlov.anthill
 			
 			var sw:int = stage.stageWidth;
 			var sh:int = stage.stageHeight;
-			graphics.lineStyle(1, 0x000000);
+			
+			graphics.beginFill(0x000000, 1);
+			graphics.drawRect(0, 0, sw, sh);
+			graphics.endFill();
+			
+			graphics.lineStyle(1, 0xFFFFFF);
 			graphics.moveTo(sw * 0.5 - 50, sh * 0.5 + 5);
 			graphics.lineTo(sw * 0.5 + 50, sh * 0.5 + 5);
 			
-			graphics.beginFill(0x000000, 1);
+			graphics.beginFill(0xFFFFFF, 1);
 			graphics.drawRect(sw * 0.5 - 50, sh * 0.5, 100 * aPercent, 5);
 			graphics.endFill();
 		}
