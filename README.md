@@ -1,6 +1,11 @@
 Anthill Game Framework
 ======================
 
+Important thing!
+----------------
+
+Development of the **Anthill Game Framework** is stopped and new updates is not planned. But if you're still using this framework and you have questions or issues, you can contact with me for support via email ant.karlov [at] gmail.com
+
 What is Anthill?
 -----------------
 
